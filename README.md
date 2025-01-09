@@ -19,7 +19,7 @@ View a product demonstration at
 | [Jenny Dobariya] - *Scrum Master*| 6921795 |
 | [Priyanshu Vora]| 6911002 |
 | [Neeti Pandya]| 6877765 |
-| [Harsh Kapoor]| 6909543 |
+| [Harsh Kapoor]| 7101470 |
 
 
 ## License
