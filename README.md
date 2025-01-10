@@ -15,11 +15,11 @@ View a product demonstration at
 ## Team Members 👥
 | Name | Student Number|
 |------|---------------|
-| [Rohit Pillai] - *Product Owner* | 5937123 |
-| [Jenny Dobariya] - *Scrum Master*| 6921795 |
-| [Priyanshu Vora]| 6911002 |
-| [Neeti Pandya]| 6877765 |
-| [Harsh Kapoor]| 7101470 |
+| Rohit Pillai| 5937123 |
+| Jenny Dobariya *Scrum Master*| 6921795 |
+| Priyanshu Vora| 6911002 |
+| Neeti Pandya *Product Owner* | 6877765 |
+| Harsh Kapoor| 7101470 |
 
 
 ## License
