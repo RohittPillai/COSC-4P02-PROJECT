@@ -1,6 +1,6 @@
 ## Welcome everybody 👋
 This is the COSC 4P02 Project of our team.
-Project documents are located in the [doc](doc) folder.
+Project documents are located in the [docs](docs) folder.
 
 
 ## Project Website 🌐
