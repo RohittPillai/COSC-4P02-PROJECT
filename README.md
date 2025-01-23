@@ -20,6 +20,7 @@ View a product demonstration at
 | Priyanshu Vora| 7087729 |
 | Neeti Pandya *Product Owner* | 7015696 |
 | Harsh Kapoor| 7101470 |
+| Minhazul Islam Mahim| 6603849 |
 
 
 ## License
