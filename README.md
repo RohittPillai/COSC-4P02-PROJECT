@@ -2,6 +2,7 @@
 This is the COSC 4P02 Project of our team.
 Project documents are located in the [docs](docs) folder.
 
+[Work Distribution](docs/PageAssignment.pdf).
 
 ## Project Website 🌐
 Visit the live site at 
