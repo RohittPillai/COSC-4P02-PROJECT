@@ -1,6 +1,7 @@
 import Header from "~/components/ui/Header";
 
 import { GalleryVerticalEnd } from "lucide-react";
+import Image from "next/image";
 
 import { LoginForm } from "~/components/login-form";
 
@@ -10,16 +11,13 @@ export default function LoginPage() {
     <>
       <Header></Header>
       <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
-        <div className="flex w-full max-w-sm flex-col gap-6">
-          <a
-            href="#"
-            className="flex items-center gap-2 self-center font-medium"
-          >
-            <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
-              <GalleryVerticalEnd className="size-4" />
-            </div>
-            ResumeX
-          </a>
+        <div className="flex w-full max-w-sm flex-col items-center self-center">
+            <Image
+            src="/main_logo.png" // Path to your logo in the public folder
+            alt="ResumeX"
+            width={200} // Adjust width
+            height={200} // Adjust height
+            />
           <LoginForm />
         </div>
       </div>
