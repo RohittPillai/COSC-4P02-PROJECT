@@ -10,7 +10,7 @@ export default function Homepage() {
       <Header /> {/* Header at the top */}
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-500 to-teal-500 text-white text-center py-20 px-6">
+      <section className="bg-gradient-to-r from-teal-500 to-blue-500 text-white text-center py-20 px-6">
         <h1 className="text-5xl font-extrabold">Build Your Resume with AI</h1>
         <p className="mt-4 text-lg">
           Generate professional resumes effortlessly with AI-powered templates.
