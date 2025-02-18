@@ -11,8 +11,8 @@ export default function RegisterPage() {
           <Image
             src="/main_logo.png"
             alt="ResumeX"
-            width={200}
-            height={200}
+            width={300}
+            height={300}
           />
           <RegisterForm />
         </div>
