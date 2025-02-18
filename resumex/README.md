@@ -1,3 +1,19 @@
+# Instructions
+
+For first time run, `next` needs to be installed
+
+```console
+npm install next
+```
+
+To host the webpage
+```
+npm build dev
+```
+> The url to open the page should be displayed after running the command.
+>
+> Usually <http://localhost:3000>
+
 # Create T3 App
 
 This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.

@@ -1,5 +1,4 @@
 "use client";
-
 import Header from "./_components/Header";
 import Footer from "./_components/Footer";
 import Link from "next/link";
