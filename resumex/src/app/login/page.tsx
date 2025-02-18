@@ -1,5 +1,5 @@
-import Header from "~/components/ui/Header";
-
+import Header from "../_components/Header";
+import Footer from "../_components/Footer";
 import { GalleryVerticalEnd } from "lucide-react";
 import Image from "next/image";
 

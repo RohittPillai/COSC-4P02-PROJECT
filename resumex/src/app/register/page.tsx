@@ -1,4 +1,5 @@
-import Header from "~/components/ui/Header";
+import Header from "../_components/Header";
+import Footer from "../_components/Footer";
 import Image from "next/image";
 import { RegisterForm } from "~/components/register-form";
 
