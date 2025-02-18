@@ -48,11 +48,7 @@ export default function FreeResume() {
                     />
                 </section>
 
-                {/* Templates Section */}
-                <aside className="w-1/4 bg-gray-200 shadow-lg p-4 border-l border-gray-300 h-full">
-                    <h2 className="text-lg font-semibold mb-4">Templates</h2>
-                    <p className="text-sm text-gray-600">Templates page is under development...</p>
-                </aside>
+
             </main>
 
             <Footer  />
