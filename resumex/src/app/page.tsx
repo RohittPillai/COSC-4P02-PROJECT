@@ -1,5 +1,4 @@
 "use client";
-
 import Header from "./_components/Header";
 import Footer from "./_components/Footer";
 import Link from "next/link";
@@ -15,7 +14,7 @@ export default function Homepage() {
         <p className="mt-4 text-lg">
           Generate professional resumes effortlessly with AI-powered templates.
         </p>
-        <Link href="/templates">
+        <Link href="/free-resume">
           <button className="mt-6 px-6 py-3 bg-white text-blue-600 font-semibold rounded-lg hover:bg-gray-200 transition">
             Get Started for Free
           </button>
