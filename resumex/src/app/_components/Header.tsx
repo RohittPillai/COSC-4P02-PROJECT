@@ -6,27 +6,27 @@ import Image from "next/image";
 
 const Header = () => {
   return (
-    <header className="bg-black text-white sticky top-0 z-50 h-20">
-      <div className="max-w-4xl mx-auto flex justify-between items-center p-4">
-        {/* Clickable Logo */}
-        <Link href="/" className="flex items-center space-x-3">
+    <header className="bg-teal-400 text-black sticky top-0 z-50 h-20 flex items-center">
+      <div className="max-w-7xl w-full mx-auto flex justify-between items-center py-2">
+        {/* Logo */}
+        <Link href="/src/pages.tsx" className="flex items-center space-x-2">
           <Image
             src="/main_logo.png"
             alt="ResumeX Logo"
-            width={175} // Adjust as needed
-            height={175}
+            width={150}  // Reduced size for better fit
+            height={150} 
+            className="h-22 w-auto" // Ensures a fixed height with auto width
             priority
-            className="cursor-pointer" // Makes it clear it's clickable
           />
         </Link>
 
         {/* Navigation Bar */}
         <nav className="flex space-x-6">
-          <Link href="/pricing" className="hover:text-teal-400">Pricing</Link>
-          <Link href="/templates" className="hover:text-teal-400">Templates</Link>
-          <Link href="/pro-version" className="hover:text-teal-400">Pro Version</Link>
-          <Link href="/about" className="hover:text-teal-400">About Us</Link>
-          <Link href="/login" className="hover:text-teal-400">Login</Link>
+          <Link href="/pricing" className="hover:text-white">Pricing</Link>
+          <Link href="/templates" className="hover:text-white">Templates</Link>
+          <Link href="/pro-version" className="hover:text-white">Pro Version</Link>
+          <Link href="/about" className="hover:text-white">About Us</Link>
+          <Link href="/login" className="hover:text-white">Login</Link>
         </nav>
       </div>
     </header>
