@@ -6,27 +6,27 @@ import Image from "next/image";
 
 const Header = () => {
   return (
-    <header className="bg-teal-400 text-black sticky top-0 z-50 h-20 flex items-center">
-      <div className="max-w-7xl w-full mx-auto flex justify-between items-center py-2">
-        {/* Logo */}
-        <Link href="/src/pages.tsx" className="flex items-center space-x-2">
+    <header className="bg-black text-white sticky top-0 z-50 h-24 shadow-lg">
+      <div className="max-w-6xl mx-auto flex justify-between items-center px-8 h-full">
+        {/* Logo - Larger for Better Visibility */}
+        <Link href="/" className="flex items-center space-x-4">
           <Image
             src="/main_logo.png"
             alt="ResumeX Logo"
-            width={150}  // Reduced size for better fit
-            height={150} 
+            width={180} // Increased size for better visibility
+            height={180}
             priority
             className="cursor-pointer"
           />
         </Link>
 
-        {/* Navigation Bar */}
+        {/* Navigation Bar - Larger Text, More Spacing */}
         <nav className="flex space-x-10 text-lg font-medium">
-          <Link href="/pricing" className="hover:text-white">Pricing</Link>
-          <Link href="/templates" className="hover:text-white">Templates</Link>
-          <Link href="/pro-version" className="hover:text-white">Pro Version</Link>
-          <Link href="/about" className="hover:text-white">About Us</Link>
-          <Link href="/login" className="hover:text-white">Login</Link>
+          <Link href="/pricing" className="hover:text-teal-400 transition">Pricing</Link>
+          <Link href="/templates" className="hover:text-teal-400 transition">Templates</Link>
+          <Link href="/pro-version" className="hover:text-teal-400 transition">Pro Version</Link>
+          <Link href="/about" className="hover:text-teal-400 transition">About Us</Link>
+          <Link href="/login" className="hover:text-teal-400 transition">Login</Link>
         </nav>
       </div>
     </header>
@@ -34,4 +34,3 @@ const Header = () => {
 };
 
 export default Header;
-
