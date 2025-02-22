@@ -1,5 +1,4 @@
 "use client";
-
 import Header from "./_components/Header";
 import Footer from "./_components/Footer";
 import Link from "next/link";
@@ -7,15 +6,15 @@ import Link from "next/link";
 export default function Homepage() {
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
-      <Header/> {/* Header at the top */}
+      <Header /> {/* Header at the top */}
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-teal-500 to-blue-500 text-white text-center py-20 px-6">
+      <section className="bg-gradient-to-r from-blue-500 to-teal-500 text-white text-center py-20 px-6">
         <h1 className="text-5xl font-extrabold">Build Your Resume with AI</h1>
         <p className="mt-4 text-lg">
           Generate professional resumes effortlessly with AI-powered templates.
         </p>
-        <Link href="/templates">
+        <Link href="/free-resume">
           <button className="mt-6 px-6 py-3 bg-white text-blue-600 font-semibold rounded-lg hover:bg-gray-200 transition">
             Get Started for Free
           </button>
