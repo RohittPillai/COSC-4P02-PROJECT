@@ -15,13 +15,13 @@ const Header = () => {
             alt="ResumeX Logo"
             width={150}  // Reduced size for better fit
             height={150} 
-            className="h-22 w-auto" // Ensures a fixed height with auto width
             priority
+            className="cursor-pointer"
           />
         </Link>
 
         {/* Navigation Bar */}
-        <nav className="flex space-x-6">
+        <nav className="flex space-x-10 text-lg font-medium">
           <Link href="/pricing" className="hover:text-white">Pricing</Link>
           <Link href="/templates" className="hover:text-white">Templates</Link>
           <Link href="/pro-version" className="hover:text-white">Pro Version</Link>
