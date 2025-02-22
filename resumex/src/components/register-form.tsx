@@ -96,7 +96,11 @@ export function RegisterForm({ className, ...props }: React.ComponentPropsWithou
                   Sign up with Google
                 </Button>
               </div>
-
+              <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
+                <span className="relative z-10 bg-background px-2 text-muted-foreground">
+                  Or continue with
+                </span>
+              </div>
               {/*Form Fields */}
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
@@ -122,6 +126,9 @@ export function RegisterForm({ className, ...props }: React.ComponentPropsWithou
           </form>
         </CardContent>
       </Card>
+      <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary">
+        By continuing, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+      </div>
     </div>
   );
 }
