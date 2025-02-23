@@ -32,8 +32,7 @@ export default function FAQ() {
     <section ref={faqRef} className="py-16 bg-gray-100">
       <motion.div
         initial={{ opacity: 0, y: 50 }}
-        animate={isVisible ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.8, ease: "easeOut" }}
+        animate={isVisible ? { opacity: 1, y: 0, transition: { duration: 0.8, delay: 0.2, ease: "easeOut" } } : {}}
         className="max-w-4xl mx-auto px-6"
       >
         <h2 className="text-3xl font-bold text-center text-gray-800">
@@ -42,15 +41,17 @@ export default function FAQ() {
 
         <div className="mt-8 space-y-4">
           {faqData.map((faq, index) => (
-            <details
+            <motion.details
               key={index}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={isVisible ? { opacity: 1, scale: 1, transition: { duration: 0.4, delay: index * 0.1 } } : {}}
               className="bg-white p-4 rounded-lg shadow transition hover:shadow-lg"
             >
               <summary className="font-semibold cursor-pointer">
                 {faq.question}
               </summary>
               <p className="mt-2 text-gray-600">{faq.answer}</p>
-            </details>
+            </motion.details>
           ))}
         </div>
       </motion.div>
