@@ -16,7 +16,7 @@ export default function FreeResume() {
             {/* Main Content */}
             <main className="flex flex-grow w-full h-screen relative">
                 {/* Side Panel (Collapsible) */}
-                <aside className={`${isSidebarOpen ? "w-1/5" : "w-12"} bg-white shadow-lg p-4 border-r border-gray-300 h-full flex flex-col transition-all duration-300`}>
+                <aside className={`${isSidebarOpen ? "w-1/5" : "w-12"} bg-gradient-to-b from-gray-900 to gray-800 text-white shadow-lg p-4 border-r border-gray-300 h-full flex flex-col transition-all duration-300`}>
                     <button onClick={() => setIsSidebarOpen(!isSidebarOpen)}
                             className="self-end text-gray-600 hover:text-gray-900 mb-4">
                         {isSidebarOpen ? <AiOutlineLeft size={20} /> : <AiOutlineRight size={20} />}
