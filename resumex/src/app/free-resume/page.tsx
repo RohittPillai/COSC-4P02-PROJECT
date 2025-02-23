@@ -40,7 +40,7 @@ export default function FreeResume() {
                 </aside>
 
                 {/* Resume Editor */}
-                <section className="flex-1 p-6 h-[96vh] flex justify-center items-center">
+                <section className="flex-1 p-6 h-[96vh] flex justify-center items-center bg-gradient-to-b from-gray-100 to-gray-200">
                     <div className="w-[45%]"> {/* Reduced width */}
                         <h1 className="text-3xl font-bold text-gray-900 text-center mb-4">Free Resume Builder</h1>
                         <textarea
