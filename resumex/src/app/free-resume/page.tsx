@@ -3,6 +3,8 @@ import Header from "../_components/Header";
 import Footer from "../_components/Footer";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { jsPDF } from "jspdf"; // Import jsPDF for PDF generation
+import { saveAs } from "file-saver"; // Import file-saver for Word file download
 import { AiOutlineLeft, AiOutlineRight, AiOutlineClose, AiOutlineSync, AiOutlineCheck } from "react-icons/ai"; // Added Icons
 
 export default function FreeResume() {
@@ -35,6 +37,18 @@ export default function FreeResume() {
 
         return () => clearTimeout(autoSaveInterval); // Cleanup timeout
     }, [resumeContent]); // Runs only when resumeContent changes
+
+    const downloadAsPDF = () => {
+        const doc = new jsPDF();
+        doc.text(resumeContent, 10, 10); // Adds the text from resumeContent to the PDF
+        doc.save("resume.pdf"); // Triggers the download with the filename "resume.pdf"
+    };
+
+    const downloadAsWord = () => {
+        const blob = new Blob([resumeContent], { type: "application/msword" });
+        saveAs(blob, "resume.doc");
+    };
+
 
     return (
         <div className="flex flex-col min-h-screen w-full bg-gray-100">
@@ -99,10 +113,16 @@ export default function FreeResume() {
                                     </button>
                                     {isDownloadExpanded && (
                                         <>
-                                            <button className="w-full mt-2 py-2 bg-white text-gray-800 font-semibold rounded-lg border border-gray-300 hover:bg-gray-200 transition-all duration-200 ease-in-out">
+                                            <button
+                                                onClick={downloadAsPDF}
+                                                className="w-full mt-2 py-2 bg-white text-gray-800 font-semibold rounded-lg border border-gray-300 hover:bg-gray-200 transition-all duration-200 ease-in-out"
+                                            >
                                                 Download as PDF
                                             </button>
-                                            <button className="w-full mt-2 py-2 bg-white text-gray-800 font-semibold rounded-lg border border-gray-300 hover:bg-gray-200 transition-all duration-200 ease-in-out">
+                                            <button
+                                                onClick={downloadAsWord}
+                                                className="w-full mt-2 py-2 bg-white text-gray-800 font-semibold rounded-lg border border-gray-300 hover:bg-gray-200 transition-all duration-200 ease-in-out"
+                                            >
                                                 Download as Word
                                             </button>
                                         </>
