@@ -15,7 +15,7 @@ export default function Pricing() {
       {/* Hero Section */}
       <section className="bg-gradient-to-b from-gray-900 to-gray-800 text-white text-center py-24 px-8">
         <h1 className="text-5xl font-extrabold">Flexible Pricing Plans</h1>
-        <p className="mt-4 text-lg opacity-80">
+        <p className="mt-4 text-lg opacity-90 leading-relaxed">
           Choose a plan that fits your career goals. Upgrade anytime.
         </p>
       </section>
