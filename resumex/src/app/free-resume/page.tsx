@@ -26,13 +26,13 @@ export default function FreeResume() {
                             <h2 className="text-lg font-semibold mb-4">Resume Options</h2>
                             <ul className="space-y-3">
                                 <li><Link href="/login" className="text-blue-600 hover:underline">Sign In</Link></li>
-                                <li><button className="w-full py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 transition">Custom Section</button></li>
-                                <li><button className="w-full py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 transition">Design & Font</button></li>
-                                <li><button className="w-full py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 transition">Undo</button></li>
-                                <li><button className="w-full py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 transition">Redo</button></li>
-                                <li><button className="w-full py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 transition">Save</button></li>
-                                <li><button className="w-full py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 transition">Download</button></li>
-                                <li><button className="w-full py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 transition">Share</button></li>
+                                <li><button className="w-full py-2 bg-gradient-to-r from-blue-600 to-green-200 text-white font-semibold rounded-lg hover:from-teal-600 hover:to-green-600 transition-all duration-200 ease-in-out">Custom Section</button></li>
+                                <li><button className="w-full py-2 bg-gradient-to-r from-blue-600 to-green-200 text-white font-semibold rounded-lg hover:from-teal-600 hover:to-green-600 transition-all duration-200 ease-in-out">Design & Font</button></li>
+                                <li><button className="w-full py-2 bg-gradient-to-r from-blue-600 to-green-200 text-white font-semibold rounded-lg hover:from-teal-600 hover:to-green-600 transition-all duration-200 ease-in-out">Undo</button></li>
+                                <li><button className="w-full py-2 bg-gradient-to-r from-blue-600 to-green-200 text-white font-semibold rounded-lg hover:from-teal-600 hover:to-green-600 transition-all duration-200 ease-in-out">Redo</button></li>
+                                <li><button className="w-full py-2 bg-gradient-to-r from-blue-600 to-green-200 text-white font-semibold rounded-lg hover:from-teal-600 hover:to-green-600 transition-all duration-200 ease-in-out">Save</button></li>
+                                <li><button className="w-full py-2 bg-gradient-to-r from-blue-600 to-green-200 text-white font-semibold rounded-lg hover:from-teal-600 hover:to-green-600 transition-all duration-200 ease-in-out">Download</button></li>
+                                <li><button className="w-full py-2 bg-gradient-to-r from-blue-600 to-green-200 text-white font-semibold rounded-lg hover:from-teal-600 hover:to-green-600 transition-all duration-200 ease-in-out">Share</button></li>
 
                             </ul>
                         </>
