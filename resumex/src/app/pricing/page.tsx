@@ -21,7 +21,7 @@ export default function Pricing() {
       </section>
 
       {/* Pricing Plans */}
-      <main className="flex-grow flex flex-col items-center justify-center py-16 px-6">
+      <main className="flex-grow flex flex-col items-center justify-center py-20 px-8">
         <div className="grid md:grid-cols-2 gap-8 max-w-5xl">
           {/* Basic Plan */}
           <div className="p-8 bg-white shadow-lg rounded-lg text-center border border-gray-300
