@@ -3,7 +3,7 @@ import Header from "../_components/Header";
 import Footer from "../_components/Footer";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { AiOutlineLeft, AiOutlineRight, AiOutlineClose, AiOutlineSync, AiOutlineCheck } from "react-icons/ai"; // Added icons
+import { AiOutlineLeft, AiOutlineRight, AiOutlineClose, AiOutlineSync, AiOutlineCheck } from "react-icons/ai"; // Added Icons
 
 export default function FreeResume() {
     const [resumeContent, setResumeContent] = useState("Start typing your resume...");
@@ -11,26 +11,30 @@ export default function FreeResume() {
     const [isDesignExpanded, setIsDesignExpanded] = useState(false);
     const [isDownloadExpanded, setIsDownloadExpanded] = useState(false);
     const [isShareModalOpen, setIsShareModalOpen] = useState(false);
-    const [isSaving, setIsSaving] = useState(false); // Tracks save state
+    const [isSaving, setIsSaving] = useState(false);
+    const [lastSavedContent, setLastSavedContent] = useState(""); // Track last saved content
 
-    // Function to simulate saving (Replace this with an actual API call)
+    // Function to simulate saving (Replace with actual API call)
     const saveResume = () => {
-        setIsSaving(true); // Show saving animation
+        if (resumeContent !== lastSavedContent) { // Only save if content changed
+            setIsSaving(true);
 
-        setTimeout(() => {
-            setIsSaving(false); // Hide animation after 1 sec
-            console.log("Resume saved:", resumeContent);
-        }, 1000);
+            setTimeout(() => {
+                setIsSaving(false);
+                setLastSavedContent(resumeContent); // Update last saved content
+                console.log("Resume saved:", resumeContent);
+            }, 1000);
+        }
     };
 
-    // Auto-save every 5 seconds
+    // Auto-save only when changes are made
     useEffect(() => {
-        const autoSaveInterval = setInterval(() => {
+        const autoSaveInterval = setTimeout(() => {
             saveResume();
-        }, 5000); // Auto-save every 5 seconds
+        }, 5000); // Check for changes every 5 seconds
 
-        return () => clearInterval(autoSaveInterval); // Cleanup interval on unmount
-    }, [resumeContent]);
+        return () => clearTimeout(autoSaveInterval); // Cleanup timeout
+    }, [resumeContent]); // Runs only when resumeContent changes
 
     return (
         <div className="flex flex-col min-h-screen w-full bg-gray-100">
@@ -80,7 +84,7 @@ export default function FreeResume() {
                                         onClick={saveResume}
                                         className="w-full flex justify-center items-center gap-2 py-3 bg-gradient-to-r from-blue-600 to-green-200 text-white font-semibold rounded-lg border border-gray-300 hover:from-teal-600 hover:to-green-600 transition-all duration-200 ease-in-out"
                                     >
-                                        {isSaving ? <AiOutlineSync className="animate-spin" size={20} /> : <AiOutlineCheck size={20} />} {/* Spin icon while saving */}
+                                        {isSaving ? <AiOutlineSync className="animate-spin" size={20} /> : <AiOutlineCheck size={20} />}
                                         Save
                                     </button>
                                 </li>
