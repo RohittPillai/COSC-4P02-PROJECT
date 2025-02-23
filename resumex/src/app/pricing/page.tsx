@@ -21,7 +21,8 @@ export default function Pricing() {
       <main className="flex-grow flex flex-col items-center justify-center py-16 px-6">
         <div className="grid md:grid-cols-2 gap-8 max-w-5xl">
           {/* Basic Plan */}
-          <div className="p-8 bg-white shadow-md rounded-lg text-center border border-gray-300 transition hover:shadow-2xl hover:scale-105 duration-300 ease-in-out">
+          <div className="p-8 bg-white shadow-lg rounded-lg text-center border border-gray-300
+                          transition-transform transform hover:scale-105 hover:shadow-xl">
             <h2 className="text-3xl font-semibold">Basic Plan</h2>
             <p className="mt-2 text-gray-500 text-lg">$10/month</p>
             <ul className="mt-6 space-y-4 text-gray-600 text-left">
@@ -32,14 +33,15 @@ export default function Pricing() {
               <li>✅ Basic Customer Support</li>
             </ul>
             <Link href="/subscribe/basic">
-              <button className="mt-8 px-6 py-3 w-full bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-800 transition duration-300 ease-in-out shadow-md hover:shadow-lg">
+              <button className="mt-8 px-6 py-3 w-full bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition">
                 Get Started
               </button>
             </Link>
           </div>
 
-          {/* Premium Plan */}
-          <div className="p-8 bg-white shadow-lg rounded-lg text-center border-2 border-blue-500 transform scale-105 transition hover:shadow-xl">
+          {/* Premium Plan  */}
+          <div className="p-8 bg-white shadow-lg rounded-lg text-center border-2 border-blue-500
+                          transform scale-100 transition-transform hover:scale-105 hover:shadow-xl">
             <h2 className="text-3xl font-semibold text-blue-600">Premium Plan</h2>
             <p className="mt-2 text-gray-500 text-lg">$20/month</p>
             <ul className="mt-6 space-y-4 text-gray-600 text-left">
@@ -52,13 +54,14 @@ export default function Pricing() {
               <li>✅ LinkedIn Profile Optimization Tips</li>
             </ul>
             <Link href="/subscribe/premium">
-              <button className="mt-8 px-6 py-3 w-full bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-800 transition duration-300 ease-in-out shadow-md hover:shadow-lg">
+              <button className="mt-8 px-6 py-3 w-full bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition">
                 Get Premium
               </button>
             </Link>
           </div>
         </div>
       </main>
+
 
       {/* Features Comparison Table */}
       <section className="max-w-5xl mx-auto bg-white p-8 rounded-lg shadow-lg mt-12">
