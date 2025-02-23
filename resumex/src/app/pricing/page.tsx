@@ -61,58 +61,61 @@ export default function Pricing() {
       </main>
 
       {/* Features Comparison Table */}
-      {/* Features Comparison Table */}
       <section className="max-w-5xl mx-auto bg-white p-8 rounded-lg shadow-lg mt-12">
         <h2 className="text-3xl font-bold text-center text-gray-800">Feature Comparison</h2>
         <div className="overflow-x-auto mt-6">
           <table className="w-full border-collapse border border-gray-300 rounded-lg overflow-hidden">
+            {/* Table Head */}
             <thead className="bg-gradient-to-r from-gray-200 to-gray-300 text-gray-900 font-bold text-center">
               <tr>
-                <th className="p-4 border">Feature</th>
-                <th className="p-4 border">Basic</th>
-                <th className="p-4 border">Premium</th>
+                <th className="p-4 border text-left">Feature</th>
+                <th className="p-4 border bg-blue-100 text-blue-700">Basic</th>
+                <th className="p-4 border bg-blue-600 text-white">Premium</th>
               </tr>
             </thead>
+
+            {/* Table Body */}
             <tbody className="text-center">
               <tr>
-                <td className="p-4 border">AI-Powered Resume</td>
-                <td className="p-4 border text-green-500 text-lg">✔</td>
-                <td className="p-4 border text-green-500 text-lg">✔</td>
+                <td className="p-4 border text-left">AI-Powered Resume</td>
+                <td className="p-4 border text-green-500 font-semibold">✔</td>
+                <td className="p-4 border text-green-500 font-semibold">✔</td>
               </tr>
               <tr>
-                <td className="p-4 border">Resume Templates</td>
-                <td className="p-4 border">3</td>
-                <td className="p-4 border">10</td>
+                <td className="p-4 border text-left">Resume Templates</td>
+                <td className="p-4 border font-semibold">3</td>
+                <td className="p-4 border font-semibold">10</td>
               </tr>
               <tr>
-                <td className="p-4 border">PDF Export</td>
-                <td className="p-4 border text-green-500 text-lg">✔</td>
-                <td className="p-4 border text-green-500 text-lg">✔</td>
+                <td className="p-4 border text-left">PDF Export</td>
+                <td className="p-4 border text-green-500 font-semibold">✔</td>
+                <td className="p-4 border text-green-500 font-semibold">✔</td>
               </tr>
               <tr>
-                <td className="p-4 border">Resume Score & Feedback</td>
-                <td className="p-4 border text-green-500 text-lg">✔</td>
-                <td className="p-4 border text-green-500 text-lg">✔</td>
+                <td className="p-4 border text-left">Resume Score & Feedback</td>
+                <td className="p-4 border text-green-500 font-semibold">✔</td>
+                <td className="p-4 border text-green-500 font-semibold">✔</td>
               </tr>
               <tr>
-                <td className="p-4 border">Cover Letter Generator</td>
-                <td className="p-4 border text-red-500 text-lg">✖</td>
-                <td className="p-4 border text-green-500 text-lg">✔</td>
+                <td className="p-4 border text-left">Cover Letter Generator</td>
+                <td className="p-4 border text-gray-400 font-semibold">-</td>
+                <td className="p-4 border text-green-500 font-semibold">✔</td>
               </tr>
               <tr>
-                <td className="p-4 border">Resume Analytics</td>
-                <td className="p-4 border text-red-500 text-lg">✖</td>
-                <td className="p-4 border text-green-500 text-lg">✔</td>
+                <td className="p-4 border text-left">Resume Analytics</td>
+                <td className="p-4 border text-gray-400 font-semibold">-</td>
+                <td className="p-4 border text-green-500 font-semibold">✔</td>
               </tr>
               <tr>
-                <td className="p-4 border">Priority Support</td>
-                <td className="p-4 border text-red-500 text-lg">✖</td>
-                <td className="p-4 border text-green-500 text-lg">✔</td>
+                <td className="p-4 border text-left">Priority Support</td>
+                <td className="p-4 border text-gray-400 font-semibold">-</td>
+                <td className="p-4 border text-green-500 font-semibold">✔</td>
               </tr>
             </tbody>
           </table>
         </div>
       </section>
+
 
 
       {/* FAQs Section */}
