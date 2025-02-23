@@ -134,16 +134,26 @@ export default function Pricing() {
     <div className="overflow-hidden py-4">
       <div className="flex space-x-12 animate-marquee">
         <div className="flex justify-center gap-8 flex-wrap">
-                <Image src="/brock.png" alt="Brock University" width={120} height={50} />
-                <Image src="/algonquin.png" alt="Algonquin College" width={120} height={50} />
-                <Image src="/sheridan.png" alt="Sheridan College" width={120} height={50} />
-                <Image src="/durham.png" alt="Durham College" width={120} height={50} />
-                <Image src="/conestoga.png" alt="Conestoga College" width={120} height={50} />
-              </div>
+          {[
+            { src: "/brock.png", alt: "Brock University" },
+            { src: "/algonquin.png", alt: "Algonquin College" },
+            { src: "/sheridan.png", alt: "Sheridan College" },
+            { src: "/durham.png", alt: "Durham College" },
+            { src: "/conestoga.png", alt: "Conestoga College" },
+          ].map((logo, index) => (
+            <div
+              key={index}
+              className="transition-transform transform hover:scale-110 hover:shadow-md"
+            >
+              <Image src={logo.src} alt={logo.alt} width={100} height={40} />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   </div>
 </section>
+
 
 
 
