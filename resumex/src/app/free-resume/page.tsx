@@ -16,7 +16,7 @@ export default function FreeResume() {
             {/* Main Content */}
             <main className="flex flex-grow w-full h-screen relative">
                 {/* Side Panel (Collapsible) */}
-                <aside className={`${isSidebarOpen ? "w-1/6" : "w-12"} bg-white shadow-lg p-4 border-r border-gray-300 h-full flex flex-col transition-all duration-300`}>
+                <aside className={`${isSidebarOpen ? "w-1/5" : "w-12"} bg-white shadow-lg p-4 border-r border-gray-300 h-full flex flex-col transition-all duration-300`}>
                     <button onClick={() => setIsSidebarOpen(!isSidebarOpen)}
                             className="self-end text-gray-600 hover:text-gray-900 mb-4">
                         {isSidebarOpen ? <AiOutlineLeft size={20} /> : <AiOutlineRight size={20} />}
@@ -28,24 +28,28 @@ export default function FreeResume() {
                                 <li><Link href="/login" className="text-blue-600 hover:underline">Sign In</Link></li>
                                 <li><button className="w-full py-2 bg-gray-200 rounded">Custom Section</button></li>
                                 <li><button className="w-full py-2 bg-gray-200 rounded">Design & Font</button></li>
-                                <li><button className="w-full py-2 bg-gray-200 rounded">Download</button></li>
-                                <li><button className="w-full py-2 bg-gray-200 rounded">Share</button></li>
                                 <li><button className="w-full py-2 bg-gray-200 rounded">Undo</button></li>
                                 <li><button className="w-full py-2 bg-gray-200 rounded">Redo</button></li>
+                                <li><button className="w-full py-2 bg-gray-200 rounded">Save</button></li>
+                                <li><button className="w-full py-2 bg-gray-200 rounded">Download</button></li>
+                                <li><button className="w-full py-2 bg-gray-200 rounded">Share</button></li>
+
                             </ul>
                         </>
                     )}
                 </aside>
 
                 {/* Resume Editor */}
-                <section className="flex-1 p-6 h-full">
-                    <h1 className="text-3xl font-bold text-gray-900 text-center mb-4">Free Resume Builder</h1>
-                    <textarea
-                        className="w-full h-[70vh] p-4 border rounded shadow-sm resize-none"
-                        value={resumeContent}
-                        onChange={(e) => setResumeContent(e.target.value)}
-                        aria-label="Resume Editor"
-                    />
+                <section className="flex-1 p-6 h-[96vh] flex justify-center items-center">
+                    <div className="w-[45%]"> {/* Reduced width */}
+                        <h1 className="text-3xl font-bold text-gray-900 text-center mb-4">Free Resume Builder</h1>
+                        <textarea
+                            className="w-full h-[85vh] p-4 border rounded shadow-sm resize-none"
+                            value={resumeContent}
+                            onChange={(e) => setResumeContent(e.target.value)}
+                            aria-label="Resume Editor"
+                        />
+                    </div>
                 </section>
 
 
