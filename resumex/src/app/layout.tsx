@@ -8,7 +8,9 @@ import { TRPCReactProvider } from "~/trpc/react";
 export const metadata: Metadata = {
   title: "ResumeX",
   description: "Build Your Resume with AI",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  icons: [
+    { rel: "icon", url: "/favicon.ico" },
+    { rel: "apple-touch-icon", url: "/apple-touch-icon.png", sizes: "180x180" }],
 };
 
 export default function RootLayout({
