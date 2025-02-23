@@ -8,6 +8,8 @@ import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 export default function FreeResume() {
     const [resumeContent, setResumeContent] = useState("Start typing your resume...");
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    const [isDesignExpanded, setIsDesignExpanded] = useState(false);
+    const [isDownloadExpanded, setIsDownloadExpanded] = useState(false);
 
     return (
         <div className="flex flex-col min-h-screen w-full bg-gray-100">
@@ -27,13 +29,52 @@ export default function FreeResume() {
                             <ul className="space-y-3">
                                 <li><Link href="/login" className="text-blue-600 hover:underline">Sign In</Link></li>
                                 <li><button className="w-full py-3 bg-gradient-to-r from-blue-600 to-green-200 text-white font-semibold rounded-lg border border-gray-300 hover:from-teal-600 hover:to-green-600 transition-all duration-200 ease-in-out">Custom Section</button></li>
-                                <li><button className="w-full py-3 bg-gradient-to-r from-blue-600 to-green-200 text-white font-semibold rounded-lg border border-gray-300 hover:from-teal-600 hover:to-green-600 transition-all duration-200 ease-in-out">Design & Font</button></li>
+
+                                {/* DESIGN & FONT EXPANDING BUTTON */}
+                                <li>
+                                    <button
+                                        onClick={() => setIsDesignExpanded(!isDesignExpanded)}
+                                        className="w-full py-3 bg-gradient-to-r from-blue-600 to-green-200 text-white font-semibold rounded-lg border border-gray-300 hover:from-teal-600 hover:to-green-600 transition-all duration-200 ease-in-out"
+                                    >
+                                        Design & Font {isDesignExpanded ? "▲" : "▼"}
+                                    </button>
+                                    {isDesignExpanded && (
+                                        <>
+                                            <button className="w-full mt-2 py-2 bg-white text-gray-800 font-semibold rounded-lg border border-gray-300 hover:bg-gray-200 transition-all duration-200 ease-in-out">
+                                                Change Font
+                                            </button>
+                                            <button className="w-full mt-2 py-2 bg-white text-gray-800 font-semibold rounded-lg border border-gray-300 hover:bg-gray-200 transition-all duration-200 ease-in-out">
+                                                Change Theme
+                                            </button>
+                                        </>
+                                    )}
+                                </li>
+
                                 <li><button className="w-full py-3 bg-gradient-to-r from-blue-600 to-green-200 text-white font-semibold rounded-lg border border-gray-300 hover:from-teal-600 hover:to-green-600 transition-all duration-200 ease-in-out">Undo</button></li>
                                 <li><button className="w-full py-3 bg-gradient-to-r from-blue-600 to-green-200 text-white font-semibold rounded-lg border border-gray-300 hover:from-teal-600 hover:to-green-600 transition-all duration-200 ease-in-out">Redo</button></li>
                                 <li><button className="w-full py-3 bg-gradient-to-r from-blue-600 to-green-200 text-white font-semibold rounded-lg border border-gray-300 hover:from-teal-600 hover:to-green-600 transition-all duration-200 ease-in-out">Save</button></li>
-                                <li><button className="w-full py-3 bg-gradient-to-r from-blue-600 to-green-200 text-white font-semibold rounded-lg border border-gray-300 hover:from-teal-600 hover:to-green-600 transition-all duration-200 ease-in-out">Download</button></li>
-                                <li><button className="w-full py-3 bg-gradient-to-r from-blue-600 to-green-200 text-white font-semibold rounded-lg border border-gray-300 hover:from-teal-600 hover:to-green-600 transition-all duration-200 ease-in-out">Share</button></li>
 
+                                {/* DOWNLOAD EXPANDING BUTTON */}
+                                <li>
+                                    <button
+                                        onClick={() => setIsDownloadExpanded(!isDownloadExpanded)}
+                                        className="w-full py-3 bg-gradient-to-r from-blue-600 to-green-200 text-white font-semibold rounded-lg border border-gray-300 hover:from-teal-600 hover:to-green-600 transition-all duration-200 ease-in-out"
+                                    >
+                                        Download {isDownloadExpanded ? "▲" : "▼"}
+                                    </button>
+                                    {isDownloadExpanded && (
+                                        <>
+                                            <button className="w-full mt-2 py-2 bg-white text-gray-800 font-semibold rounded-lg border border-gray-300 hover:bg-gray-200 transition-all duration-200 ease-in-out">
+                                                Download as PDF
+                                            </button>
+                                            <button className="w-full mt-2 py-2 bg-white text-gray-800 font-semibold rounded-lg border border-gray-300 hover:bg-gray-200 transition-all duration-200 ease-in-out">
+                                                Download as Word
+                                            </button>
+                                        </>
+                                    )}
+                                </li>
+
+                                <li><button className="w-full py-3 bg-gradient-to-r from-blue-600 to-green-200 text-white font-semibold rounded-lg border border-gray-300 hover:from-teal-600 hover:to-green-600 transition-all duration-200 ease-in-out">Share</button></li>
                             </ul>
                         </>
                     )}
@@ -51,11 +92,9 @@ export default function FreeResume() {
                         />
                     </div>
                 </section>
-
-
             </main>
 
-            <Footer  />
+            <Footer />
         </div>
     );
 }
