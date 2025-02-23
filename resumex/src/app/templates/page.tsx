@@ -21,7 +21,7 @@ export default function TemplatesPlaceholder() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % resumes.length);
-    }, 4000); // Change resume every 4 seconds
+    }, 2000); // Change resume every 4 seconds
 
     return () => clearInterval(interval);
   }, []);
