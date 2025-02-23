@@ -26,13 +26,13 @@ export default function FreeResume() {
                             <h2 className="text-lg font-semibold mb-4">Resume Options</h2>
                             <ul className="space-y-3">
                                 <li><Link href="/login" className="text-blue-600 hover:underline">Sign In</Link></li>
-                                <li><button className="w-full py-2 bg-gray-200 rounded">Custom Section</button></li>
-                                <li><button className="w-full py-2 bg-gray-200 rounded">Design & Font</button></li>
-                                <li><button className="w-full py-2 bg-gray-200 rounded">Undo</button></li>
-                                <li><button className="w-full py-2 bg-gray-200 rounded">Redo</button></li>
-                                <li><button className="w-full py-2 bg-gray-200 rounded">Save</button></li>
-                                <li><button className="w-full py-2 bg-gray-200 rounded">Download</button></li>
-                                <li><button className="w-full py-2 bg-gray-200 rounded">Share</button></li>
+                                <li><button className="w-full py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 transition">Custom Section</button></li>
+                                <li><button className="w-full py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 transition">Design & Font</button></li>
+                                <li><button className="w-full py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 transition">Undo</button></li>
+                                <li><button className="w-full py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 transition">Redo</button></li>
+                                <li><button className="w-full py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 transition">Save</button></li>
+                                <li><button className="w-full py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 transition">Download</button></li>
+                                <li><button className="w-full py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 transition">Share</button></li>
 
                             </ul>
                         </>
