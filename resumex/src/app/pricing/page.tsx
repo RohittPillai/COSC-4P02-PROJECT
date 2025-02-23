@@ -164,7 +164,7 @@ export default function Pricing() {
         <h2 className="text-3xl font-bold">Start Building Your Resume Today</h2>
         <p className="mt-4 text-lg">Join thousands of professionals using ResumeX.</p>
         <Link href="/register">
-          <button className="mt-6 px-6 py-3 bg-white text-blue-600 font-semibold rounded-lg hover:bg-gray-200 transition">
+          <button className="mt-6 px-10 py-4 bg-white text-blue-600 font-semibold rounded-xl shadow-md hover:bg-gray-200 transition">
             Sign Up Now
           </button>
         </Link>
