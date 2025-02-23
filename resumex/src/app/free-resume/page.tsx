@@ -1,9 +1,9 @@
 "use client";
 import Header from "../_components/Header";
 import Footer from "../_components/Footer";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { AiOutlineLeft, AiOutlineRight, AiOutlineClose } from "react-icons/ai"; // Added Close Icon
+import { AiOutlineLeft, AiOutlineRight, AiOutlineClose, AiOutlineSync, AiOutlineCheck } from "react-icons/ai"; // Added icons
 
 export default function FreeResume() {
     const [resumeContent, setResumeContent] = useState("Start typing your resume...");
@@ -11,12 +11,26 @@ export default function FreeResume() {
     const [isDesignExpanded, setIsDesignExpanded] = useState(false);
     const [isDownloadExpanded, setIsDownloadExpanded] = useState(false);
     const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+    const [isSaving, setIsSaving] = useState(false); // Tracks save state
 
-    // Function to copy a mock resume link
-    const copyToClipboard = () => {
-        navigator.clipboard.writeText("https://resumex.com/my-resume");
-        alert("Resume link copied to clipboard!");
+    // Function to simulate saving (Replace this with an actual API call)
+    const saveResume = () => {
+        setIsSaving(true); // Show saving animation
+
+        setTimeout(() => {
+            setIsSaving(false); // Hide animation after 1 sec
+            console.log("Resume saved:", resumeContent);
+        }, 1000);
     };
+
+    // Auto-save every 5 seconds
+    useEffect(() => {
+        const autoSaveInterval = setInterval(() => {
+            saveResume();
+        }, 5000); // Auto-save every 5 seconds
+
+        return () => clearInterval(autoSaveInterval); // Cleanup interval on unmount
+    }, [resumeContent]);
 
     return (
         <div className="flex flex-col min-h-screen w-full bg-gray-100">
@@ -59,7 +73,17 @@ export default function FreeResume() {
 
                                 <li><button className="w-full py-3 bg-gradient-to-r from-blue-600 to-green-200 text-white font-semibold rounded-lg border border-gray-300 hover:from-teal-600 hover:to-green-600 transition-all duration-200 ease-in-out">Undo</button></li>
                                 <li><button className="w-full py-3 bg-gradient-to-r from-blue-600 to-green-200 text-white font-semibold rounded-lg border border-gray-300 hover:from-teal-600 hover:to-green-600 transition-all duration-200 ease-in-out">Redo</button></li>
-                                <li><button className="w-full py-3 bg-gradient-to-r from-blue-600 to-green-200 text-white font-semibold rounded-lg border border-gray-300 hover:from-teal-600 hover:to-green-600 transition-all duration-200 ease-in-out">Save</button></li>
+
+                                {/* SAVE BUTTON */}
+                                <li>
+                                    <button
+                                        onClick={saveResume}
+                                        className="w-full flex justify-center items-center gap-2 py-3 bg-gradient-to-r from-blue-600 to-green-200 text-white font-semibold rounded-lg border border-gray-300 hover:from-teal-600 hover:to-green-600 transition-all duration-200 ease-in-out"
+                                    >
+                                        {isSaving ? <AiOutlineSync className="animate-spin" size={20} /> : <AiOutlineCheck size={20} />} {/* Spin icon while saving */}
+                                        Save
+                                    </button>
+                                </li>
 
                                 {/* DOWNLOAD EXPANDING BUTTON */}
                                 <li>
@@ -97,7 +121,7 @@ export default function FreeResume() {
 
                 {/* Resume Editor */}
                 <section className="flex-1 p-6 h-[96vh] flex justify-center items-center bg-gradient-to-b from-gray-100 to-gray-200">
-                    <div className="w-[45%]"> {/* Reduced width */}
+                    <div className="w-[45%]">
                         <h1 className="text-4xl font-extrabold text-gray-900 text-center mb-4">Free Resume Builder</h1>
                         <textarea
                             className="w-full h-[85vh] p-4 border border-gray-300 rounded-lg shadow-xl resize-none bg-white"
@@ -110,27 +134,6 @@ export default function FreeResume() {
             </main>
 
             <Footer />
-
-            {/* SHARE MODAL */}
-            {isShareModalOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-                    <div className="relative bg-white p-6 rounded-lg shadow-lg w-96 text-center">
-                        {/* Close Icon at Top Right */}
-                        <button
-                            onClick={() => setIsShareModalOpen(false)}
-                            className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
-                        >
-                            <AiOutlineClose size={24} />
-                        </button>
-
-                        <h2 className="text-lg font-bold mb-4">Share Your Resume</h2>
-                        <button className="w-full py-2 bg-blue-600 text-white font-semibold rounded-lg mb-2 hover:bg-blue-700 transition">Share on LinkedIn</button>
-                        <button className="w-full py-2 bg-gray-500 text-white font-semibold rounded-lg mb-2 hover:bg-gray-600 transition">Share via Email</button>
-                        <button onClick={copyToClipboard} className="w-full py-2 bg-green-500 text-white font-semibold rounded-lg mb-2 hover:bg-green-600 transition">Copy Resume Link</button>
-                        <button onClick={() => setIsShareModalOpen(false)} className="w-full py-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition">Close</button>
-                    </div>
-                </div>
-            )}
         </div>
     );
 }
