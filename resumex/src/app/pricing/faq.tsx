@@ -32,7 +32,7 @@ export default function FAQ() {
     <section ref={faqRef} className="py-16 bg-gray-100">
       <motion.div
         initial={{ opacity: 0, y: 50 }}
-        animate={isVisible ? { opacity: 1, y: 0, transition: { duration: 0.8, delay: 0.2, ease: "easeOut" } } : {}}
+        animate={isVisible ? { opacity: 1, y: 0, transition: { duration: 1, delay: 0.3, ease: "easeOut" } } : {}}
         className="max-w-4xl mx-auto px-6"
       >
         <h2 className="text-3xl font-bold text-center text-gray-800">
