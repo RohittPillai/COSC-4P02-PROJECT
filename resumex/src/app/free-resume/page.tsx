@@ -27,7 +27,15 @@ export default function FreeResume() {
                         <>
                             <h2 className="text-lg font-semibold mb-4">Resume Options</h2>
                             <ul className="space-y-3">
-                                <li><Link href="/login" className="text-blue-600 hover:underline">Sign In</Link></li>
+                                <li>
+                                    <button
+                                        onClick={() => window.location.href = "/login"}
+                                        className="text-blue-600 hover:underline"
+                                    >
+                                        Sign In
+                                    </button>
+                                </li>
+
                                 <li><button className="w-full py-3 bg-gradient-to-r from-blue-600 to-green-200 text-white font-semibold rounded-lg border border-gray-300 hover:from-teal-600 hover:to-green-600 transition-all duration-200 ease-in-out">Custom Section</button></li>
 
                                 {/* DESIGN & FONT EXPANDING BUTTON */}
