@@ -13,7 +13,7 @@ export default function Pricing() {
       <Header /> {/* Header at the top */}
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-b from-gray-900 to-gray-800 text-white text-center py-20 px-6">
+      <section className="bg-gradient-to-b from-gray-900 to-gray-800 text-white text-center py-24 px-8">
         <h1 className="text-5xl font-extrabold">Flexible Pricing Plans</h1>
         <p className="mt-4 text-lg opacity-80">
           Choose a plan that fits your career goals. Upgrade anytime.
@@ -35,7 +35,7 @@ export default function Pricing() {
               <li>✅ Resume Score & Feedback</li>
               <li>✅ Basic Customer Support</li>
             </ul>
-            <Link href="/subscribe/basic">
+            <Link href="/pricing/basic">
               <button className="mt-8 px-6 py-3 w-full bg-blue-600 text-white font-semibold rounded-full shadow-md hover:bg-blue-700 hover:shadow-lg transition-transform transform hover:scale-105">
                 Get Started
               </button>
@@ -81,7 +81,7 @@ export default function Pricing() {
             </thead>
 
             {/* Table Body */}
-            <tbody className="text-center">
+            <tbody className="text-center divide-y divide-gray-200">
               <tr>
                 <td className="p-4 border text-left">AI-Powered Resume</td>
                 <td className="p-4 border text-green-500 font-semibold">✔</td>
