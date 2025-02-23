@@ -9,11 +9,11 @@ export default function LoginPage() {
   return (
     // TODO: Check if this is the correct way to add the header to pages
     <>
-      <Header></Header>
-      <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
-        <div className="flex w-full max-w-sm flex-col items-center self-center">
+      <Header />
+      <div className="flex min-h-screen flex-col items-center justify-center gap-8 bg-muted p-6 md:p-10">
+        <div className="flex w-full max-w-sm flex-col items-center self-center gap-10">
             <Image
-            src="/main_logo.png" // Path to your logo in the public folder
+            src="/transparent_black_main_logo.png" // Path to logo in the public folder
             alt="ResumeX"
             width={200} // Adjust width
             height={200} // Adjust height
@@ -21,6 +21,7 @@ export default function LoginPage() {
           <LoginForm />
         </div>
       </div>
+      <Footer />
     </>
   );
 }
