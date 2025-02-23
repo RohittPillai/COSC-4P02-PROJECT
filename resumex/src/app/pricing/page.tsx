@@ -65,7 +65,7 @@ export default function Pricing() {
         <h2 className="text-3xl font-bold text-center text-gray-800">Feature Comparison</h2>
         <div className="overflow-x-auto mt-6">
           <table className="w-full border-collapse border border-gray-300">
-            <thead className="bg-gray-200">
+            <thead className="bg-gray-300 text-gray-900 font-bold text-center">
               <tr>
                 <th className="p-4 border">Feature</th>
                 <th className="p-4 border">Basic</th>
