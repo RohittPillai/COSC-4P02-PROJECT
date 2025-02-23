@@ -11,9 +11,15 @@ export default function TemplatesPlaceholder() {
         <Header />
         {/* left aligned resume templates text */}
         <div className="mt-16 ml-16">
-          <h1 className="text-6xl font-extrabold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-500 to-gray-800 animate-gradient">
-            RESUME TEMPLATES
+          <h1 className="text-6xl font-extrabold tracking-wide text-transparent bg-clip-text animate-gradient leading-tight">
+            RESUME <br/>TEMPLATES
           </h1>
+          {/* Subtitle Below the Heading (Thin Text) */}
+        <p className="mt-4 max-w-2xl text-lg text-gray-600 font-light">
+          Choose a <span className="font-normal text-black">professionally designed resume template<br/></span> and create your 
+          standout resume in minutes. <span className="font-normal text-black">Easy to edit,<br/> fully customizable,</span> and 
+          optimized for success.
+        </p>
         </div>
         {/* Animation keyframes */}
         <style jsx>{`
@@ -21,16 +27,17 @@ export default function TemplatesPlaceholder() {
             0% {
               background-position: 0% 50%;
             }
-            50% {
-              background-position: 100% 50%;
-            }
-            100% {
-              background-position: 0% 50%;
+           100% {
+              background-position: 200% 50%;
             }
           }
           .animate-gradient {
-            background-size: 200% 200%;
-            animation: gradientAnimation 3s ease infinite;
+          background-image: linear-gradient(to right, black, blue, purple, black);
+          background-size: 200% auto;
+          background-clip: text;
+          -webkit-background-clip: text;
+          color: transparent;
+          animation: gradientAnimation 6s linear infinite;
           }
         `}</style>
       </div>
