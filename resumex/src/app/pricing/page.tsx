@@ -70,7 +70,7 @@ export default function Pricing() {
       <section className="max-w-5xl mx-auto bg-white p-8 rounded-lg shadow-lg mt-12">
         <h2 className="text-3xl font-bold text-center text-gray-800">Feature Comparison</h2>
         <div className="overflow-x-auto mt-6">
-          <table className="w-full border-collapse border border-gray-300 rounded-lg overflow-hidden">
+          <table className="w-full border-collapse border border-gray-400 rounded-lg overflow-hidden">
             {/* Table Head */}
             <thead className="bg-gradient-to-r from-gray-200 to-gray-300 text-gray-900 font-bold text-center">
               <tr>
