@@ -45,7 +45,7 @@ export default function FAQ() {
               key={index}
               initial={{ opacity: 0, scale: 0.95 }}
               animate={isVisible ? { opacity: 1, scale: 1, transition: { duration: 0.4, delay: index * 0.1 } } : {}}
-              className="bg-white p-4 rounded-lg shadow transition hover:shadow-lg"
+              className="bg-white p-4 rounded-lg shadow transition-transform transform hover:scale-105 hover:shadow-xl"
             >
               <summary className="font-semibold cursor-pointer">
                 {faq.question}
