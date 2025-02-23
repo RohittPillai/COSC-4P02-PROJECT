@@ -64,3 +64,17 @@
     @apply bg-background text-foreground;
   }
 }
+@keyframes marquee {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  gap: 2rem;
+  animation: marquee 15s linear infinite;
+}
