@@ -4,6 +4,7 @@ import Header from "../_components/Header";
 import Footer from "../_components/Footer";
 import Link from "next/link";
 import Image from "next/image";
+import FAQ from "./faq";
 
 
 export default function Pricing() {
@@ -155,22 +156,8 @@ export default function Pricing() {
 </section>
 
 
-
-
-      {/* FAQs Section */}
-      <section className="max-w-5xl mx-auto bg-gray-100 p-8 rounded-lg shadow-lg mt-12">
-        <h2 className="text-3xl font-bold text-center text-gray-800">Frequently Asked Questions</h2>
-        <div className="mt-6">
-          <div className="mb-4 p-4 bg-white rounded-lg shadow">
-            <h3 className="text-lg font-semibold">Can I cancel anytime?</h3>
-            <p className="text-gray-600">Yes! You can cancel your subscription at any time from your account settings.</p>
-          </div>
-          <div className="mb-4 p-4 bg-white rounded-lg shadow">
-            <h3 className="text-lg font-semibold">Do I get a refund if I cancel?</h3>
-            <p className="text-gray-600">We do not offer refunds, but your premium benefits will last until your billing cycle ends.</p>
-          </div>
-        </div>
-      </section>
+{/* Trusted by Universities & Colleges */}
+      <FAQ /> {/* Using FAQ component here */}
 
       {/* Call to Action */}
       <section className="bg-blue-600 text-white text-center py-16 mt-12">
