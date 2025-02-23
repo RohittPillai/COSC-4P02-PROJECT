@@ -21,10 +21,12 @@ export default function Pricing() {
           <div className="p-6 bg-white shadow-lg rounded-lg text-center border border-gray-300">
             <h2 className="text-2xl font-semibold">Basic Plan</h2>
             <p className="mt-2 text-gray-500">$10/month</p>
-            <ul className="mt-4 space-y-2 text-gray-600">
+            <ul className="mt-4 space-y-2 text-gray-600 text-left">
               <li>✔ AI-Powered Resume</li>
               <li>✔ 3 Resume Templates</li>
               <li>✔ PDF Export</li>
+              <li>✔ Resume Score & Feedback</li>
+              <li>✔ Basic Customer Support</li>
             </ul>
             <Link href="/subscribe/basic">
               <button className="mt-6 px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition">
@@ -37,11 +39,14 @@ export default function Pricing() {
           <div className="p-6 bg-white shadow-lg rounded-lg text-center border border-gray-300">
             <h2 className="text-2xl font-semibold">Premium Plan</h2>
             <p className="mt-2 text-gray-500">$20/month</p>
-            <ul className="mt-4 space-y-2 text-gray-600">
+            <ul className="mt-4 space-y-2 text-gray-600 text-left">
               <li>✔ All Features from Basic</li>
               <li>✔ 10 Premium Templates</li>
               <li>✔ AI-Powered Customization</li>
               <li>✔ Priority Support</li>
+              <li>✔ Cover Letter Generator</li>
+              <li>✔ Resume Analytics (Track Views)</li>
+              <li>✔ LinkedIn Profile Optimization Tips</li>
             </ul>
             <Link href="/subscribe/premium">
               <button className="mt-6 px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition">
