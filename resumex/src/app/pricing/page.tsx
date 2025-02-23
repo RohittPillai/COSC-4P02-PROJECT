@@ -21,7 +21,7 @@ export default function Pricing() {
       <main className="flex-grow flex flex-col items-center justify-center py-16 px-6">
         <div className="grid md:grid-cols-2 gap-8 max-w-5xl">
           {/* Basic Plan */}
-          <div className="p-8 bg-white shadow-lg rounded-lg text-center border border-gray-300 transition hover:shadow-xl">
+          <div className="p-8 bg-white shadow-md rounded-lg text-center border border-gray-300 transition hover:shadow-2xl hover:scale-105 duration-300 ease-in-out">
             <h2 className="text-3xl font-semibold">Basic Plan</h2>
             <p className="mt-2 text-gray-500 text-lg">$10/month</p>
             <ul className="mt-6 space-y-4 text-gray-600 text-left">
@@ -61,22 +61,23 @@ export default function Pricing() {
       </main>
 
       {/* Features Comparison Table */}
+      {/* Features Comparison Table */}
       <section className="max-w-5xl mx-auto bg-white p-8 rounded-lg shadow-lg mt-12">
         <h2 className="text-3xl font-bold text-center text-gray-800">Feature Comparison</h2>
         <div className="overflow-x-auto mt-6">
-          <table className="w-full border-collapse border border-gray-300">
-            <thead className="bg-gray-300 text-gray-900 font-bold text-center">
+          <table className="w-full border-collapse border border-gray-300 rounded-lg overflow-hidden">
+            <thead className="bg-gradient-to-r from-gray-200 to-gray-300 text-gray-900 font-bold text-center">
               <tr>
                 <th className="p-4 border">Feature</th>
                 <th className="p-4 border">Basic</th>
                 <th className="p-4 border">Premium</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="text-center">
               <tr>
                 <td className="p-4 border">AI-Powered Resume</td>
-                <td className="p-4 border">✅</td>
-                <td className="p-4 border">✅</td>
+                <td className="p-4 border text-green-500 text-lg">✔</td>
+                <td className="p-4 border text-green-500 text-lg">✔</td>
               </tr>
               <tr>
                 <td className="p-4 border">Resume Templates</td>
@@ -85,33 +86,34 @@ export default function Pricing() {
               </tr>
               <tr>
                 <td className="p-4 border">PDF Export</td>
-                <td className="p-4 border">✅</td>
-                <td className="p-4 border">✅</td>
+                <td className="p-4 border text-green-500 text-lg">✔</td>
+                <td className="p-4 border text-green-500 text-lg">✔</td>
               </tr>
               <tr>
                 <td className="p-4 border">Resume Score & Feedback</td>
-                <td className="p-4 border">✅</td>
-                <td className="p-4 border">✅</td>
+                <td className="p-4 border text-green-500 text-lg">✔</td>
+                <td className="p-4 border text-green-500 text-lg">✔</td>
               </tr>
               <tr>
                 <td className="p-4 border">Cover Letter Generator</td>
-                <td className="p-4 border">❌</td>
-                <td className="p-4 border">✅</td>
+                <td className="p-4 border text-red-500 text-lg">✖</td>
+                <td className="p-4 border text-green-500 text-lg">✔</td>
               </tr>
               <tr>
                 <td className="p-4 border">Resume Analytics</td>
-                <td className="p-4 border">❌</td>
-                <td className="p-4 border">✅</td>
+                <td className="p-4 border text-red-500 text-lg">✖</td>
+                <td className="p-4 border text-green-500 text-lg">✔</td>
               </tr>
               <tr>
                 <td className="p-4 border">Priority Support</td>
-                <td className="p-4 border">❌</td>
-                <td className="p-4 border">✅</td>
+                <td className="p-4 border text-red-500 text-lg">✖</td>
+                <td className="p-4 border text-green-500 text-lg">✔</td>
               </tr>
             </tbody>
           </table>
         </div>
       </section>
+
 
       {/* FAQs Section */}
       <section className="max-w-5xl mx-auto bg-gray-100 p-8 rounded-lg shadow-lg mt-12">
