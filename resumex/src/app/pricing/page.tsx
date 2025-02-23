@@ -36,7 +36,7 @@ export default function Pricing() {
               <li>✅ Basic Customer Support</li>
             </ul>
             <Link href="/subscribe/basic">
-              <button className="mt-8 px-6 py-3 w-full bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition">
+              <button className="mt-8 px-6 py-3 w-full bg-blue-600 text-white font-semibold rounded-full shadow-md hover:bg-blue-700 hover:shadow-lg transition-transform transform hover:scale-105">
                 Get Started
               </button>
             </Link>
@@ -57,7 +57,7 @@ export default function Pricing() {
               <li>✅ LinkedIn Profile Optimization Tips</li>
             </ul>
             <Link href="/subscribe/premium">
-              <button className="mt-8 px-6 py-3 w-full bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition">
+              <button className="mt-8 px-6 py-3 w-full bg-blue-600 text-white font-semibold rounded-full shadow-md hover:bg-blue-700 hover:shadow-lg transition-transform transform hover:scale-105">
                 Get Premium
               </button>
             </Link>
