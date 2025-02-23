@@ -12,7 +12,7 @@ const Header = () => {
         {/* Logo and Title */}
         <Link href="/" className="flex items-center space-x-2">
           <Image
-            src="/main_logo.png" // Path to your logo in the public folder
+            src="/transparent_white_main_logo.png" // Path to your logo in the public folder
             alt="Resumex Logo"
             width={40} // Adjust width
             height={40} // Adjust height
