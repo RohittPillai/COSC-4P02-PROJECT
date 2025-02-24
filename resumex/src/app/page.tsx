@@ -17,7 +17,7 @@ export default function Homepage() {
           Generate professional resumes effortlessly with AI-powered templates.
         </p>
         <Link href="/free-resume">
-          <button className="mt-6 px-6 py-3 bg-white text-blue-600 font-semibold rounded-lg hover:bg-gray-200 transition">
+          <button className="mt-6 px-6 py-3 bg-blue-600 text-gray-900 font-semibold rounded-lg hover:bg-gray-200 transition">
             Get Started for Free
           </button>
         </Link>
@@ -64,8 +64,8 @@ export default function Homepage() {
         ⚡ Powered by <span className="text-blue-400">ChatGPT</span>
       </h2>
       <p className="mt-6 text-lg text-gray-300 max-w-4xl mx-auto leading-relaxed">
-        ResumeX leverages the power of <strong>OpenAI's ChatGPT</strong> to generate <strong>job-winning resumes</strong> 
-        with AI-driven content recommendations. Whether you're a seasoned professional or a fresh graduate, 
+        ResumeX leverages the power of <strong>OpenAI&apos;s ChatGPT</strong> to generate <strong>job-winning resumes</strong> 
+        with AI-driven content recommendations. Whether you&apos;re a seasoned professional or a fresh graduate, 
         our AI optimizes your resume to make it stand out to recruiters.
       </p>
 
@@ -117,7 +117,7 @@ export default function Homepage() {
         <h2 className="text-3xl font-bold">Start Building Your Resume Today</h2>
         <p className="mt-4 text-lg">Join thousands of professionals using ResumeX.</p>
         <Link href="/register">
-          <button className="mt-6 px-6 py-3 bg-white text-blue-600 font-semibold rounded-lg hover:bg-gray-200 transition">
+          <button className="mt-6 px-6 py-3 bg-blue-600 text-gray-900 font-semibold rounded-lg hover:bg-gray-200 transition">
             Sign Up Now
           </button>
         </Link>
