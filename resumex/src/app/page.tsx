@@ -2,10 +2,23 @@
 import Header from "./_components/Header";
 import Footer from "./_components/Footer";
 import Link from "next/link";
-import { Sparkles, Palette, FileText, Star} from "lucide-react";
+import { Sparkles, Palette, FileText, Star, X, Send } from "lucide-react";
+import React, { useState } from "react";
 
 
 export default function Homepage() {
+  const [chatOpen, setChatOpen] = useState(false);
+  const [message, setMessage] = useState("");
+  const [chatMessages, setChatMessages] = useState([
+    { text: "Hi! How can I assist you today?", sender: "bot" }
+  ]);
+
+  const handleSendMessage = () => {
+    if (message.trim() !== "") {
+      setChatMessages([...chatMessages, { text: message, sender: "user" }]);
+      setMessage("");
+    }
+  };
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
       <Header /> {/* Header at the top */}
@@ -155,18 +168,58 @@ export default function Homepage() {
       <p className="mt-2 text-gray-600">
         Need quick answers? Our chatbot can assist you instantly.
       </p>
-      <a 
-        href="/chatbot"
-        className="mt-4 inline-block px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg shadow-lg transition duration-300 transform hover:scale-105"
-      >
-        Start Chat
-      </a>
+      <div className="mt-12">
+          <button
+            onClick={() => setChatOpen(true)}
+            className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg shadow-lg transition duration-300 transform hover:scale-105"
+          >
+            Start Chat
+          </button>
+        </div>
     </div>
   </div>
 </section>
-      
+ 
+         {/* Chatbot Sidebar */}
+      {chatOpen && (
+        <div className="fixed bottom-20 right-10 bg-white shadow-xl border border-gray-300 rounded-xl p-4 w-80 h-[450px] flex flex-col">
+          <div className="flex justify-between items-center border-b pb-3">
+            <h3 className="text-lg font-semibold text-gray-900">ResumeX AI Chatbot</h3>
+            <button onClick={() => setChatOpen(false)} className="text-gray-600 hover:text-gray-800">
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+          
+          {/* Chat Messages */}
+          <div className="flex-grow overflow-y-auto p-3 space-y-3 text-gray-600">
+            {chatMessages.map((msg, index) => (
+              <div key={index} className={`p-3 rounded-lg max-w-[80%] ${msg.sender === "bot" ? "bg-gray-200 text-gray-900 self-start" : "bg-blue-500 text-white self-end"}`}>
+                {msg.text}
+              </div>
+            ))}
+          </div>
+
+          {/* Chat Input */}
+          <form onSubmit={handleSendMessage} className="flex items-center border-t pt-3">
+            <input
+              type="text"
+              placeholder="Type your message..."
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <button
+              type="submit"
+              className="ml-2 p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+            >
+              <Send className="w-5 h-5" />
+            </button>
+          </form>
+        </div>
+      )}
 
       <Footer /> {/* Footer at the bottom */}
     </div>
   );
 }
+
