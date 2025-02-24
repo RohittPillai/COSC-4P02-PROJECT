@@ -160,7 +160,7 @@ export default function Pricing() {
       <FAQ /> {/* Using FAQ component here */}
 
       {/* Call to Action */}
-      <section className="bg-blue-600 text-white text-center py-16 mt-12">
+      <section className="bg-gray-900 text-white text-center py-16 mt-12">
         <h2 className="text-3xl font-bold">Start Building Your Resume Today</h2>
         <p className="mt-4 text-lg">Join thousands of professionals using ResumeX.</p>
         <Link href="/register">
