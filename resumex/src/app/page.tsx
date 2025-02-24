@@ -123,6 +123,47 @@ export default function Homepage() {
         </Link>
       </section>
 
+      <section className="py-20 px-6 bg-gray-100 text-center">
+  <h2 className="text-4xl font-bold text-gray-900">Need Help? Contact Us</h2>
+  <p className="mt-4 text-lg text-gray-700 max-w-3xl mx-auto">
+    Have questions or need support? Reach out to us via email or phone, or start a chat with our AI-powered assistant.
+  </p>
+
+  <div className="mt-12 max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
+    {/* Contact Info */}
+    <div className="p-6 bg-white shadow-lg rounded-2xl border border-gray-200">
+      <h3 className="text-2xl font-semibold text-gray-900">Contact Support</h3>
+      <ul className="mt-4 space-y-3 text-left">
+        <li className="flex items-center gap-2">
+          <svg className="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M16 12H3M16 12l-4 4m4-4l-4-4"></path>
+          </svg>
+          <span>support@resumex.com</span>
+        </li>
+        <li className="flex items-center gap-2">
+          <svg className="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3 5h18M3 12h18M3 19h18"></path>
+          </svg>
+          <span>+1 (123) 456-7890</span>
+        </li>
+      </ul>
+    </div>
+
+    {/*Chatbot Help */}
+    <div className="p-6 bg-white shadow-lg rounded-2xl border border-gray-200">
+      <h3 className="text-2xl font-semibold text-gray-900">Chat with AI Assistant</h3>
+      <p className="mt-2 text-gray-600">
+        Need quick answers? Our chatbot can assist you instantly.
+      </p>
+      <a 
+        href="/chatbot"
+        className="mt-4 inline-block px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg shadow-lg transition duration-300 transform hover:scale-105"
+      >
+        Start Chat
+      </a>
+    </div>
+  </div>
+</section>
       
 
       <Footer /> {/* Footer at the bottom */}
