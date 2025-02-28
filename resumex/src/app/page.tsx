@@ -1,12 +1,12 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import Script from "next/script";
 import Link from "next/link";
 import { Sparkles, Palette, FileText, Star } from "lucide-react";
 import Header from "./_components/Header";
 import Footer from "./_components/Footer";
 
-// 1. Declare AgentInitializer on the Window interface (TypeScript fix)
+// For TypeScript users:
 declare global {
   interface Window {
     AgentInitializer?: {
@@ -16,7 +16,7 @@ declare global {
 }
 
 export default function Homepage() {
-  // 2. This function initializes the JotForm chatbot when "Start Chat" is clicked
+  // Initialize the JotForm chatbot when "Start Chat" is clicked
   const handleStartChat = () => {
     if (typeof window !== "undefined" && window.AgentInitializer) {
       window.AgentInitializer.init({
@@ -41,16 +41,32 @@ export default function Homepage() {
     }
   };
 
+  /**
+   * Cleanup effect to remove the JotForm agent from the DOM
+   * when the user navigates away from the homepage.
+   */
+  useEffect(() => {
+    return () => {
+      // Remove the JotForm agent's container if it exists
+      const agentRoot = document.getElementById(
+        "JotformAgent-01954e62666e790e93a05f107990fb5bc6b7"
+      );
+      if (agentRoot) {
+        agentRoot.remove();
+      }
+    };
+  }, []);
+
   return (
     <>
-      {/* 3. Load the JotForm Agent script (but don't initialize automatically) */}
+      {/* Load JotForm script only on this page */}
       <Script
         src="https://cdn.jotfor.ms/s/umd/latest/for-embedded-agent.js"
         strategy="afterInteractive"
       />
 
       <div className="flex flex-col min-h-screen bg-gray-100">
-        <Header /> {/* Header at the top */}
+        <Header />
 
         {/* Hero Section */}
         <section className="bg-gray-900 text-white text-center py-20 px-6">
@@ -260,7 +276,7 @@ export default function Homepage() {
           </div>
         </section>
 
-        <Footer /> {/* Footer at the bottom */}
+        <Footer />
       </div>
     </>
   );
