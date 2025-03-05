@@ -13,16 +13,25 @@ pnpm-lock.yaml
 out/
 .vercel/
 .cache/
+build/
 
 # ⚡ macOS System Files
 .DS_Store
+.AppleDouble
+.LSOverride
+
+# ⚡ Windows System Files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
 
 # ⚡ Logs & Debugging
 logs/
 *.log
 *.gz
 *.log.*
-/.npm/
+.npm/
 
 # ⚡ Editor & IDE Configs
 .vscode/
@@ -31,6 +40,9 @@ logs/
 *.swp
 *.swo
 
+# ⚡ TypeScript
+*.tsbuildinfo
+
 # ⚡ Environment Variables (Sensitive Data)
 .env
 .env.local
@@ -38,7 +50,7 @@ logs/
 .env.production.local
 .env.test.local
 
-# ⚡ Misc
+# ⚡ Miscellaneous
 *.sqlite
 *.sqlite-journal
 *.pid
@@ -48,5 +60,10 @@ dist/
 public/tmp/
 public/uploads/
 public/static/
-.DS_Store
+public/.DS_Store
+public/.cache
 next-env.d.ts
+
+# ⚡ Ignore local Git/Misc settings
+.git/
+.gitignore
