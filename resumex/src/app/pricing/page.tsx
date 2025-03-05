@@ -39,9 +39,9 @@ export default function PricingPage() {
           />
           <div className="w-12 h-6 bg-gray-300 rounded-full p-1 duration-300 ease-in-out">
             <div
-              className={`bg-blue-600 w-4 h-4 rounded-full shadow-md transform duration-300 ease-in-out ${
+              className={bg-blue-600 w-4 h-4 rounded-full shadow-md transform duration-300 ease-in-out ${
                 isYearly ? "translate-x-6" : ""
-              }`}
+              }}
             ></div>
           </div>
           <span className="ml-3 text-gray-700 font-semibold">Yearly (Save 15%)</span>
@@ -64,7 +64,7 @@ export default function PricingPage() {
               <li>✅ Resume Score & Feedback</li>
               <li>✅ Basic Customer Support</li>
             </ul>
-            <Link href="/pricing/basic/">
+            <Link href="/pricing/basic">
               <button className="mt-8 px-6 py-3 w-full bg-blue-600 text-white font-semibold rounded-full shadow-md hover:bg-blue-700 hover:shadow-lg transition-transform transform hover:scale-105">
                 Get Started
               </button>
