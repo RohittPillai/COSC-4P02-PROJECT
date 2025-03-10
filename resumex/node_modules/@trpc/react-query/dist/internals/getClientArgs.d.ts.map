@@ -1,0 +1,1 @@
+{"version":3,"file":"getClientArgs.d.ts","sourceRoot":"","sources":["../../src/internals/getClientArgs.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,YAAY,EAAE,MAAM,eAAe,CAAC;AAElD;;GAEG;AACH,wBAAgB,aAAa,CAAC,QAAQ,EACpC,QAAQ,EAAE,YAAY,EACtB,IAAI,EAAE,QAAQ,EACd,cAAc,CAAC,EAAE;IACf,SAAS,EAAE,GAAG,CAAC;IACf,SAAS,EAAE,SAAS,GAAG,UAAU,CAAC;CACnC,mCAYF"}

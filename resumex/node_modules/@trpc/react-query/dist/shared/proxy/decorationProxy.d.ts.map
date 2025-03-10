@@ -1,0 +1,1 @@
+{"version":3,"file":"decorationProxy.d.ts","sourceRoot":"","sources":["../../../src/shared/proxy/decorationProxy.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,SAAS,EAAE,MAAM,0CAA0C,CAAC;AAE1E,OAAO,KAAK,EAAE,qBAAqB,EAAE,MAAM,8BAA8B,CAAC;AAE1E;;;GAGG;AACH,wBAAgB,qBAAqB,CACnC,OAAO,SAAS,SAAS,EACzB,WAAW,GAAG,OAAO,EACrB,KAAK,EAAE,qBAAqB,CAAC,OAAO,EAAE,WAAW,CAAC,WAuBnD"}
