@@ -1,0 +1,22 @@
+{
+  "app": {
+    "[project]/src/app/page": [
+      "static/media/Geist_Variable-s.p.781b491f.woff2"
+    ],
+    "[project]/src/app/pricing/page": [
+      "static/media/Geist_Variable-s.p.781b491f.woff2"
+    ],
+    "[project]/src/app/templates/page": [
+      "static/media/Geist_Variable-s.p.781b491f.woff2"
+    ],
+    "[project]/src/app/pro-resume/page": [
+      "static/media/Geist_Variable-s.p.781b491f.woff2"
+    ],
+    "[project]/src/app/login/page": [
+      "static/media/Geist_Variable-s.p.781b491f.woff2"
+    ]
+  },
+  "appUsingSizeAdjust": true,
+  "pages": {},
+  "pagesUsingSizeAdjust": false
+}
