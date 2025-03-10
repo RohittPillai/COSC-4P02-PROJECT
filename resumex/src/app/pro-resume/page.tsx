@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 "use client";
 
 import React, { useState } from "react";
@@ -80,3 +81,5 @@ const ProVersion = () => {
 };
 
 export default ProVersion;
+=======
+>>>>>>> a603c67b743b4dd18d8815b1da5d0bb157cecb36
