@@ -58,7 +58,7 @@ export default function FreeResume() {
             <main className="flex flex-grow w-full h-screen relative">
                 {/* Sidebar */}
                 <aside className={`${isSidebarOpen ? "w-1/5" : "w-12"} bg-gradient-to-b from-gray-900 to-gray-800 text-white shadow-lg p-4 border-r border-gray-700 h-full flex flex-col transition-all duration-300`}>
-                <button onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                    <button onClick={() => setIsSidebarOpen(!isSidebarOpen)}
                             className="self-end text-gray-400 hover:text-gray-200 mb-4">
                         {isSidebarOpen ? <AiOutlineLeft size={20} /> : <AiOutlineRight size={20} />}
                     </button>
@@ -68,29 +68,49 @@ export default function FreeResume() {
                             <ul className="space-y-3">
                                 <li><Link href="/login" className="text-blue-400 hover:underline">Sign In</Link></li>
 
-                                <li><button className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition">Custom Section</button></li>
+                                {/* Custom Section */}
+                                <li>
+                                    <button className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 shadow-md hover:bg-blue-600 hover:text-white hover:shadow-lg transition-all duration-300 ease-in-out">
+                                        Custom Section
+                                    </button>
+                                </li>
 
                                 {/* DESIGN & FONT EXPANDING BUTTON */}
                                 <li>
                                     <button onClick={() => setIsDesignExpanded(!isDesignExpanded)}
-                                            className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition">
+                                            className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 shadow-md hover:bg-blue-600 hover:text-white hover:shadow-lg transition-all duration-300 ease-in-out">
                                         Design & Font {isDesignExpanded ? "▲" : "▼"}
                                     </button>
                                     {isDesignExpanded && (
                                         <>
-                                            <button className="w-full mt-2 py-2 bg-gray-800 text-gray-300 font-semibold rounded-lg border border-gray-600">Change Font</button>
-                                            <button className="w-full mt-2 py-2 bg-gray-800 text-gray-300 font-semibold rounded-lg border border-gray-600">Change Theme</button>
+                                            <button className="w-full mt-2 py-2 bg-gray-800 text-gray-300 font-semibold rounded-lg border border-gray-600">
+                                                Change Font
+                                            </button>
+                                            <button className="w-full mt-2 py-2 bg-gray-800 text-gray-300 font-semibold rounded-lg border border-gray-600">
+                                                Change Theme
+                                            </button>
                                         </>
                                     )}
                                 </li>
 
-                                <li><button className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition">Undo</button></li>
-                                <li><button className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition">Redo</button></li>
+                                {/* Undo */}
+                                <li>
+                                    <button className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 shadow-md hover:bg-blue-600 hover:text-white hover:shadow-lg transition-all duration-300 ease-in-out">
+                                        Undo
+                                    </button>
+                                </li>
+
+                                {/* Redo */}
+                                <li>
+                                    <button className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 shadow-md hover:bg-blue-600 hover:text-white hover:shadow-lg transition-all duration-300 ease-in-out">
+                                        Redo
+                                    </button>
+                                </li>
 
                                 {/* SAVE BUTTON */}
                                 <li>
                                     <button onClick={saveResume}
-                                            className="w-full flex justify-center items-center gap-2 py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition">
+                                            className="w-full flex justify-center items-center gap-2 py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 shadow-md hover:bg-blue-600 hover:text-white hover:shadow-lg transition-all duration-300 ease-in-out">
                                         {isSaving ? <AiOutlineSync className="animate-spin" size={20} /> : <AiOutlineCheck size={20} />}
                                         Save
                                     </button>
@@ -99,7 +119,7 @@ export default function FreeResume() {
                                 {/* DOWNLOAD EXPANDING BUTTON */}
                                 <li>
                                     <button onClick={() => setIsDownloadExpanded(!isDownloadExpanded)}
-                                            className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition">
+                                            className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 shadow-md hover:bg-blue-600 hover:text-white hover:shadow-lg transition-all duration-300 ease-in-out">
                                         Download {isDownloadExpanded ? "▲" : "▼"}
                                     </button>
                                     {isDownloadExpanded && (
@@ -119,7 +139,7 @@ export default function FreeResume() {
                                 {/* SHARE BUTTON */}
                                 <li>
                                     <button onClick={() => setIsShareModalOpen(true)}
-                                            className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition">
+                                            className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 shadow-md hover:bg-blue-600 hover:text-white hover:shadow-lg transition-all duration-300 ease-in-out">
                                         Share
                                     </button>
                                 </li>
@@ -142,22 +162,6 @@ export default function FreeResume() {
             </main>
 
             <Footer />
-
-            {/* SHARE MODAL */}
-            {isShareModalOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-                    <div className="relative bg-white p-6 rounded-lg shadow-lg w-96 text-center">
-                        <button onClick={() => setIsShareModalOpen(false)}
-                                className="absolute top-2 right-2 text-gray-500 hover:text-gray-800">
-                            <AiOutlineClose size={24} />
-                        </button>
-                        <h2 className="text-lg font-bold mb-4">Share Your Resume</h2>
-                        <button className="w-full py-2 bg-blue-600 text-white font-semibold rounded-lg mb-2">Share on LinkedIn</button>
-                        <button className="w-full py-2 bg-gray-500 text-white font-semibold rounded-lg mb-2">Share via Email</button>
-                        <button onClick={copyToClipboard} className="w-full py-2 bg-green-500 text-white font-semibold rounded-lg mb-2">Copy Resume Link</button>
-                    </div>
-                </div>
-            )}
         </div>
     );
 }
