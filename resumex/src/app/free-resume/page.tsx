@@ -83,10 +83,10 @@ export default function FreeResume() {
                                     </button>
                                     {isDesignExpanded && (
                                         <>
-                                            <button className="w-full mt-2 py-2 bg-gray-800 text-gray-300 font-semibold rounded-lg border border-gray-600">
+                                            <button className="w-full mt-2 py-2 bg-gray-700 text-white font-semibold rounded-lg border border-gray-500 hover:bg-gray-600 transition-all duration-200">
                                                 Change Font
                                             </button>
-                                            <button className="w-full mt-2 py-2 bg-gray-800 text-gray-300 font-semibold rounded-lg border border-gray-600">
+                                            <button className="w-full mt-2 py-2 bg-gray-700 text-white font-semibold rounded-lg border border-gray-500 hover:bg-gray-600 transition-all duration-200">
                                                 Change Theme
                                             </button>
                                         </>
@@ -125,11 +125,11 @@ export default function FreeResume() {
                                     {isDownloadExpanded && (
                                         <>
                                             <button onClick={downloadAsPDF}
-                                                    className="w-full mt-2 py-2 bg-gray-800 text-gray-300 font-semibold rounded-lg border border-gray-600">
+                                                    className="w-full mt-2 py-2 bg-gray-700 text-white font-semibold rounded-lg border border-gray-500 hover:bg-gray-600 transition-all duration-200">
                                                 Download as PDF
                                             </button>
                                             <button onClick={downloadAsWord}
-                                                    className="w-full mt-2 py-2 bg-gray-800 text-gray-300 font-semibold rounded-lg border border-gray-600">
+                                                    className="w-full mt-2 py-2 bg-gray-700 text-white font-semibold rounded-lg border border-gray-500 hover:bg-gray-600 transition-all duration-200">
                                                 Download as Word
                                             </button>
                                         </>
