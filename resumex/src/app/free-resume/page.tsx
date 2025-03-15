@@ -67,12 +67,13 @@ export default function FreeResume() {
                             <h2 className="text-lg font-semibold mb-4">Resume Options</h2>
                             <ul className="space-y-3">
                                 <li><Link href="/login" className="text-blue-400 hover:underline">Sign In</Link></li>
-                                <li><button className="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-500">Custom Section</button></li>
+
+                                <li><button className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition">Custom Section</button></li>
 
                                 {/* DESIGN & FONT EXPANDING BUTTON */}
                                 <li>
                                     <button onClick={() => setIsDesignExpanded(!isDesignExpanded)}
-                                            className="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-500">
+                                            className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition">
                                         Design & Font {isDesignExpanded ? "▲" : "▼"}
                                     </button>
                                     {isDesignExpanded && (
@@ -83,13 +84,13 @@ export default function FreeResume() {
                                     )}
                                 </li>
 
-                                <li><button className="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-500">Undo</button></li>
-                                <li><button className="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-500">Redo</button></li>
+                                <li><button className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition">Undo</button></li>
+                                <li><button className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition">Redo</button></li>
 
                                 {/* SAVE BUTTON */}
                                 <li>
                                     <button onClick={saveResume}
-                                            className="w-full flex justify-center items-center gap-2 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-500">
+                                            className="w-full flex justify-center items-center gap-2 py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition">
                                         {isSaving ? <AiOutlineSync className="animate-spin" size={20} /> : <AiOutlineCheck size={20} />}
                                         Save
                                     </button>
@@ -98,7 +99,7 @@ export default function FreeResume() {
                                 {/* DOWNLOAD EXPANDING BUTTON */}
                                 <li>
                                     <button onClick={() => setIsDownloadExpanded(!isDownloadExpanded)}
-                                            className="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-500">
+                                            className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition">
                                         Download {isDownloadExpanded ? "▲" : "▼"}
                                     </button>
                                     {isDownloadExpanded && (
@@ -118,7 +119,7 @@ export default function FreeResume() {
                                 {/* SHARE BUTTON */}
                                 <li>
                                     <button onClick={() => setIsShareModalOpen(true)}
-                                            className="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-500">
+                                            className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition">
                                         Share
                                     </button>
                                 </li>
