@@ -18,7 +18,7 @@ export default function AboutUs() {
                 </p>
             </section>
 
-            {/* Our Story */}
+            {/* Welcome Section */}
             <section className="max-w-4xl mx-auto text-center py-16 px-8">
                 <h2 className="text-3xl font-semibold text-gray-800">Welcome to ResumeX</h2>
                 <p className="mt-4 text-gray-600 text-lg">
@@ -27,30 +27,33 @@ export default function AboutUs() {
                     easier, stress-free, and accessible to everyone.
                 </p>
                 <p className="mt-4 text-gray-600 text-lg">
-                    That’s why we built a simple, AI-powered resume builder with ready-to-use templates
-                    and a choice between a free plan or an affordable premium option packed with
-                    extra features—so you get the best without breaking the bank.
+                    That’s why we built an AI-powered resume builder with simple, ready-to-use templates
+                    and a choice between a free plan or an affordable premium option with exclusive tools.
                 </p>
                 <p className="mt-4 text-gray-600 text-lg font-semibold">
-                    We’re excited to help you take the next step in your career—let’s build something great together!
+                    Your career journey starts here—let’s build something great together!
                 </p>
             </section>
 
-            {/* Why Choose Us */}
+            {/* What Makes ResumeX Different */}
             <section className="bg-white py-16 px-8">
-                <h2 className="text-3xl font-semibold text-center text-gray-800">Why Choose ResumeX?</h2>
+                <h2 className="text-3xl font-semibold text-center text-gray-800">What Makes ResumeX Different?</h2>
+                <p className="text-lg text-gray-600 text-center max-w-3xl mx-auto mt-4">
+                    We built ResumeX with one goal in mind—to make resume-building effortless.
+                    Unlike traditional tools, we focus on speed, simplicity, and AI-driven enhancements.
+                </p>
                 <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto mt-8 text-center">
                     <div className="p-6 bg-gray-100 rounded-lg shadow">
-                        <h3 className="text-xl font-semibold">AI-Powered Resume Builder</h3>
-                        <p className="mt-2 text-gray-600">Generate job-winning resumes instantly with AI assistance.</p>
+                        <h3 className="text-xl font-semibold">AI That Works for You</h3>
+                        <p className="mt-2 text-gray-600">Generate job-winning resumes in minutes with intelligent suggestions.</p>
                     </div>
                     <div className="p-6 bg-gray-100 rounded-lg shadow">
-                        <h3 className="text-xl font-semibold">Modern, Customizable Templates</h3>
-                        <p className="mt-2 text-gray-600">Stand out with sleek, professional resume designs.</p>
+                        <h3 className="text-xl font-semibold">Customizable Templates</h3>
+                        <p className="mt-2 text-gray-600">Professional, polished designs tailored to your needs.</p>
                     </div>
                     <div className="p-6 bg-gray-100 rounded-lg shadow">
-                        <h3 className="text-xl font-semibold">Real-Time Feedback & Analytics</h3>
-                        <p className="mt-2 text-gray-600">Get AI-driven resume scores and optimization tips.</p>
+                        <h3 className="text-xl font-semibold">Real-Time Insights</h3>
+                        <p className="mt-2 text-gray-600">Resume scores and optimization tips to improve your chances.</p>
                     </div>
                 </div>
             </section>
