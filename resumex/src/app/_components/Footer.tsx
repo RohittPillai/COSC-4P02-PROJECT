@@ -21,7 +21,8 @@ const Footer = () => {
               <li><a href="/resume-builder" className="hover:text-blue-400">Resume Builder</a></li>
               <li><a href="/templates" className="hover:text-blue-400">Templates</a></li>
               <li><a href="/pricing" className="hover:text-blue-400">Pricing</a></li>
-              <li><a href="/contact" className="hover:text-blue-400">Contact</a></li>
+              <li className="relative group"><span className="text-gray-400 cursor-default group-hover:text-blue-400">Contact</span>
+                <div className="absolute left-1/2 -translate-x-1/2 mt-1 bg-gray-800 text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">On your right</div></li>
             </ul>
           </div>
 
