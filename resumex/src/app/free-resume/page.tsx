@@ -161,6 +161,22 @@ export default function FreeResume() {
                 </section>
             </main>
 
+            {/* SHARE MODAL */}
+            {isShareModalOpen && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                    <div className="relative bg-white p-6 rounded-lg shadow-lg w-96 text-center">
+                        <button onClick={() => setIsShareModalOpen(false)}
+                                className="absolute top-2 right-2 text-gray-500 hover:text-gray-800">
+                            <AiOutlineClose size={24} />
+                        </button>
+                        <h2 className="text-lg font-bold mb-4">Share Your Resume</h2>
+                        <button className="w-full py-2 bg-blue-600 text-white font-semibold rounded-lg mb-2">Share on LinkedIn</button>
+                        <button className="w-full py-2 bg-gray-500 text-white font-semibold rounded-lg mb-2">Share via Email</button>
+                        <button onClick={copyToClipboard} className="w-full py-2 bg-green-500 text-white font-semibold rounded-lg mb-2">Copy Resume Link</button>
+                    </div>
+                </div>
+            )}
+
             <Footer />
         </div>
     );
