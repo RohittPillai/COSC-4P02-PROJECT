@@ -6,7 +6,7 @@ import Footer from "../_components/Footer";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 
-// templates for animation on top right
+// Templates for animation in the top right
 const resumes = [
   "/template1.webp",
   "/template2.avif",
@@ -15,14 +15,35 @@ const resumes = [
   "/template5.avif",
 ];
 
+// List of available resume templates
+const templates = [
+  {
+    id: "template1",
+    image: "/templates1.svg",
+    name: "Modern Clean Resume",
+    description: "A simple, modern, and easy-to-read resume template for professionals.",
+  },
+  {
+    id: "template2",
+    image: "/templates2.png",
+    name: "Creative Professional Resume",
+    description: "A stylish template with a unique design, perfect for creatives.",
+  },
+  {
+    id: "template3",
+    image: "/templates3.webp",
+    name: "Executive Resume",
+    description: "A bold, professional resume template ideal for executives.",
+  },
+];
+
 export default function TemplatesPlaceholder() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % resumes.length);
-    }, 2000); // Change resume every 4 seconds
+    }, 2000); // Change resume every 2 seconds
 
     return () => clearInterval(interval);
   }, []);
@@ -32,64 +53,31 @@ export default function TemplatesPlaceholder() {
       <div className="relative min-h-screen bg-gradient-to-b from-blue-100 to-white">
         <Header />
 
-        {/* Left-aligned Resume Templates text */}
-        <div className="mt-20 ml-16 fade-zoom">
+        {/* Resume Templates Heading */}
+        <div className="mt-20 ml-8 md:ml-16 fade-zoom">
           <h1 className="text-6xl font-extrabold tracking-wide text-transparent bg-clip-text gradient-text leading-tight">
             RESUME <br />TEMPLATES
           </h1>
 
           {/* Subtitle Below the Heading */}
           <p className="mt-4 max-w-2xl text-lg text-gray-600 font-light">
-            Choose a <span className="font-normal text-black">professionally designed resume template</span><br />
-            and create your standout resume in minutes. <span className="font-normal text-black">Easy to edit,</span><br />
+            Choose a <span className="font-normal text-black">professionally designed resume template</span>
+            <br />
+            and create your standout resume in minutes. <span className="font-normal text-black">Easy to edit,</span>
+            <br />
             <span className="font-normal text-black">fully customizable,</span> and optimized for success.
           </p>
         </div>
 
-        {/* Resume Template Card */}
-        <div className="relative mt-10 ml-16 w-[400px] h-[650px] flex flex-col items-center justify-start transition-all duration-300 mb-20"
-             onMouseEnter={() => setIsHovered(true)}
-             onMouseLeave={() => setIsHovered(false)}
-        >
-          {/* Transparent Background Box */}
-          <div className={`absolute inset-0 w-full h-full border border-gray-200 rounded-xl shadow-lg backdrop-blur-lg transition duration-300 ${
-            isHovered ? "bg-gradient-to-r from-blue-400/40 to-purple-500/40 scale-105 shadow-2xl" : "bg-white/20"
-          }`}></div>
-
-          {/* Resume Image (Properly Adjusted) */}
-          <div className="relative z-10 w-[340px] h-[450px] flex justify-center items-center mt-6">
-            <Image
-              src="/templates1.svg"
-              alt="Resume Template Preview"
-              width={340}
-              height={450}
-              className={`rounded-lg shadow-lg transition duration-300 ${isHovered ? "brightness-110 scale-105" : ""}`}
-            />
-
-            {/* Adjusted Button Size and Alignment */}
-            <Link href="/free-resume" passHref>
-              <div className={`absolute bottom-6 left-1/2 transform -translate-x-1/2 transition-opacity duration-500 ${
-                isHovered ? 'opacity-100 scale-105' : 'opacity-0'
-              }`}>
-                <button className="px-6 py-2 bg-green-500 text-white text-sm font-semibold rounded-md shadow-md hover:bg-green-600 transition duration-300">
-                  Customize This Template
-                </button>
-              </div>
-            </Link>
-          </div>
-
-          {/* Description Inside Box */}
-          <div className="relative z-10 text-center p-4 w-[340px] mt-4">
-            <h3 className="text-lg font-semibold text-gray-800">Modern Clean Resume</h3>
-            <p className="text-gray-600 mt-1 text-sm">
-              A simple, modern, and easy-to-read resume template designed for professionals.
-              Ideal for all industries, it provides a structured and clean layout.
-            </p>
-          </div>
+        {/* Resume Templates */}
+        <div className="flex flex-wrap justify-center gap-12 px-6 md:px-16 mt-10 mb-20">
+          {templates.map((template) => (
+            <ResumeCard key={template.id} {...template} />
+          ))}
         </div>
 
-        {/* Zoom & Fade-In Resume Templates in the Top-Right */}
-        <div className="absolute top-28 right-32 w-48 h-64 overflow-hidden">
+        {/* Floating Animation for Extra Templates (Right-Side) */}
+        <div className="hidden lg:block absolute top-28 right-32 w-48 h-64 overflow-hidden">
           {resumes.map((resume, index) => (
             <div
               key={index}
@@ -124,15 +112,6 @@ export default function TemplatesPlaceholder() {
             animation: gradientAnimation 6s linear infinite;
           }
 
-          @keyframes fadeZoom {
-            0% { transform: scale(0.8); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-          }
-
-          .fade-zoom {
-            animation: fadeZoom 1.5s ease-in-out forwards;
-          }
-
           @keyframes fadeZoomIn {
             0% { transform: scale(0.8); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
@@ -157,5 +136,51 @@ export default function TemplatesPlaceholder() {
 
       <Footer />
     </>
+  );
+}
+
+// Resume Template Card - Button Placed Over Image
+function ResumeCard({ image, name, description, id }) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <div
+      className="relative w-[400px] h-[650px] flex flex-col items-center justify-start transition-all duration-300"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {/* Transparent Background Box (Same as Template 1) */}
+      <div className={`absolute inset-0 w-full h-full border border-gray-200 rounded-xl shadow-lg backdrop-blur-lg transition duration-300 ${
+        isHovered ? "bg-gradient-to-r from-blue-400/40 to-purple-500/40 scale-105 shadow-2xl" : "bg-white/20"
+      }`}></div>
+
+      {/* Resume Image (Button Over Image) */}
+      <div className="relative z-10 w-[340px] h-[450px] flex justify-center items-center mt-6">
+        <Image
+          src={image}
+          alt={name}
+          width={340}
+          height={450}
+          className={`rounded-lg shadow-lg transition duration-300 ${isHovered ? "brightness-110 scale-105" : ""}`}
+        />
+
+        {/* Button on Top of Image */}
+        <Link href={`/free-resume?template=${id}`} passHref>
+          <div className={`absolute bottom-10 left-1/2 transform -translate-x-1/2 transition-opacity duration-500 ${
+            isHovered ? 'opacity-100 scale-110' : 'opacity-0'
+          }`}>
+            <button className="px-6 py-2 bg-green-500 text-white text-sm font-semibold rounded-md shadow-md hover:bg-green-600 transition duration-300">
+              Customize This Template
+            </button>
+          </div>
+        </Link>
+      </div>
+
+      {/* Description Inside Box */}
+      <div className="relative z-10 text-center p-4 w-[340px] mt-4">
+        <h3 className="text-lg font-semibold text-gray-800">{name}</h3>
+        <p className="text-gray-600 mt-1 text-sm">{description}</p>
+      </div>
+    </div>
   );
 }

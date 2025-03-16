@@ -74,7 +74,7 @@ export default function Homepage() {
             <p className="mt-4 text-lg">
               Generate professional resumes effortlessly with AI-powered templates.
             </p>
-            <Link href="/free-resume">
+            <Link href="/templates">
               <button className="mt-6 px-6 py-3 bg-blue-600 text-gray-900 font-semibold rounded-lg hover:bg-gray-200 transition">
                 Get Started for Free
               </button>
