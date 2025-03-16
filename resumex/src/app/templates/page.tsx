@@ -1,13 +1,14 @@
-"use client";
+"use client"; // Only needed if you're using Next.js 13 App Router for a client component
 
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
+
 import Header from "../_components/Header";
 import Footer from "../_components/Footer";
-import Link from "next/link";
-import { useState, useEffect } from "react";
 
-// Templates for animation in the top right
-const resumes = [
+// Define the structure for each resume's path
+const resumes: string[] = [
   "/template1.webp",
   "/template2.avif",
   "/template3.jpeg",
@@ -15,8 +16,16 @@ const resumes = [
   "/template5.avif",
 ];
 
+// Define an interface for your template objects
+interface Template {
+  id: string;
+  image: string;
+  name: string;
+  description: string;
+}
+
 // List of available resume templates
-const templates = [
+const templates: Template[] = [
   {
     id: "template1",
     image: "/templates1.svg",
@@ -37,8 +46,16 @@ const templates = [
   },
 ];
 
-export default function TemplatesPlaceholder() {
-  const [currentIndex, setCurrentIndex] = useState(0);
+// Props interface for the ResumeCard component
+interface ResumeCardProps {
+  image: string;
+  name: string;
+  description: string;
+  id: string;
+}
+
+export default function TemplatesPlaceholder(): JSX.Element {
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -56,16 +73,22 @@ export default function TemplatesPlaceholder() {
         {/* Resume Templates Heading */}
         <div className="mt-20 ml-8 md:ml-16 fade-zoom">
           <h1 className="text-6xl font-extrabold tracking-wide text-transparent bg-clip-text gradient-text leading-tight">
-            RESUME <br />TEMPLATES
+            RESUME <br />
+            TEMPLATES
           </h1>
 
           {/* Subtitle Below the Heading */}
           <p className="mt-4 max-w-2xl text-lg text-gray-600 font-light">
-            Choose a <span className="font-normal text-black">professionally designed resume template</span>
+            Choose a{" "}
+            <span className="font-normal text-black">
+              professionally designed resume template
+            </span>
             <br />
-            and create your standout resume in minutes. <span className="font-normal text-black">Easy to edit,</span>
+            and create your standout resume in minutes.{" "}
+            <span className="font-normal text-black">Easy to edit,</span>
             <br />
-            <span className="font-normal text-black">fully customizable,</span> and optimized for success.
+            <span className="font-normal text-black">fully customizable,</span>{" "}
+            and optimized for success.
           </p>
         </div>
 
@@ -99,8 +122,12 @@ export default function TemplatesPlaceholder() {
         {/* Animation keyframes */}
         <style jsx>{`
           @keyframes gradientAnimation {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 200% 50%; }
+            0% {
+              background-position: 0% 50%;
+            }
+            100% {
+              background-position: 200% 50%;
+            }
           }
 
           .gradient-text {
@@ -113,13 +140,23 @@ export default function TemplatesPlaceholder() {
           }
 
           @keyframes fadeZoomIn {
-            0% { transform: scale(0.8); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
+            0% {
+              transform: scale(0.8);
+              opacity: 0;
+            }
+            100% {
+              transform: scale(1);
+              opacity: 1;
+            }
           }
 
           @keyframes fadeOut {
-            0% { opacity: 1; }
-            100% { opacity: 0; }
+            0% {
+              opacity: 1;
+            }
+            100% {
+              opacity: 0;
+            }
           }
 
           .fade-zoom-in {
@@ -140,8 +177,8 @@ export default function TemplatesPlaceholder() {
 }
 
 // Resume Template Card - Button Placed Over Image
-function ResumeCard({ image, name, description, id }) {
-  const [isHovered, setIsHovered] = useState(false);
+function ResumeCard({ image, name, description, id }: ResumeCardProps): JSX.Element {
+  const [isHovered, setIsHovered] = useState<boolean>(false);
 
   return (
     <div
@@ -150,9 +187,13 @@ function ResumeCard({ image, name, description, id }) {
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Transparent Background Box (Same as Template 1) */}
-      <div className={`absolute inset-0 w-full h-full border border-gray-200 rounded-xl shadow-lg backdrop-blur-lg transition duration-300 ${
-        isHovered ? "bg-gradient-to-r from-blue-400/40 to-purple-500/40 scale-105 shadow-2xl" : "bg-white/20"
-      }`}></div>
+      <div
+        className={`absolute inset-0 w-full h-full border border-gray-200 rounded-xl shadow-lg backdrop-blur-lg transition duration-300 ${
+          isHovered
+            ? "bg-gradient-to-r from-blue-400/40 to-purple-500/40 scale-105 shadow-2xl"
+            : "bg-white/20"
+        }`}
+      ></div>
 
       {/* Resume Image (Button Over Image) */}
       <div className="relative z-10 w-[340px] h-[450px] flex justify-center items-center mt-6">
@@ -161,14 +202,18 @@ function ResumeCard({ image, name, description, id }) {
           alt={name}
           width={340}
           height={450}
-          className={`rounded-lg shadow-lg transition duration-300 ${isHovered ? "brightness-110 scale-105" : ""}`}
+          className={`rounded-lg shadow-lg transition duration-300 ${
+            isHovered ? "brightness-110 scale-105" : ""
+          }`}
         />
 
         {/* Button on Top of Image */}
         <Link href={`/free-resume?template=${id}`} passHref>
-          <div className={`absolute bottom-10 left-1/2 transform -translate-x-1/2 transition-opacity duration-500 ${
-            isHovered ? 'opacity-100 scale-110' : 'opacity-0'
-          }`}>
+          <div
+            className={`absolute bottom-10 left-1/2 transform -translate-x-1/2 transition-opacity duration-500 ${
+              isHovered ? "opacity-100 scale-110" : "opacity-0"
+            }`}
+          >
             <button className="px-6 py-2 bg-green-500 text-white text-sm font-semibold rounded-md shadow-md hover:bg-green-600 transition duration-300">
               Customize This Template
             </button>
