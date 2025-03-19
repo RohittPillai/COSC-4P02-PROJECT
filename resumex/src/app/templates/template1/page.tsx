@@ -1,8 +1,12 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai"; // Icons for Save & Cancel
+import EditableSection from "../../_components/EditableSection";
 
-export default function Template1Page({ data }: { data: any }) {
+
+export default function Template1Page({ data, updateResume }) {
+
+
   const [resumeData, setResumeData] = useState(() => {
     const savedData = localStorage.getItem("resumeData");
     return savedData ? JSON.parse(savedData) : data;
@@ -23,7 +27,7 @@ export default function Template1Page({ data }: { data: any }) {
   const saveResume = () => {
     setIsSaving(true);
     localStorage.setItem("resumeData", JSON.stringify(tempData));
-    setResumeData(tempData);
+    updateResume(tempData);
     setTimeout(() => {
       setIsSaving(false);
       setIsEditingHeader(false);
@@ -172,6 +176,20 @@ export default function Template1Page({ data }: { data: any }) {
               <h3 className="text-2xl font-semibold text-gray-800">Interests</h3>
               <p className="text-gray-700">{data.interests.join(", ")}</p>
             </div>
+
+            {/* Custom Sections */}
+            {data.customSections && data.customSections.length > 0 && (
+                <section className="mt-6">
+                  <h2 className="text-xl font-bold border-b pb-1">Custom Sections</h2>
+                  {data.customSections.map((section: any, index: number) => (
+                      <div key={index} className="mt-4">
+                        <h3 className="font-semibold">{section.title}</h3>
+                        <p>{section.content}</p>
+                      </div>
+                  ))}
+                </section>
+            )}
+
           </div>
         </div>
       </div>
