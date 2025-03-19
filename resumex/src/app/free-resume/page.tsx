@@ -1,6 +1,5 @@
 "use client";
 import Header from "../_components/Header";
-import Footer from "../_components/Footer";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -8,6 +7,7 @@ import { jsPDF } from "jspdf";
 import { saveAs } from "file-saver";
 import { AiOutlineLeft, AiOutlineRight, AiOutlineClose, AiOutlineSync, AiOutlineCheck, AiOutlineUp, AiOutlineDown } from "react-icons/ai";
 import dynamic from "next/dynamic";
+import html2canvas from "html2canvas";
 
 const Template1Page = dynamic(() => import("../templates/template1/page"));
 const Template2Page = dynamic(() => import("../templates/template2/page"));
@@ -102,10 +102,39 @@ export default function FreeResume() {
   };
 
   const downloadAsPDF = () => {
-    const doc = new jsPDF();
-    doc.text(resumeContent, 10, 10);
-    doc.save(`${template}-resume.pdf`);
+    const element = document.getElementById("resume-content"); // Target resume div
+    if (!element) return;
+
+    html2canvas(element, {
+      scale: 2, // Higher resolution
+      useCORS: true, // Fix issues with external fonts/images
+      windowWidth: element.scrollWidth,
+      windowHeight: element.scrollHeight,
+    }).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
+
+      const imgWidth = 210; // A4 width in mm
+      const imgHeight = (canvas.height * imgWidth) / canvas.width; // Scale height proportionally
+
+      let heightLeft = imgHeight;
+      let position = 0;
+
+      // Add multiple pages if needed
+      while (heightLeft > 0) {
+        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+        heightLeft -= 297; // A4 height in mm
+        if (heightLeft > 0) {
+          position -= 297;
+          pdf.addPage();
+        }
+      }
+
+      pdf.save(`${template}-resume.pdf`);
+    });
   };
+
+
 
   const downloadAsWord = () => {
     const blob = new Blob([resumeContent], { type: "application/msword" });
@@ -266,16 +295,13 @@ export default function FreeResume() {
 
           <section className="flex-1 p-6 h-[96vh] flex flex-col justify-center items-center bg-gray-100 pt-20 mb-32">
             <h1 className="text-4xl font-extrabold text-gray-900 mb-4">Editing: {selectedTemplate.name}</h1>
-            <div className="w-full max-w-2xl p-4 border border-gray-400 rounded-lg shadow-xl bg-white">
+            <div id="resume-container" className="w-full max-w-2xl p-4 border border-gray-400 rounded-lg shadow-xl bg-white">
               {selectedTemplate.component && (
-                  <selectedTemplate.component
-                      data={resumeContent}
-                      updateResume={setResumeContent}
-                  />
+                  <selectedTemplate.component data={resumeContent} updateResume={setResumeContent} />
               )}
             </div>
-
           </section>
+
         </main>
 
         {/* Collapsible Footer */}
