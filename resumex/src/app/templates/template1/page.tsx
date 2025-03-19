@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai"; // Icons for Save & Cancel
-import EditableSection from "../../_components/EditableSection";
 
 
 export default function Template1Page({ data, updateResume }) {
