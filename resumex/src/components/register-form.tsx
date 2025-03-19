@@ -103,6 +103,17 @@ export function RegisterForm({ className, ...props }: React.ComponentPropsWithou
               </div>
               {/*Form Fields */}
               <div className="grid gap-2">
+                <Label htmlFor="name">Name</Label>
+                <Input
+                  id="name"
+                  name="name"
+                  placeholder="Your name"
+                  type="text"
+                  required
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
                 <Input id="email" name="email" placeholder="abc@example.com" type="email" required onChange={handleChange} />
               </div>
