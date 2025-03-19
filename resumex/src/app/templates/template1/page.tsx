@@ -221,14 +221,22 @@ export default function Template1Page({ data }: { data: any }) {
                             <input type="text" value={tempEducation[index].year} onChange={(e) => handleEducationChange(e, index, "year")} className="text-sm text-gray-600 border-b border-gray-300 w-full" />
 
                             {/* Save and Cancel Buttons */}
+                            {/* Save and Cancel Buttons */}
                             <div className="mt-4 flex justify-center gap-4">
-                              <button onClick={saveEducationEdit} className="px-4 py-2 bg-green-600 text-white rounded-full">
+                              <button
+                                  onClick={saveEducationEdit}
+                                  className="px-4 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition flex items-center gap-2"
+                              >
                                 <AiOutlineCheck size={18} /> Save
                               </button>
-                              <button onClick={cancelEducationEdit} className="px-4 py-2 bg-red-600 text-white rounded-full">
+                              <button
+                                  onClick={cancelEducationEdit}
+                                  className="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition flex items-center gap-2"
+                              >
                                 <AiOutlineClose size={18} /> Cancel
                               </button>
                             </div>
+
                           </>
                       ) : (
                           <div>
