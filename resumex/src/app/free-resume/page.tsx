@@ -8,6 +8,7 @@ import { saveAs } from "file-saver";
 import { AiOutlineLeft, AiOutlineRight, AiOutlineClose, AiOutlineSync, AiOutlineCheck, AiOutlineUp, AiOutlineDown } from "react-icons/ai";
 import dynamic from "next/dynamic";
 import html2canvas from "html2canvas";
+import { Document, Packer, Paragraph, TextRun } from "docx";
 
 const Template1Page = dynamic(() => import("../templates/template1/page"));
 const Template2Page = dynamic(() => import("../templates/template2/page"));
@@ -134,16 +135,62 @@ export default function FreeResume() {
     });
   };
 
-
-
   const downloadAsWord = () => {
-    const blob = new Blob([resumeContent], { type: "application/msword" });
-    saveAs(blob, `${template}-resume.doc`);
-  };
+    const doc = new Document({
+      sections: [
+        {
+          properties: {},
+          children: [
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: `${resumeContent.firstName} ${resumeContent.lastName}`,
+                  bold: true,
+                  size: 32,
+                }),
+              ],
+            }),
+            new Paragraph({
+              text: resumeContent.position,
+              size: 24,
+            }),
+            new Paragraph({
+              text: `${resumeContent.email} | ${resumeContent.phone}`,
+            }),
+            new Paragraph({ text: "Experience", bold: true }),
+            ...resumeContent.experienceList.map(
+                (job) =>
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          text: `${job.company} (${job.duration})`,
+                          bold: true,
+                        }),
+                        new TextRun({ text: `\n${job.description}` }),
+                      ],
+                    })
+            ),
+            new Paragraph({ text: "Education", bold: true }),
+            ...resumeContent.education.map(
+                (edu) =>
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          text: `${edu.school} (${edu.year})`,
+                          bold: true,
+                        }),
+                        new TextRun({ text: `\n${edu.degree}` }),
+                      ],
+                    })
+            ),
+          ],
+        },
+      ],
+    });
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText("https://resumex.com/my-resume");
-    alert("Resume link copied to clipboard!");
+    Packer.toBlob(doc).then((blob) => {
+      saveAs(blob, "resume.docx");
+    });
   };
 
   const removeCustomSection = (index) => {
@@ -206,6 +253,13 @@ export default function FreeResume() {
     interests: ["Football", "Programming", "Gaming"],
   };
 
+  const copyToClipboard = () => {
+    const resumeLink = "https://resumex.com/my-resume"; // Replace with actual resume link
+    navigator.clipboard.writeText(resumeLink)
+        .then(() => alert("Resume link copied to clipboard!"))
+        .catch((err) => console.error("Failed to copy: ", err));
+  };
+
   return (
       <div className="flex flex-col min-h-screen w-full bg-gray-100">
         <Header />
@@ -219,7 +273,7 @@ export default function FreeResume() {
           h-[calc(100vh-4rem)] fixed top-[4rem] left-0 z-0`}>
 
 
-          <button onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            <button onClick={() => setIsSidebarOpen(!isSidebarOpen)}
                     className="self-end text-gray-400 hover:text-gray-200 mb-4">
               {isSidebarOpen ? <AiOutlineLeft size={20} /> : <AiOutlineRight size={20} />}
             </button>
