@@ -2,10 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai"; // Icons for Save & Cancel
 
-
-export default function Template1Page({ data, updateResume }) {
-
-
+export default function Template1Page({ data }: { data: any }) {
   const [resumeData, setResumeData] = useState(() => {
     const savedData = localStorage.getItem("resumeData");
     return savedData ? JSON.parse(savedData) : data;
@@ -26,7 +23,7 @@ export default function Template1Page({ data, updateResume }) {
   const saveResume = () => {
     setIsSaving(true);
     localStorage.setItem("resumeData", JSON.stringify(tempData));
-    updateResume(tempData);
+    setResumeData(tempData);
     setTimeout(() => {
       setIsSaving(false);
       setIsEditingHeader(false);
@@ -55,7 +52,7 @@ export default function Template1Page({ data, updateResume }) {
 
   return (
       <div className="flex justify-center items-start w-full min-h-[calc(100vh-100px)] pt-10 pb-10">
-        <div id="resume-content" className="bg-white shadow-lg p-8 rounded-lg max-w-[1000px] w-[95%] mx-auto
+        <div className="bg-white shadow-lg p-8 rounded-lg max-w-[1000px] w-[95%] mx-auto
         max-h-[calc(100vh-180px)] overflow-y-auto flex-grow">
 
           {/* Header Section */}
@@ -175,20 +172,6 @@ export default function Template1Page({ data, updateResume }) {
               <h3 className="text-2xl font-semibold text-gray-800">Interests</h3>
               <p className="text-gray-700">{data.interests.join(", ")}</p>
             </div>
-
-            {/* Custom Sections */}
-            {data.customSections && data.customSections.length > 0 && (
-                <section className="mt-6">
-                  <h2 className="text-xl font-bold border-b pb-1">Custom Sections</h2>
-                  {data.customSections.map((section: any, index: number) => (
-                      <div key={index} className="mt-4">
-                        <h3 className="font-semibold">{section.title}</h3>
-                        <p>{section.content}</p>
-                      </div>
-                  ))}
-                </section>
-            )}
-
           </div>
         </div>
       </div>
