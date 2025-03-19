@@ -33,7 +33,27 @@ export default function FreeResume() {
   const template = searchParams.get("template") || "template1";
   const selectedTemplate = templates[template] || templates["template1"];
 
-  const [resumeContent, setResumeContent] = useState("Start typing your resume...");
+  const [resumeContent, setResumeContent] = useState(() => {
+    const savedData = JSON.parse(localStorage.getItem("resumeData")) || {};
+    return {
+      firstName: "John",
+      lastName: "Doe",
+      email: "john.doe@gmail.com",
+      phone: "111-222-3333",
+      position: "Front-End Developer",
+      description: "I am a front-end developer with 3+ years of experience...",
+      experienceList: savedData.experienceList || [
+        { company: "KlowdBox", location: "San Francisco, CA", duration: "Jan 2011 - Feb 2015", position: "Front-End Developer", description: "Developed user-friendly interfaces." },
+        { company: "Akount", location: "Santa Monica, CA", duration: "Jan 2015 - Present", position: "Senior Front-End Developer", description: "Led front-end team, optimized UI." },
+      ],
+      education: savedData.education || [{ school: "Sample Institute of Technology", location: "San Francisco, CA", year: "2011 - 2015", degree: "BSc in Computer Science" }],
+      projects: savedData.projects || [{ name: "DSP", description: "Developed a web app.", link: "https://example.com/dsp" }],
+      skills: savedData.skills || ["JavaScript", "React", "Node.js"],
+      interests: savedData.interests || ["Football", "Gaming"],
+      customSections: savedData.customSections || [], // Ensure customSections is always defined
+    };
+  });
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isDesignExpanded, setIsDesignExpanded] = useState(false);
   const [isDownloadExpanded, setIsDownloadExpanded] = useState(false);
@@ -62,6 +82,25 @@ export default function FreeResume() {
     return () => clearTimeout(autoSaveInterval);
   }, [resumeContent]);
 
+  const addCustomSection = () => {
+    const newSection = {
+      title: "New Section",
+      content: "Write something here...",
+    };
+    setResumeContent((prev) => {
+      const updatedSections = [...prev.customSections, newSection];
+
+      setTimeout(() => {
+        const lastSection = document.getElementById(`custom-section-${updatedSections.length - 1}`);
+        lastSection?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
+
+      const updatedResume = { ...prev, customSections: updatedSections };
+      localStorage.setItem("resumeData", JSON.stringify(updatedResume));
+      return updatedResume;
+    });
+  };
+
   const downloadAsPDF = () => {
     const doc = new jsPDF();
     doc.text(resumeContent, 10, 10);
@@ -76,6 +115,19 @@ export default function FreeResume() {
   const copyToClipboard = () => {
     navigator.clipboard.writeText("https://resumex.com/my-resume");
     alert("Resume link copied to clipboard!");
+  };
+
+  const removeCustomSection = (index) => {
+    const updatedSections = [...resumeContent.customSections];
+    updatedSections.splice(index, 1);
+
+    const updatedResume = {
+      ...resumeContent,
+      customSections: updatedSections,
+    };
+
+    setResumeContent(updatedResume);
+    localStorage.setItem("resumeData", JSON.stringify(updatedResume)); // Save to localStorage
   };
 
   const resumeData = {
@@ -148,7 +200,15 @@ export default function FreeResume() {
                   <ul className="space-y-3">
                     <li><Link href="/login" className="text-blue-400 hover:underline">Sign In</Link></li>
 
-                    <li><button className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition">Custom Section</button></li>
+                    <li>
+                      <button
+                          onClick={addCustomSection}
+                          className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition"
+                      >
+                        Custom Section
+                      </button>
+                    </li>
+
 
                     <li>
                       <button onClick={() => setIsDesignExpanded(!isDesignExpanded)}
@@ -207,8 +267,14 @@ export default function FreeResume() {
           <section className="flex-1 p-6 h-[96vh] flex flex-col justify-center items-center bg-gray-100 pt-20 mb-32">
             <h1 className="text-4xl font-extrabold text-gray-900 mb-4">Editing: {selectedTemplate.name}</h1>
             <div className="w-full max-w-2xl p-4 border border-gray-400 rounded-lg shadow-xl bg-white">
-              {selectedTemplate.component && <selectedTemplate.component data={resumeData} />}
+              {selectedTemplate.component && (
+                  <selectedTemplate.component
+                      data={resumeContent}
+                      updateResume={setResumeContent}
+                  />
+              )}
             </div>
+
           </section>
         </main>
 
