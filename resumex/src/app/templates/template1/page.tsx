@@ -11,12 +11,39 @@ export default function Template1Page({ data }: { data: any }) {
   const [isSaving, setIsSaving] = useState(false);
   const [isEditingHeader, setIsEditingHeader] = useState(false);
   const [tempData, setTempData] = useState(resumeData); // Store temporary changes
+  const [isEditingExperience, setIsEditingExperience] = useState<number | null>(null); //
+  const [tempExperience, setTempExperience] = useState(resumeData.experienceList); // Store experience changes
 
   const headerRef = useRef<HTMLDivElement>(null); // Ref to track header section
 
   // Handle input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, field: string) => {
     setTempData({ ...tempData, [field]: e.target.value });
+  };
+
+  // Handle input changes for experience section
+  const handleExperienceChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number, field: string) => {
+    const updatedExperience = [...tempExperience];
+    updatedExperience[index] = { ...updatedExperience[index], [field]: e.target.value };
+    setTempExperience(updatedExperience);
+  };
+
+// Cancel editing for experience section
+  const cancelExperienceEdit = () => {
+    setIsEditingExperience(null);
+    setTempExperience([...resumeData.experienceList]); // Restore original experience data
+  };
+
+  // Save only the experience section
+  const saveExperienceEdit = () => {
+    setIsSaving(true);
+    const updatedData = { ...resumeData, experienceList: tempExperience };
+    localStorage.setItem("resumeData", JSON.stringify(updatedData));
+    setResumeData(updatedData);
+    setTimeout(() => {
+      setIsSaving(false);
+      setIsEditingExperience(null); // Exit edit mode after saving
+    }, 1000);
   };
 
   // Save changes
@@ -120,18 +147,37 @@ export default function Template1Page({ data }: { data: any }) {
           </div>
 
           {/* Experience Section */}
-          <div className="details mt-6">
-            <div className="section">
-              <h3 className="text-2xl font-semibold text-gray-800">Experience</h3>
-              <div className="mt-4">
-                {data.experienceList.map((job: any, index: number) => (
-                    <div key={index} className="mb-4">
-                      <h4 className="text-lg font-semibold">{job.company}</h4>
-                      <p className="text-sm text-gray-600">{job.location} ({job.duration})</p>
-                      <p className="text-gray-700">{job.description}</p>
-                    </div>
-                ))}
-              </div>
+          <div className="section mt-6">
+            <h3 className="text-2xl font-semibold text-gray-800">Experience</h3>
+            <div className="mt-4">
+              {tempExperience.map((job: any, index: number) => (
+                  <div key={index} className="mb-4 cursor-pointer relative" onClick={() => setIsEditingExperience(index)}>
+                    {isEditingExperience === index ? (
+                        <>
+                          <input type="text" value={tempExperience[index].company} onChange={(e) => handleExperienceChange(e, index, "company")} className="text-lg font-semibold border-b border-gray-300 focus:outline-none focus:border-blue-500 w-full" />
+                          <input type="text" value={tempExperience[index].location} onChange={(e) => handleExperienceChange(e, index, "location")} className="text-sm text-gray-600 border-b border-gray-300 focus:outline-none focus:border-blue-500 w-full" />
+                          <input type="text" value={tempExperience[index].duration} onChange={(e) => handleExperienceChange(e, index, "duration")} className="text-sm text-gray-600 border-b border-gray-300 focus:outline-none focus:border-blue-500 w-full" />
+                          <textarea value={tempExperience[index].description} onChange={(e) => handleExperienceChange(e, index, "description")} className="text-gray-700 border-b border-gray-300 focus:outline-none focus:border-blue-500 w-full" />
+
+                          {/* Save and Cancel Buttons */}
+                          <div className="mt-4 flex justify-center gap-4">
+                            <button onClick={saveExperienceEdit} className="px-4 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition flex items-center gap-2">
+                              <AiOutlineCheck size={18} /> Save
+                            </button>
+                            <button onClick={cancelExperienceEdit} className="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition flex items-center gap-2">
+                              <AiOutlineClose size={18} /> Cancel
+                            </button>
+                          </div>
+                        </>
+                    ) : (
+                        <div>
+                          <h4 className="text-lg font-semibold">{job.company}</h4>
+                          <p className="text-sm text-gray-600">{job.location} ({job.duration})</p>
+                          <p className="text-gray-700">{job.description}</p>
+                        </div>
+                    )}
+                  </div>
+              ))}
             </div>
 
             {/* Education Section */}
