@@ -12,10 +12,12 @@ export default function Template1Page({ data }: { data: any }) {
   const [isEditingHeader, setIsEditingHeader] = useState(false);
   const [isEditingExperience, setIsEditingExperience] = useState<number | null>(null); //
   const [isEditingEducation, setIsEditingEducation] = useState<number | null>(null); // Track education edit mode
+  const [isEditingProject, setIsEditingProject] = useState<number | null>(null); // Track project edit mode
 
   const [tempData, setTempData] = useState(resumeData); // Store temporary changes
   const [tempExperience, setTempExperience] = useState(resumeData.experienceList); // Store experience changes
   const [tempEducation, setTempEducation] = useState(resumeData.education); // Store education edits
+  const [tempProjects, setTempProjects] = useState(resumeData.projects); // Store project edits
 
   const headerRef = useRef<HTMLDivElement>(null); // Ref to track header section
 
@@ -38,6 +40,13 @@ export default function Template1Page({ data }: { data: any }) {
     setTempEducation(updatedEducation);
   };
 
+  const handleProjectChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number, field: string) => {
+    const updatedProjects = [...tempProjects];
+    updatedProjects[index] = { ...updatedProjects[index], [field]: e.target.value };
+    setTempProjects(updatedProjects);
+  };
+
+
 // Cancel editing for experience section
   const cancelExperienceEdit = () => {
     setIsEditingExperience(null);
@@ -48,6 +57,22 @@ export default function Template1Page({ data }: { data: any }) {
   const cancelEducationEdit = () => {
     setIsEditingEducation(null);
     setTempEducation([...resumeData.education]); // Restore original education data
+  };
+
+  const cancelProjectEdit = () => {
+    setIsEditingProject(null);
+    setTempProjects([...resumeData.projects]); // Restore original project data
+  };
+
+  const saveProjectEdit = () => {
+    setIsSaving(true);
+    const updatedData = { ...resumeData, projects: tempProjects };
+    localStorage.setItem("resumeData", JSON.stringify(updatedData));
+    setResumeData(updatedData);
+    setTimeout(() => {
+      setIsSaving(false);
+      setIsEditingProject(null);
+    }, 1000);
   };
 
   // Save only the education section
@@ -253,10 +278,38 @@ export default function Template1Page({ data }: { data: any }) {
             <div className="section mt-6">
               <h3 className="text-2xl font-semibold text-gray-800">Projects</h3>
               <div className="mt-4">
-                {data.projects.map((project: any, index: number) => (
-                    <div key={index} className="mb-4">
-                      <h4 className="text-lg font-semibold">{project.name}</h4>
-                      <p className="text-gray-700">{project.description}</p>
+                {tempProjects.map((project: any, index: number) => (
+                    <div key={index} className="mb-4 cursor-pointer relative" onClick={() => setIsEditingProject(index)}>
+                      {isEditingProject === index ? (
+                          <>
+                            <input
+                                type="text"
+                                value={tempProjects[index].name}
+                                onChange={(e) => handleProjectChange(e, index, "name")}
+                                className="text-lg font-semibold border-b border-gray-300 w-full"
+                            />
+                            <textarea
+                                value={tempProjects[index].description}
+                                onChange={(e) => handleProjectChange(e, index, "description")}
+                                className="text-gray-700 border-b border-gray-300 w-full"
+                            />
+
+                            {/* Save and Cancel Buttons */}
+                            <div className="mt-4 flex justify-center gap-4">
+                              <button onClick={saveProjectEdit} className="px-4 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition flex items-center gap-2">
+                                <AiOutlineCheck size={18} /> Save
+                              </button>
+                              <button onClick={cancelProjectEdit} className="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition flex items-center gap-2">
+                                <AiOutlineClose size={18} /> Cancel
+                              </button>
+                            </div>
+                          </>
+                      ) : (
+                          <div>
+                            <h4 className="text-lg font-semibold">{project.name}</h4>
+                            <p className="text-gray-700">{project.description}</p>
+                          </div>
+                      )}
                     </div>
                 ))}
               </div>
