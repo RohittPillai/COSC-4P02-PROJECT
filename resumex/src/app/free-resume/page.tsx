@@ -44,15 +44,15 @@ export default function FreeResume() {
 
 
   const saveResume = () => {
-    if (resumeContent !== lastSavedContent) {
-      setIsSaving(true);
-      setTimeout(() => {
-        setIsSaving(false);
-        setLastSavedContent(resumeContent);
-        console.log("Resume saved:", resumeContent);
-      }, 1000);
-    }
+    setIsSaving(true);
+    setTimeout(() => {
+      setIsSaving(false);
+      setLastSavedContent(JSON.stringify(resumeData));
+      console.log("Resume saved:", resumeData);
+      localStorage.setItem("resumeData", JSON.stringify(resumeData)); // Save to localStorage
+    }, 1000);
   };
+
 
   useEffect(() => {
     const autoSaveInterval = setTimeout(() => {
