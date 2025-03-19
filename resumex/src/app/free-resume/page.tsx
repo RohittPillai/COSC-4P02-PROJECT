@@ -65,12 +65,12 @@ export default function FreeResume() {
   const downloadAsPDF = () => {
     const doc = new jsPDF();
     doc.text(resumeContent, 10, 10);
-    doc.save(`${template}-resume.pdf`); // ✅ Corrected
+    doc.save(`${template}-resume.pdf`);
   };
 
   const downloadAsWord = () => {
     const blob = new Blob([resumeContent], { type: "application/msword" });
-    saveAs(blob, `${template}-resume.doc`); // ✅ Corrected
+    saveAs(blob, `${template}-resume.doc`);
   };
 
   const copyToClipboard = () => {
@@ -226,7 +226,7 @@ export default function FreeResume() {
             {isFooterMinimized ? <AiOutlineUp size={16} /> : <AiOutlineDown size={16} />}
           </button>
 
-          {/for gap before footer/}
+          {/*for gap before footer*/}
           <div className="h-40"></div>
 
 
