@@ -10,9 +10,12 @@ export default function Template1Page({ data }: { data: any }) {
 
   const [isSaving, setIsSaving] = useState(false);
   const [isEditingHeader, setIsEditingHeader] = useState(false);
-  const [tempData, setTempData] = useState(resumeData); // Store temporary changes
   const [isEditingExperience, setIsEditingExperience] = useState<number | null>(null); //
+  const [isEditingEducation, setIsEditingEducation] = useState<number | null>(null); // Track education edit mode
+
+  const [tempData, setTempData] = useState(resumeData); // Store temporary changes
   const [tempExperience, setTempExperience] = useState(resumeData.experienceList); // Store experience changes
+  const [tempEducation, setTempEducation] = useState(resumeData.education); // Store education edits
 
   const headerRef = useRef<HTMLDivElement>(null); // Ref to track header section
 
@@ -28,10 +31,35 @@ export default function Template1Page({ data }: { data: any }) {
     setTempExperience(updatedExperience);
   };
 
+  // Handle input changes for education section
+  const handleEducationChange = (e: React.ChangeEvent<HTMLInputElement>, index: number, field: string) => {
+    const updatedEducation = [...tempEducation];
+    updatedEducation[index] = { ...updatedEducation[index], [field]: e.target.value };
+    setTempEducation(updatedEducation);
+  };
+
 // Cancel editing for experience section
   const cancelExperienceEdit = () => {
     setIsEditingExperience(null);
     setTempExperience([...resumeData.experienceList]); // Restore original experience data
+  };
+
+  // Cancel editing for education section
+  const cancelEducationEdit = () => {
+    setIsEditingEducation(null);
+    setTempEducation([...resumeData.education]); // Restore original education data
+  };
+
+  // Save only the education section
+  const saveEducationEdit = () => {
+    setIsSaving(true);
+    const updatedData = { ...resumeData, education: tempEducation };
+    localStorage.setItem("resumeData", JSON.stringify(updatedData));
+    setResumeData(updatedData);
+    setTimeout(() => {
+      setIsSaving(false);
+      setIsEditingEducation(null);
+    }, 1000);
   };
 
   // Save only the experience section
@@ -184,11 +212,30 @@ export default function Template1Page({ data }: { data: any }) {
             <div className="section mt-6">
               <h3 className="text-2xl font-semibold text-gray-800">Education</h3>
               <div className="mt-4">
-                {data.education.map((edu: any, index: number) => (
-                    <div key={index} className="mb-4">
-                      <h4 className="text-lg font-semibold">{edu.school}</h4>
-                      <p className="text-sm text-gray-600">{edu.location} ({edu.year})</p>
-                      <p className="text-gray-700">{edu.degree}</p>
+                {tempEducation.map((edu: any, index: number) => (
+                    <div key={index} className="mb-4 cursor-pointer relative" onClick={() => setIsEditingEducation(index)}>
+                      {isEditingEducation === index ? (
+                          <>
+                            <input type="text" value={tempEducation[index].school} onChange={(e) => handleEducationChange(e, index, "school")} className="text-lg font-semibold border-b border-gray-300 w-full" />
+                            <input type="text" value={tempEducation[index].location} onChange={(e) => handleEducationChange(e, index, "location")} className="text-sm text-gray-600 border-b border-gray-300 w-full" />
+                            <input type="text" value={tempEducation[index].year} onChange={(e) => handleEducationChange(e, index, "year")} className="text-sm text-gray-600 border-b border-gray-300 w-full" />
+
+                            {/* Save and Cancel Buttons */}
+                            <div className="mt-4 flex justify-center gap-4">
+                              <button onClick={saveEducationEdit} className="px-4 py-2 bg-green-600 text-white rounded-full">
+                                <AiOutlineCheck size={18} /> Save
+                              </button>
+                              <button onClick={cancelEducationEdit} className="px-4 py-2 bg-red-600 text-white rounded-full">
+                                <AiOutlineClose size={18} /> Cancel
+                              </button>
+                            </div>
+                          </>
+                      ) : (
+                          <div>
+                            <h4 className="text-lg font-semibold">{edu.school}</h4>
+                            <p className="text-sm text-gray-600">{edu.location} ({edu.year})</p>
+                          </div>
+                      )}
                     </div>
                 ))}
               </div>
