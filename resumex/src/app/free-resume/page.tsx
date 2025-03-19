@@ -133,9 +133,9 @@ export default function FreeResume() {
     ${isSidebarOpen ? "ml-[6%]" : "ml-[2%]"}`}>
 
           <aside className={`${isSidebarOpen ? "w-1/5" : "w-12"} 
-    bg-gradient-to-b from-gray-900 to-gray-800 text-white shadow-lg 
-    p-4 border-r border-gray-700 flex flex-col transition-all duration-300 
-    h-[calc(100vh-4rem)] fixed top-[4rem] left-0 z-0`}>
+          bg-gradient-to-b from-gray-900 to-gray-800 text-white shadow-lg 
+          p-4 border-r border-gray-700 flex flex-col transition-all duration-300 
+          h-[calc(100vh-4rem)] fixed top-[4rem] left-0 z-0`}>
 
 
           <button onClick={() => setIsSidebarOpen(!isSidebarOpen)}

@@ -3,10 +3,10 @@
 export default function Template1Page({ data }: { data: any }) {
   return (
       <div className="flex justify-center items-start w-full min-h-[calc(100vh-100px)] pt-10 pb-10">
-        <div className="bg-white shadow-lg p-8 rounded-lg max-w-4xl w-full mx-4
+        <div className="bg-white shadow-lg p-8 rounded-lg max-w-[1000px] w-[95%] mx-auto
           max-h-[calc(100vh-180px)] overflow-y-auto flex-grow">
 
-          {/* Header Section */}
+        {/* Header Section */}
           <div className="header text-center pb-4">
             <h1 className="text-4xl font-bold">{data.firstName} {data.lastName}</h1>
             <p className="text-gray-600 mt-2">{data.position}</p>
