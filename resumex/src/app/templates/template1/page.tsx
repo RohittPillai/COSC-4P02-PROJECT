@@ -50,7 +50,6 @@ export default function Template1Page({ data }: { data: any }) {
                     <div key={index} className="mb-4">
                       <h4 className="text-lg font-semibold">{project.name}</h4>
                       <p className="text-gray-700">{project.description}</p>
-                      {project.link && <a href={project.link} className="text-blue-600 hover:underline">View Project</a>}
                     </div>
                 ))}
               </div>
