@@ -1,6 +1,5 @@
 "use client";
 import Header from "../_components/Header";
-import Footer from "../_components/Footer";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -8,6 +7,8 @@ import { jsPDF } from "jspdf";
 import { saveAs } from "file-saver";
 import { AiOutlineLeft, AiOutlineRight, AiOutlineClose, AiOutlineSync, AiOutlineCheck, AiOutlineUp, AiOutlineDown } from "react-icons/ai";
 import dynamic from "next/dynamic";
+import html2canvas from "html2canvas";
+import { Document, Packer, Paragraph, TextRun } from "docx";
 
 const Template1Page = dynamic(() => import("../templates/template1/page"));
 const Template2Page = dynamic(() => import("../templates/template2/page"));
@@ -33,7 +34,27 @@ export default function FreeResume() {
   const template = searchParams.get("template") || "template1";
   const selectedTemplate = templates[template] || templates["template1"];
 
-  const [resumeContent, setResumeContent] = useState("Start typing your resume...");
+  const [resumeContent, setResumeContent] = useState(() => {
+    const savedData = JSON.parse(localStorage.getItem("resumeData")) || {};
+    return {
+      firstName: "John",
+      lastName: "Doe",
+      email: "john.doe@gmail.com",
+      phone: "111-222-3333",
+      position: "Front-End Developer",
+      description: "I am a front-end developer with 3+ years of experience...",
+      experienceList: savedData.experienceList || [
+        { company: "KlowdBox", location: "San Francisco, CA", duration: "Jan 2011 - Feb 2015", position: "Front-End Developer", description: "Developed user-friendly interfaces." },
+        { company: "Akount", location: "Santa Monica, CA", duration: "Jan 2015 - Present", position: "Senior Front-End Developer", description: "Led front-end team, optimized UI." },
+      ],
+      education: savedData.education || [{ school: "Sample Institute of Technology", location: "San Francisco, CA", year: "2011 - 2015", degree: "BSc in Computer Science" }],
+      projects: savedData.projects || [{ name: "DSP", description: "Developed a web app.", link: "https://example.com/dsp" }],
+      skills: savedData.skills || ["JavaScript", "React", "Node.js"],
+      interests: savedData.interests || ["Football", "Gaming"],
+      customSections: savedData.customSections || [], // Ensure customSections is always defined
+    };
+  });
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isDesignExpanded, setIsDesignExpanded] = useState(false);
   const [isDownloadExpanded, setIsDownloadExpanded] = useState(false);
@@ -62,20 +83,127 @@ export default function FreeResume() {
     return () => clearTimeout(autoSaveInterval);
   }, [resumeContent]);
 
+  const addCustomSection = () => {
+    const newSection = {
+      title: "New Section",
+      content: "Write something here...",
+    };
+    setResumeContent((prev) => {
+      const updatedSections = [...prev.customSections, newSection];
+
+      setTimeout(() => {
+        const lastSection = document.getElementById(`custom-section-${updatedSections.length - 1}`);
+        lastSection?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
+
+      const updatedResume = { ...prev, customSections: updatedSections };
+      localStorage.setItem("resumeData", JSON.stringify(updatedResume));
+      return updatedResume;
+    });
+  };
+
   const downloadAsPDF = () => {
-    const doc = new jsPDF();
-    doc.text(resumeContent, 10, 10);
-    doc.save(`${template}-resume.pdf`);
+    const element = document.getElementById("resume-content"); // Target resume div
+    if (!element) return;
+
+    html2canvas(element, {
+      scale: 2, // Higher resolution
+      useCORS: true, // Fix issues with external fonts/images
+      windowWidth: element.scrollWidth,
+      windowHeight: element.scrollHeight,
+    }).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
+
+      const imgWidth = 210; // A4 width in mm
+      const imgHeight = (canvas.height * imgWidth) / canvas.width; // Scale height proportionally
+
+      let heightLeft = imgHeight;
+      let position = 0;
+
+      // Add multiple pages if needed
+      while (heightLeft > 0) {
+        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+        heightLeft -= 297; // A4 height in mm
+        if (heightLeft > 0) {
+          position -= 297;
+          pdf.addPage();
+        }
+      }
+
+      pdf.save(`${template}-resume.pdf`);
+    });
   };
 
   const downloadAsWord = () => {
-    const blob = new Blob([resumeContent], { type: "application/msword" });
-    saveAs(blob, `${template}-resume.doc`);
+    const doc = new Document({
+      sections: [
+        {
+          properties: {},
+          children: [
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: `${resumeContent.firstName} ${resumeContent.lastName}`,
+                  bold: true,
+                  size: 32,
+                }),
+              ],
+            }),
+            new Paragraph({
+              text: resumeContent.position,
+              size: 24,
+            }),
+            new Paragraph({
+              text: `${resumeContent.email} | ${resumeContent.phone}`,
+            }),
+            new Paragraph({ text: "Experience", bold: true }),
+            ...resumeContent.experienceList.map(
+                (job) =>
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          text: `${job.company} (${job.duration})`,
+                          bold: true,
+                        }),
+                        new TextRun({ text: `\n${job.description}` }),
+                      ],
+                    })
+            ),
+            new Paragraph({ text: "Education", bold: true }),
+            ...resumeContent.education.map(
+                (edu) =>
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          text: `${edu.school} (${edu.year})`,
+                          bold: true,
+                        }),
+                        new TextRun({ text: `\n${edu.degree}` }),
+                      ],
+                    })
+            ),
+          ],
+        },
+      ],
+    });
+
+    Packer.toBlob(doc).then((blob) => {
+      saveAs(blob, "resume.docx");
+    });
   };
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText("https://resumex.com/my-resume");
-    alert("Resume link copied to clipboard!");
+  const removeCustomSection = (index) => {
+    const updatedSections = [...resumeContent.customSections];
+    updatedSections.splice(index, 1);
+
+    const updatedResume = {
+      ...resumeContent,
+      customSections: updatedSections,
+    };
+
+    setResumeContent(updatedResume);
+    localStorage.setItem("resumeData", JSON.stringify(updatedResume)); // Save to localStorage
   };
 
   const resumeData = {
@@ -125,6 +253,13 @@ export default function FreeResume() {
     interests: ["Football", "Programming", "Gaming"],
   };
 
+  const copyToClipboard = () => {
+    const resumeLink = "https://resumex.com/my-resume"; // Replace with actual resume link
+    navigator.clipboard.writeText(resumeLink)
+        .then(() => alert("Resume link copied to clipboard!"))
+        .catch((err) => console.error("Failed to copy: ", err));
+  };
+
   return (
       <div className="flex flex-col min-h-screen w-full bg-gray-100">
         <Header />
@@ -138,7 +273,7 @@ export default function FreeResume() {
           h-[calc(100vh-4rem)] fixed top-[4rem] left-0 z-0`}>
 
 
-          <button onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            <button onClick={() => setIsSidebarOpen(!isSidebarOpen)}
                     className="self-end text-gray-400 hover:text-gray-200 mb-4">
               {isSidebarOpen ? <AiOutlineLeft size={20} /> : <AiOutlineRight size={20} />}
             </button>
@@ -148,7 +283,15 @@ export default function FreeResume() {
                   <ul className="space-y-3">
                     <li><Link href="/login" className="text-blue-400 hover:underline">Sign In</Link></li>
 
-                    <li><button className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition">Custom Section</button></li>
+                    <li>
+                      <button
+                          onClick={addCustomSection}
+                          className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition"
+                      >
+                        Custom Section
+                      </button>
+                    </li>
+
 
                     <li>
                       <button onClick={() => setIsDesignExpanded(!isDesignExpanded)}
@@ -206,10 +349,13 @@ export default function FreeResume() {
 
           <section className="flex-1 p-6 h-[96vh] flex flex-col justify-center items-center bg-gray-100 pt-20 mb-32">
             <h1 className="text-4xl font-extrabold text-gray-900 mb-4">Editing: {selectedTemplate.name}</h1>
-            <div className="w-full max-w-2xl p-4 border border-gray-400 rounded-lg shadow-xl bg-white">
-              {selectedTemplate.component && <selectedTemplate.component data={resumeData} />}
+            <div id="resume-container" className="w-full max-w-2xl p-4 border border-gray-400 rounded-lg shadow-xl bg-white">
+              {selectedTemplate.component && (
+                  <selectedTemplate.component data={resumeContent} updateResume={setResumeContent} />
+              )}
             </div>
           </section>
+
         </main>
 
         {/* Collapsible Footer */}
