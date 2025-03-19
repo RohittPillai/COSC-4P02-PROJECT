@@ -56,7 +56,7 @@ export default function Template1Page({ data, updateResume }) {
 
   return (
       <div className="flex justify-center items-start w-full min-h-[calc(100vh-100px)] pt-10 pb-10">
-        <div className="bg-white shadow-lg p-8 rounded-lg max-w-[1000px] w-[95%] mx-auto
+        <div id="resume-content" className="bg-white shadow-lg p-8 rounded-lg max-w-[1000px] w-[95%] mx-auto
         max-h-[calc(100vh-180px)] overflow-y-auto flex-grow">
 
           {/* Header Section */}
