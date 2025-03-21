@@ -1,30 +1,83 @@
 "use client";
 
 import { useState } from "react";
+import { motion } from "framer-motion";
+import Link from "next/link";
 import Header from "../_components/Header";
 import Footer from "../_components/Footer";
-import Link from "next/link";
-import Image from "next/image";
 import FAQ from "./faq";
+import Image from "next/image";
+
+// Stripe checkout function
+async function handleCheckout(priceId: string, setLoading: (value: boolean) => void) {
+  try {
+    setLoading(true);
+    const res = await fetch("/api/checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ priceId }),
+    });
+
+    if (!res.ok) {
+      const errorMessage = await res.text();
+      throw new Error(Checkout failed: ${res.status} - ${errorMessage});
+    }
+
+    const data = await res.json();
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      throw new Error("Stripe did not return a URL");
+    }
+  } catch (error) {
+    console.error("❌ Checkout Error:", error);
+    alert(Payment failed: ${error.message});
+  } finally {
+    setLoading(false);
+  }
+}
 
 export default function PricingPage() {
-  const [isYearly, setIsYearly] = useState(false); // Toggle monthly/yearly pricing
+  const [isYearly, setIsYearly] = useState(false);
+  const [loadingPro, setLoadingPro] = useState(false);
 
-  const plans = {
-    basic: { monthly: 10, yearly: 100 },
-    premium: { monthly: 20, yearly: 200 },
-  };
+  // Stripe Price IDs
+  const proPriceId = isYearly
+    ? "price_1R4AIbP4fL01NYku1dphhh55" // Yearly Pro
+    : "price_1R4AH7P4fL01NYkumg1mJSUV"; // Monthly Pro
+
+  // Pricing Calculation (15% Discount for Yearly)
+  const proMonthly = 20;
+  const discountRate = 0.15;
+  const proYearly = (proMonthly * 12 * (1 - discountRate)).toFixed(2);
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <div className="flex flex-col min-h-screen bg-gray-100">
       <Header />
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-b from-gray-900 to-gray-800 text-white text-center py-24 px-8">
-        <h1 className="text-5xl font-extrabold">Flexible Pricing Plans</h1>
-        <p className="mt-4 text-lg opacity-90 leading-relaxed">
+      <section className="bg-gray-900 text-white text-center py-20 px-6">
+        <motion.h1
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-5xl font-extrabold"
+        >
+          Build a strikingly powerful resume approved by recruiters
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="mt-4 text-lg opacity-90"
+        >
           Choose a plan that fits your career goals. Upgrade anytime.
-        </p>
+        </motion.p>
+        <Link href="/templates">
+          <button className="mt-6 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition">
+            Build My Resume Now
+          </button>
+        </Link>
       </section>
 
       {/* Pricing Toggle */}
@@ -37,11 +90,11 @@ export default function PricingPage() {
             checked={isYearly}
             onChange={() => setIsYearly(!isYearly)}
           />
-          <div className="w-12 h-6 bg-gray-300 rounded-full p-1 duration-300 ease-in-out">
+          <div className="relative w-14 h-7 bg-gray-300 rounded-full p-1 duration-300 ease-in-out">
             <div
-              className={bg-blue-600 w-4 h-4 rounded-full shadow-md transform duration-300 ease-in-out ${
-                isYearly ? "translate-x-6" : ""
-              }}
+              className={`absolute top-1 left-1 w-5 h-5 bg-blue-600 rounded-full shadow-md transform transition-transform ${
+                isYearly ? "translate-x-7" : ""
+              }`}
             ></div>
           </div>
           <span className="ml-3 text-gray-700 font-semibold">Yearly (Save 15%)</span>
@@ -49,151 +102,105 @@ export default function PricingPage() {
       </div>
 
       {/* Pricing Plans */}
-      <main className="flex-grow flex flex-col items-center justify-center py-20 px-8">
-        <div className="grid md:grid-cols-2 gap-8 max-w-5xl">
-          {/* Basic Plan */}
-          <div className="p-8 bg-white shadow-lg rounded-lg text-center border border-gray-300 transition-transform transform hover:scale-105 hover:shadow-xl">
-            <h2 className="text-3xl font-semibold">Basic Plan</h2>
-            <p className="mt-2 text-gray-500 text-lg">
-              ${isYearly ? plans.basic.yearly : plans.basic.monthly}/{isYearly ? "year" : "month"}
-            </p>
-            <ul className="mt-6 space-y-4 text-gray-600 text-left">
-              <li>✅ AI-Powered Resume</li>
-              <li>✅ 3 Resume Templates</li>
-              <li>✅ PDF Export</li>
-              <li>✅ Resume Score & Feedback</li>
-              <li>✅ Basic Customer Support</li>
+      <main className="flex-grow py-10 px-6">
+        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-8">
+          {/* Free Plan */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="p-8 bg-white shadow-lg rounded-lg border border-gray-300 text-center"
+          >
+            <h3 className="text-sm font-semibold bg-gray-200 text-gray-700 px-3 py-1 rounded-full inline-block">
+              FREE PLAN
+            </h3>
+            <h2 className="text-5xl font-bold mt-2">$0</h2>
+            <p className="text-gray-500">Valid for 7 days</p>
+            <ul className="mt-6 space-y-2 text-gray-600 text-left">
+              <li>✅ Two resumes</li>
+              <li>✅ Few resume templates</li>
+              <li>✅ Basic resume sections</li>
+              <li>✅ resumeX branding</li>
+              <li>✅ Up to 2 years of experience</li>
+              <li>✅ Access to few design tools</li>
             </ul>
-            <Link href="/pricing/basic">
-              <button className="mt-8 px-6 py-3 w-full bg-blue-600 text-white font-semibold rounded-full shadow-md hover:bg-blue-700 hover:shadow-lg transition-transform transform hover:scale-105">
-                Get Started
+            <Link href="/templates">
+              <button className="mt-6 px-6 py-3 border-2 border-gray-900 text-gray-900 font-semibold rounded-lg hover:bg-gray-900 hover:text-white transition">
+                Build My Resume
               </button>
             </Link>
-          </div>
+          </motion.div>
 
-          {/* Premium Plan */}
-          <div className="p-8 bg-white shadow-lg rounded-lg text-center border-2 border-blue-500 transform scale-100 transition-transform hover:scale-105 hover:shadow-xl relative">
-            <span className="absolute top-0 right-0 bg-blue-600 text-white text-xs font-semibold px-2 py-1 rounded-bl-lg">
-              Most Popular
+          {/* Pro Plan */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="p-8 bg-white shadow-lg rounded-lg border-2 border-blue-500 text-center relative"
+          >
+            <span className="absolute top-0 right-0 bg-yellow-500 text-white text-xs font-semibold px-2 py-1 rounded-bl-lg">
+              SAVE 15%
             </span>
-            <h2 className="text-3xl font-semibold text-blue-600">Premium Plan</h2>
-            <p className="mt-2 text-gray-500 text-lg">
-              ${isYearly ? plans.premium.yearly : plans.premium.monthly}/{isYearly ? "year" : "month"}
+            <h3 className="text-sm font-semibold bg-blue-200 text-blue-700 px-3 py-1 rounded-full inline-block">
+              PRO PLAN
+            </h3>
+            <h2 className="text-5xl font-bold mt-2 text-blue-600">
+              ${isYearly ? proYearly : proMonthly}.00/mo
+            </h2>
+            <p className="text-gray-500">
+              {isYearly
+                ? $${(proMonthly * 12).toFixed(2)} billed yearly
+                : $${(proMonthly * 3).toFixed(2)} billed every 3 months}
             </p>
-            <ul className="mt-6 space-y-4 text-gray-600 text-left">
-              <li>✅ All Features from Basic</li>
-              <li>✅ 10 Premium Templates</li>
-              <li>✅ AI-Powered Customization</li>
-              <li>✅ Priority Support</li>
-              <li>✅ Cover Letter Generator</li>
-              <li>✅ Resume Analytics</li>
-              <li>✅ LinkedIn Optimization</li>
+            <ul className="mt-6 space-y-2 text-gray-600 text-left">
+              <li>✅ 150 resumes</li>
+              <li>✅ All resume templates</li>
+              <li>✅ Real-time content suggestions</li>
+              <li>✅ ATS Check (Applicant Tracking System)</li>
+              <li>✅ Pro resume sections</li>
+              <li>✅ No branding</li>
+              <li>✅ Unlimited section items</li>
+              <li>✅ Thousands of design options</li>
             </ul>
-            <Link href="/pricing/premium">
-              <button className="mt-8 px-6 py-3 w-full bg-blue-600 text-white font-semibold rounded-full shadow-md hover:bg-blue-700 hover:shadow-lg transition-transform transform hover:scale-105">
-                Get Premium
-              </button>
-            </Link>
-          </div>
+            <button
+              onClick={() => handleCheckout(proPriceId, setLoadingPro)}
+              className={`mt-6 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition ${
+                loadingPro ? "cursor-not-allowed opacity-75" : ""
+              }`}
+              disabled={loadingPro}
+            >
+              {loadingPro ? "Processing..." : "Subscribe to Pro Plan"}
+            </button>
+          </motion.div>
         </div>
       </main>
 
-      {/* Feature Comparison Table */}
-      <section className="max-w-5xl mx-auto bg-white p-8 rounded-lg shadow-lg mt-12">
-        <h2 className="text-3xl font-bold text-center text-gray-800">Feature Comparison</h2>
-        <div className="overflow-x-auto mt-6">
-          <table className="w-full border-collapse border border-gray-400 rounded-lg overflow-hidden">
-            {/* Table Head */}
-            <thead className="bg-gradient-to-r from-gray-200 to-gray-300 text-gray-900 font-bold text-center">
-              <tr>
-                <th className="p-4 border text-left">Feature</th>
-                <th className="p-4 border bg-blue-100 text-blue-700">Basic</th>
-                <th className="p-4 border bg-blue-600 text-white">Premium</th>
-              </tr>
-            </thead>
-
-            {/* Table Body */}
-            <tbody className="text-center divide-y divide-gray-200">
-              <tr>
-                <td className="p-4 border text-left">AI-Powered Resume</td>
-                <td className="p-4 border text-green-500 font-semibold">✔</td>
-                <td className="p-4 border text-green-500 font-semibold">✔</td>
-              </tr>
-              <tr>
-                <td className="p-4 border text-left">Resume Templates</td>
-                <td className="p-4 border font-semibold">3</td>
-                <td className="p-4 border font-semibold">10</td>
-              </tr>
-              <tr>
-                <td className="p-4 border text-left">PDF Export</td>
-                <td className="p-4 border text-green-500 font-semibold">✔</td>
-                <td className="p-4 border text-green-500 font-semibold">✔</td>
-              </tr>
-              <tr>
-                <td className="p-4 border text-left">Resume Score & Feedback</td>
-                <td className="p-4 border text-green-500 font-semibold">✔</td>
-                <td className="p-4 border text-green-500 font-semibold">✔</td>
-              </tr>
-              <tr>
-                <td className="p-4 border text-left">Cover Letter Generator</td>
-                <td className="p-4 border text-gray-400 font-semibold">-</td>
-                <td className="p-4 border text-green-500 font-semibold">✔</td>
-              </tr>
-              <tr>
-                <td className="p-4 border text-left">Resume Analytics</td>
-                <td className="p-4 border text-gray-400 font-semibold">-</td>
-                <td className="p-4 border text-green-500 font-semibold">✔</td>
-              </tr>
-              <tr>
-                <td className="p-4 border text-left">Priority Support</td>
-                <td className="p-4 border text-gray-400 font-semibold">-</td>
-                <td className="p-4 border text-green-500 font-semibold">✔</td>
-              </tr>
-            </tbody>
-          </table>
+      {/* Payment Methods */}
+      <div className="text-center py-10">
+        <p className="text-gray-600 font-semibold">We accept:</p>
+        <div className="mt-4 flex justify-center space-x-4">
+          <Image src="/mastercard.png" alt="Mastercard" width={50} height={30} />
+          <Image src="/visa.png" alt="Visa" width={50} height={30} />
+          <Image src="/paypal.png" alt="PayPal" width={50} height={30} />
+          <Image src="/aMEX.png" alt="Amex" width={50} height={30} />
         </div>
-      </section>
+      </div>
 
-      {/* Trusted by Universities */}
-      <section className="bg-gray-100 py-12">
-        <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-center text-gray-800 text-lg font-semibold mb-6">
-            Trusted by Universities & Colleges Across Ontario
-          </h2>
-          <div className="overflow-hidden py-4">
-            <div className="flex space-x-12 animate-marquee">
-              {[
-                { src: "/brock.png", alt: "Brock University" },
-                { src: "/algonquin.png", alt: "Algonquin College" },
-                { src: "/sheridan.png", alt: "Sheridan College" },
-                { src: "/durham.png", alt: "Durham College" },
-                { src: "/conestoga.png", alt: "Conestoga College" },
-              ].map((logo, index) => (
-                <Image
-                  key={index}
-                  src={logo.src}
-                  alt={logo.alt}
-                  width={100}
-                  height={40}
-                  loading="lazy" // Lazy-load images
-                  className="transition-transform transform hover:scale-110 hover:shadow-md"
-                />
-              ))}
-            </div>
-          </div>
+      {/* Trusted by Universities Section */}
+      <section className="py-20 px-6 bg-gray-900 text-white text-center">
+        <h2 className="text-4xl font-bold">Trusted by Universities and Colleges</h2>
+        <p className="mt-4 text-lg text-gray-300">
+          Our resume builder is used by students and professionals from top institutions.
+        </p>
+        <div className="mt-12 flex flex-wrap justify-center items-center gap-8">
+          <img src="/algonquin.png" className="h-16" />
+          <img src="/brock.png" className="h-16" />
+          <img src="/conestoga.png" className="h-16" />
+          <img src="/durham.png" className="h-16" />
         </div>
       </section>
 
       <FAQ />
-      <section className="bg-gray-900 text-white text-center py-16 mt-12">
-        <h2 className="text-3xl font-bold">Start Building Your Resume Today</h2>
-        <p className="mt-4 text-lg">Join thousands of professionals using ResumeX.</p>
-        <Link href="/register">
-          <button className="mt-6 px-10 py-4 bg-white text-blue-600 font-semibold rounded-xl shadow-md hover:bg-gray-200 transition">
-            Sign Up Now
-          </button>
-        </Link>
-      </section>
       <Footer />
     </div>
   );
