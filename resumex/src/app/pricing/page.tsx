@@ -20,7 +20,7 @@ async function handleCheckout(priceId: string, setLoading: (value: boolean) => v
 
     if (!res.ok) {
       const errorMessage = await res.text();
-      throw new Error(Checkout failed: ${res.status} - ${errorMessage});
+      throw new Error(`Checkout failed: ${res.status} - ${errorMessage}`);
     }
 
     const data = await res.json();
@@ -29,9 +29,9 @@ async function handleCheckout(priceId: string, setLoading: (value: boolean) => v
     } else {
       throw new Error("Stripe did not return a URL");
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error("❌ Checkout Error:", error);
-    alert(Payment failed: ${error.message});
+    alert(`Payment failed: ${error.message}`);
   } finally {
     setLoading(false);
   }
@@ -41,12 +41,11 @@ export default function PricingPage() {
   const [isYearly, setIsYearly] = useState(false);
   const [loadingPro, setLoadingPro] = useState(false);
 
-  // Stripe Price IDs
   const proPriceId = isYearly
-    ? "price_1R4AIbP4fL01NYku1dphhh55" // Yearly Pro
-    : "price_1R4AH7P4fL01NYkumg1mJSUV"; // Monthly Pro
+    ? "price_1R4AIbP4fL01NYku1dphhh55"
+    : "price_1R58FhP4fL01NYkunIaG9EtS";
 
-  // Pricing Calculation (15% Discount for Yearly)
+
   const proMonthly = 20;
   const discountRate = 0.15;
   const proYearly = (proMonthly * 12 * (1 - discountRate)).toFixed(2);
@@ -149,8 +148,8 @@ export default function PricingPage() {
             </h2>
             <p className="text-gray-500">
               {isYearly
-                ? $${(proMonthly * 12).toFixed(2)} billed yearly
-                : $${(proMonthly * 3).toFixed(2)} billed every 3 months}
+                ? `${(proMonthly * 12).toFixed(2)} billed yearly`
+                : `${(proMonthly * 3).toFixed(2)} billed every 3 months`}
             </p>
             <ul className="mt-6 space-y-2 text-gray-600 text-left">
               <li>✅ 150 resumes</li>
@@ -193,7 +192,7 @@ export default function PricingPage() {
           Our resume builder is used by students and professionals from top institutions.
         </p>
         <div className="mt-12 flex flex-wrap justify-center items-center gap-8">
-          <img src="/algonquin.png" className="h-16" />
+          <img src="/Waterloo.png" className="h-16" />
           <img src="/brock.png" className="h-16" />
           <img src="/conestoga.png" className="h-16" />
           <img src="/durham.png" className="h-16" />
