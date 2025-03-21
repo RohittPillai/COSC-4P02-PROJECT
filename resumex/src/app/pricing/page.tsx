@@ -42,13 +42,13 @@ export default function PricingPage() {
   const [loadingPro, setLoadingPro] = useState(false);
 
   const proPriceId = isYearly
-    ? "price_1R4AIbP4fL01NYku1dphhh55"
-    : "price_1R58FhP4fL01NYkunIaG9EtS";
+    ? "price_1R58K6P4fL01NYku7gnFZj1I"
+    : "price_1R4AIbP4fL01NYku1dphhh55";
 
 
-  const proMonthly = 20;
+  const proMonthly = 19.99;
   const discountRate = 0.15;
-  const proYearly = (proMonthly * 12 * (1 - discountRate)).toFixed(2);
+  const proYearly = 190.99;
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
@@ -144,12 +144,14 @@ export default function PricingPage() {
               PRO PLAN
             </h3>
             <h2 className="text-5xl font-bold mt-2 text-blue-600">
-              ${isYearly ? proYearly : proMonthly}.00/mo
+              <h2 className="text-5xl font-bold mt-2 text-blue-600">
+  {isYearly ? `$${proYearly} billed yearly` : `$${proMonthly.toFixed(2)}/mo`}
+</h2>
             </h2>
             <p className="text-gray-500">
               {isYearly
-                ? `${(proMonthly * 12).toFixed(2)} billed yearly`
-                : `${(proMonthly * 3).toFixed(2)} billed every 3 months`}
+                ? `$${proYearly} billed yearly`
+                : `$${(proMonthly * 3).toFixed(2)} billed every 3 months`}
             </p>
             <ul className="mt-6 space-y-2 text-gray-600 text-left">
               <li>✅ 150 resumes</li>
