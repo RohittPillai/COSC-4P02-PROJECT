@@ -25,7 +25,7 @@ export function RegisterForm({ className, ...props }: React.ComponentPropsWithou
 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState<{ name: string } | null>(null);
+  const [user, setUser] = useState<{ name: string } | null>(null); // Hides registration form when a user is present (user), letting them log out instead.
   const router = useRouter();
 
   useEffect(() => {
@@ -36,6 +36,7 @@ export function RegisterForm({ className, ...props }: React.ComponentPropsWithou
   }, []);
 
   function handleLogout() {
+    // Clears local storage and resets user to allow re-registering.
     localStorage.removeItem("userData");
     setUser(null);
   }
@@ -81,11 +82,13 @@ export function RegisterForm({ className, ...props }: React.ComponentPropsWithou
   return (
     <>
       {user ? (
+        // If user is already logged in, show logout prompt instead of register form.
         <div className="flex flex-col gap-6">
           <p className="text-center">You are already logged in as {user.name}</p>
           <Button onClick={handleLogout}>Logout</Button>
         </div>
       ) : (
+        // Otherwise, display the sign-up fields.
         <div className={cn("flex flex-col gap-6", className)} {...props}>
           <Card>
             <CardHeader className="text-center">
