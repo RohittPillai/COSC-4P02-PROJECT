@@ -1,5 +1,8 @@
 "use client";
 
+// Documentation: Renders a sticky top navigation bar with a logo and links.
+// New changes: Checks localStorage for user data to show greeting & logout button if logged in.
+
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -15,6 +18,7 @@ const Header = () => {
   }, []);
 
   function handleLogout() {
+    // Removes user info from storage and resets login state.
     localStorage.removeItem("userData");
     setUser(null);
   }
@@ -41,6 +45,7 @@ const Header = () => {
           <Link href="/templates" className="hover:text-blue-600 transition">Templates</Link>
           <Link href="/pro-resume" className="hover:text-blue-600 transition">Pro Version</Link>
           <Link href="/aboutus" className="hover:text-blue-600 transition">About Us</Link>
+          {/* If the user is logged in, show welcome message and logout; otherwise show login link. */}
           {user ? (
             <>
               <span>Welcome, {user.name}</span>

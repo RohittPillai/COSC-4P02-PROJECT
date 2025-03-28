@@ -14,6 +14,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
+// Documentation: Display a login form if the user is not already logged in. If logged in, show logout option.
 export function LoginForm({
   className,
   ...props
@@ -22,7 +23,7 @@ export function LoginForm({
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState<{ name: string } | null>(null);
+  const [user, setUser] = useState<{ name: string } | null>(null); // New changes: Hides the form for logged-in users and provides a logout button.
   const router = useRouter();
 
   useEffect(() => {
@@ -33,6 +34,7 @@ export function LoginForm({
   }, []);
 
   function handleLogout() {
+    // Logs out the user by clearing localStorage.
     localStorage.removeItem("userData");
     setUser(null);
   }
@@ -62,11 +64,13 @@ export function LoginForm({
   return (
     <>
       {user ? (
+        // If user is logged in, display logout prompt and hide the form.
         <div className="flex flex-col gap-6">
           <p className="text-center">You are already logged in as {user.name}</p>
           <Button onClick={handleLogout}>Logout</Button>
         </div>
       ) : (
+        // Otherwise, display the login form and authenticate credentials.
         <div className={cn("flex flex-col gap-6", className)} {...props}>
           <Card>
             <CardHeader className="text-center">
