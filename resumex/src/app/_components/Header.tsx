@@ -1,10 +1,24 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
 const Header = () => {
+  const [user, setUser] = useState<{ name: string } | null>(null);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("userData");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
+  function handleLogout() {
+    localStorage.removeItem("userData");
+    setUser(null);
+  }
+
   return (
     <header className="bg-gray-900 text-white sticky top-0 z-50 shadow-lg">
       <div className="max-w-8xl mx-auto flex justify-between items-center px-8 h-20">
@@ -27,11 +41,18 @@ const Header = () => {
           <Link href="/templates" className="hover:text-blue-600 transition">Templates</Link>
           <Link href="/pro-resume" className="hover:text-blue-600 transition">Pro Version</Link>
           <Link href="/aboutus" className="hover:text-blue-600 transition">About Us</Link>
-          <Link href="/login" className="hover:text-blue-600 transition">Login</Link>
+          {user ? (
+            <>
+              <span>Welcome, {user.name}</span>
+              <button onClick={handleLogout} className="hover:text-blue-600 transition">Logout</button>
+            </>
+          ) : (
+            <Link href="/login" className="hover:text-blue-600 transition">Login</Link>
+          )}
         </nav>
-    </div>
+      </div>
     </header>
-);
+  );
 };
 
 export default Header;
