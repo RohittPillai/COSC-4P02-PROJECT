@@ -1,16 +1,16 @@
 "use client";
 
 import { cn } from "~/lib/utils";
-import { Button } from "~/components/ui/button";
+import { Button } from "~/app/_components/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "~/components/ui/card";
-import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
+} from "~/app/_components/card";
+import { Input } from "~/app/_components/input";
+import { Label } from "~/app/_components/label";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
