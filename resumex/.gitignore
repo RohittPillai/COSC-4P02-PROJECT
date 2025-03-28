@@ -52,3 +52,6 @@ public/tmp/
 public/uploads/
 public/static/
 next-env.d.ts
+
+# Ignore database files
+*.db
