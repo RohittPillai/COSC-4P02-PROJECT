@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import prisma from "~/lib/prisma";
 import bcrypt from "bcryptjs";
 
+// Documentation: Handles user login. Verifies user credentials and compares hashed passwords.
+// New changes: Returns a user object upon success, or an error message for invalid credentials.
+
 export async function POST(req: Request) {
   try {
     const { email, password } = await req.json();
@@ -22,7 +25,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // In a real app, you'd set a session/cookie or JWT here
+    // If the password matches, respond with user info.
     return NextResponse.json({
       message: "Logged in successfully",
       user: { id: user.id, name: user.name, email: user.email },
