@@ -14,14 +14,36 @@ export default function Template1Page({ data }: { data: any }) {
   const [isEditingEducation, setIsEditingEducation] = useState<number | null>(null); // Track education edit mode
   const [isEditingProject, setIsEditingProject] = useState<number | null>(null); // Track project edit mode
   const [isEditingSkills, setIsEditingSkills] = useState(false); // Track skills edit mode
+  const [isEditingInterests, setIsEditingInterests] = useState(false);
 
   const [tempData, setTempData] = useState(resumeData); // Store temporary changes
   const [tempExperience, setTempExperience] = useState(resumeData.experienceList); // Store experience changes
   const [tempEducation, setTempEducation] = useState(resumeData.education); // Store education edits
   const [tempProjects, setTempProjects] = useState(resumeData.projects); // Store project edits
   const [tempSkills, setTempSkills] = useState(resumeData.skills); // Store skills edits
+  const [tempInterests, setTempInterests] = useState(resumeData.interests); // array of strings
 
   const headerRef = useRef<HTMLDivElement>(null); // Ref to track header section
+
+  const handleInterestsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTempInterests(e.target.value.split(',').map((item) => item.trim()));
+  };
+
+  const saveInterestsEdit = () => {
+    setIsSaving(true);
+    const updatedData = { ...resumeData, interests: tempInterests };
+    localStorage.setItem("resumeData", JSON.stringify(updatedData));
+    setResumeData(updatedData);
+    setTimeout(() => {
+      setIsSaving(false);
+      setIsEditingInterests(false);
+    }, 1000);
+  };
+
+  const cancelInterestsEdit = () => {
+    setTempInterests([...resumeData.interests]);
+    setIsEditingInterests(false);
+  };
 
   const handleSkillsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTempSkills(e.target.value.split(",")); // Convert comma-separated input into an array
@@ -375,7 +397,28 @@ export default function Template1Page({ data }: { data: any }) {
             {/* Interests Section */}
             <div className="section mt-6">
               <h3 className="text-2xl font-semibold text-gray-800">Interests</h3>
-              <p className="text-gray-700">{data.interests.join(", ")}</p>
+              <div className="mt-2 cursor-pointer" onClick={() => setIsEditingInterests(true)}>
+                {isEditingInterests ? (
+                    <>
+                      <input
+                          type="text"
+                          value={tempInterests.join(", ")}
+                          onChange={handleInterestsChange}
+                          className="text-gray-700 border-b border-gray-300 focus:outline-none focus:border-blue-500 w-full"
+                      />
+                      <div className="mt-4 flex justify-center gap-4">
+                        <button onClick={saveInterestsEdit} className="px-4 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition flex items-center gap-2">
+                          <AiOutlineCheck size={18} /> Save
+                        </button>
+                        <button onClick={cancelInterestsEdit} className="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition flex items-center gap-2">
+                          <AiOutlineClose size={18} /> Cancel
+                        </button>
+                      </div>
+                    </>
+                ) : (
+                    <p className="text-gray-700">{resumeData.interests.join(", ")}</p>
+                )}
+              </div>
             </div>
           </div>
         </div>
