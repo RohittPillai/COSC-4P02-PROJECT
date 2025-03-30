@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function StaticResumeTemplate() {
+export default function Template2Page() {
   return (
       <div className="w-full max-w-[1200px] mx-auto px-10 py-10 bg-white rounded shadow-sm font-sans text-sm text-gray-800 leading-relaxed overflow-y-auto max-h-[calc(100vh-160px)] border border-gray-300">
         <header className="border-b border-gray-400 pb-3 mb-5">
@@ -9,11 +9,13 @@ export default function StaticResumeTemplate() {
           <p className="mt-2 text-gray-600">
             Motivated, patient-focused Certified Medical Assistant with 10+ years of experience providing a variety of healthcare services. Excels at prioritizing tasks, supporting organizational objectives, and ensuring excellent patient care.
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 mt-3 text-gray-600 text-sm">
-            <span>anna@youremail.com</span>
-            <span>123-4567</span>
-            <span>Houston, TX</span>
-            <span>LinkedIn.com/anna.taylor</span>
+          <div className="border-t border-gray-400 pt-2 mt-3 text-gray-600 text-sm">
+            <div className="grid grid-cols-1 sm:grid-cols-4 justify-items-center sm:justify-items-start text-center sm:text-left gap-x-10">
+              <span className="pr-6 underline">anna@youremail.com</span>
+              <span className="underline">123-4567</span>
+              <span className="underline">Houston, TX</span>
+              <span className="underline">LinkedIn.com/anna.taylor</span>
+            </div>
           </div>
         </header>
 
@@ -62,17 +64,16 @@ export default function StaticResumeTemplate() {
           <aside className="space-y-8">
             <div>
               <h2 className="font-bold text-sm text-gray-700 uppercase mb-3">Skills</h2>
-              <ul className="text-gray-700 space-y-1 list-disc list-inside">
-                <li>Patient Care</li>
-                <li>Administrative Support</li>
-                <li>Inventory Management</li>
-                <li>Conflict Resolution</li>
-                <li>Medical Terminology</li>
-                <li>Data Entry</li>
-                <li>Database Management</li>
-                <li>Medical Billing</li>
-                <li>Prioritization</li>
-              </ul>
+              <div className="grid grid-cols-2 gap-y-2 gap-x-6 text-gray-700 text-sm">
+                <span className="block before:content-['•'] before:mr-2 before:font-bold">Patient Care</span>
+                <span className="block before:content-['•'] before:mr-2 before:font-bold">Database Management</span>
+                <span className="block before:content-['•'] before:mr-2 before:font-bold">Inventory Management</span>
+                <span className="block before:content-['•'] before:mr-2 before:font-bold">Medical Billing</span>
+                <span className="block before:content-['•'] before:mr-2 before:font-bold">Administrative Support</span>
+                <span className="block before:content-['•'] before:mr-2 before:font-bold">Prioritization</span>
+                <span className="block before:content-['•'] before:mr-2 before:font-bold">Health Regulatory Compliance</span>
+                <span className="block before:content-['•'] before:mr-2 before:font-bold">Conflict Resolution</span>
+              </div>
             </div>
 
             <div>
