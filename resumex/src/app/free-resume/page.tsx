@@ -53,7 +53,6 @@ export default function FreeResume() {
     }, 1000);
   };
 
-
   useEffect(() => {
     const autoSaveInterval = setTimeout(() => {
       saveResume();
@@ -244,7 +243,7 @@ export default function FreeResume() {
           </div>
         </div>
 
-        {/* SHARE MODAL - Fully Restored ✅ */}
+        {/* SHARE MODAL - Fully Restored */}
         {isShareModalOpen && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
               <div className="relative bg-white p-6 rounded-lg shadow-lg w-96 text-center">
