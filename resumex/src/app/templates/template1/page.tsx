@@ -79,7 +79,6 @@ export default function Template1Page({ data }: { data: any }) {
     setTempProjects(updatedProjects);
   };
 
-
 // Cancel editing for experience section
   const cancelExperienceEdit = () => {
     setIsEditingExperience(null);
