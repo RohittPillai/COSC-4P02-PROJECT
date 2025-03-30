@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 
-export default function Template4Page() {
+export default function Template3Page() {
     const [activeTab, setActiveTab] = useState("profile");
 
     const tabs = ["profile", "education", "skills", "work", "projects", "awards"];
