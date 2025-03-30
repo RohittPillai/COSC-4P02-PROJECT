@@ -136,6 +136,25 @@ export default function Template3Page() {
                             </div>
                         </div>
                     )}
+
+                    {activeTab === "skills" && (
+                        <div className="space-y-10">
+                            <div className="border-l-4 border-purple-600 pl-4">
+                                <h2 className="text-2xl font-bold mb-1">Technical Skills</h2>
+                                <p className="text-sm text-gray-600">[Languages, Tools, Frameworks Placeholder]</p>
+                            </div>
+
+                            <div className="border-l-4 border-purple-600 pl-4">
+                                <h2 className="text-2xl font-bold mb-1">Soft Skills</h2>
+                                <p className="text-sm text-gray-600">[Communication, Teamwork, etc. Placeholder]</p>
+                            </div>
+
+                            <div className="border-l-4 border-purple-600 pl-4">
+                                <h2 className="text-2xl font-bold mb-1">Languages</h2>
+                                <p className="text-sm text-gray-600">[Language Proficiency Placeholder]</p>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
