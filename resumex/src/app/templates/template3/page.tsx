@@ -1,17 +1,16 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 
 export default function Template3Page() {
     const [activeTab, setActiveTab] = useState("profile");
 
-    const tabs = ["profile", "education", "skills", "work", "projects", "awards"];
+    const tabs = ["profile", "education & projects", "skills", "work", "awards"];
 
     return (
-        <div
-            className="w-full max-w-[1200px] mx-auto px-10 py-10 bg-white rounded shadow-sm font-sans text-gray-800 leading-relaxed overflow-y-auto max-h-[calc(100vh-160px)] border border-gray-300">
+        <div className="w-full max-w-[1200px] mx-auto px-10 py-10 bg-white rounded shadow-sm font-sans text-gray-800 leading-relaxed overflow-y-auto max-h-[calc(100vh-160px)] border border-gray-300">
             {/* HEADER */}
             <div className="flex justify-between items-center mb-6">
                 <div>
-                    <h1 className="text-4xl font-extrabold">Javier <span className="text-purple-600">Latorre</span></h1>
+                    <h1 className="text-4xl font-extrabold">John <span className="text-purple-600">Doe</span></h1>
                     <h2 className="text-lg uppercase tracking-wide text-gray-500 mt-1">Frontend Web Developer</h2>
                 </div>
             </div>
@@ -34,22 +33,17 @@ export default function Template3Page() {
                 <div className="space-y-10 md:col-span-1">
                     <div className="relative w-32 h-32 rounded-full bg-gray-300 mx-auto">
                         {/* Camera icon overlay */}
-                        <div
-                            className="absolute bottom-1 right-1 bg-white p-1 rounded-full shadow-md cursor-pointer hover:bg-gray-100">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
-                                 stroke="currentColor" className="w-5 h-5 text-gray-600">
-                                <path strokeLinecap="round" strokeLinejoin="round"
-                                      d="M15.75 10.5a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"/>
-                                <path strokeLinecap="round" strokeLinejoin="round"
-                                      d="M2.25 15.75V6.75A2.25 2.25 0 014.5 4.5h2.121a1.5 1.5 0 001.06-.44l.94-.94A1.5 1.5 0 0110.061 3h3.878a1.5 1.5 0 011.06.44l.94.94a1.5 1.5 0 001.061.44H19.5a2.25 2.25 0 012.25 2.25v9a2.25 2.25 0 01-2.25 2.25H4.5a2.25 2.25 0 01-2.25-2.25z"/>
+                        <div className="absolute bottom-1 right-1 bg-white p-1 rounded-full shadow-md cursor-pointer hover:bg-gray-100">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5 text-gray-600">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75V6.75A2.25 2.25 0 014.5 4.5h2.121a1.5 1.5 0 001.06-.44l.94-.94A1.5 1.5 0 0110.061 3h3.878a1.5 1.5 0 011.06.44l.94.94a1.5 1.5 0 001.061.44H19.5a2.25 2.25 0 012.25 2.25v9a2.25 2.25 0 01-2.25 2.25H4.5a2.25 2.25 0 01-2.25-2.25z" />
                             </svg>
                         </div>
                     </div>
+
                     <div className="space-y-3">
                         <h2 className="text-lg font-bold">Hello!</h2>
-                        <p className="text-sm">I'm passionate about technology and human behavior, hardworker and a
-                            fast-learner with experience in around 10 different countries studying, working and
-                            volunteering.</p>
+                        <p className="text-sm">I'm passionate about technology and human behavior, hardworker and a fast-learner with experience in around 10 different countries studying, working and volunteering.</p>
                     </div>
 
                     <div className="space-y-2">
@@ -64,10 +58,7 @@ export default function Template3Page() {
                         <p>A1B 2C3</p>
                     </div>
 
-                    <a
-                        href="mailto:abc@gmail.com"
-                        className="inline-block bg-purple-600 text-white px-4 py-2 mt-4 rounded-md text-sm hover:bg-purple-700 transition"
-                    >
+                    <a href="mailto:abc@gmail.com" className="inline-block bg-purple-600 text-white px-4 py-2 mt-4 rounded-md text-sm hover:bg-purple-700 transition">
                         Send me a message
                     </a>
 
@@ -88,22 +79,17 @@ export default function Template3Page() {
                             <div className="space-y-4">
                                 <h1 className="text-2xl font-bold">Profile</h1>
                                 <blockquote className="italic border-l-4 border-purple-600 pl-4">
-                                    <p>"There is no end to education... The whole of life... is a process of
-                                        learning."</p>
+                                    <p>"There is no end to education... The whole of life... is a process of learning."</p>
                                     <p className="text-sm">- Jiddu Krishnamurti</p>
                                 </blockquote>
                             </div>
                             <div>
                                 <h2 className="text-xl font-bold mb-2">A few words about me</h2>
-                                <p className="text-sm">Until now, in my life, I change from active moments... I consider
-                                    myself a tolerant and respectful person... I really like to listen to people
-                                    stories...</p>
+                                <p className="text-sm">Until now, in my life, I change from active moments... I consider myself a tolerant and respectful person... I really like to listen to people stories...</p>
                             </div>
                             <div>
                                 <h2 className="text-xl font-bold mb-2">Philosophy</h2>
-                                <p className="text-sm">I believe in ethic and moral, not imposed rules... life is made
-                                    from different shades of grey... as a human being... our duty is to treat others
-                                    well...</p>
+                                <p className="text-sm">I believe in ethic and moral, not imposed rules... life is made from different shades of grey... as a human being... our duty is to treat others well...</p>
                                 <ul className="list-disc list-inside text-sm mt-2">
                                     <li>Pragmatic</li>
                                     <li>Honest</li>
@@ -114,8 +100,7 @@ export default function Template3Page() {
                             </div>
                             <div>
                                 <h2 className="text-xl font-bold mb-2">Interests & Hobbies</h2>
-                                <p className="text-sm">I'm passionate about technology and human behavior, both
-                                    determine almost all my interests and hobbies:</p>
+                                <p className="text-sm">I'm passionate about technology and human behavior, both determine almost all my interests and hobbies:</p>
                                 <ul className="list-disc list-inside text-sm mt-2">
                                     <li>Visiting new places</li>
                                     <li>Meeting people</li>
@@ -129,11 +114,26 @@ export default function Template3Page() {
                         </>
                     )}
 
-                    {activeTab !== "profile" && (
-                        <div>
-                            <h2 className="text-xl font-bold capitalize">{activeTab}</h2>
-                            <p className="text-sm text-gray-700 mt-2">This is the <strong>{activeTab}</strong> section
-                                content. You can customize it further.</p>
+                    {activeTab === "education & projects" && (
+                        <div className="space-y-10">
+                            <div className="border-l-4 border-purple-600 pl-4">
+                                <h2 className="text-2xl font-bold mb-1">Education</h2>
+                                <p className="text-sm text-gray-600">[Your Degree Placeholder]</p>
+                                <p className="text-sm text-gray-600">[Your Institution Placeholder]</p>
+                                <p className="text-sm text-gray-600">[Year] | [Location]</p>
+                            </div>
+
+                            <div className="border-l-4 border-purple-600 pl-4">
+                                <h2 className="text-2xl font-bold mb-1">Project Highlight</h2>
+                                <p className="text-sm text-gray-600">[Project Title Placeholder]</p>
+                                <p className="text-sm text-gray-600">[Short Description Placeholder]</p>
+                            </div>
+
+                            <div className="border-l-4 border-purple-600 pl-4">
+                                <h2 className="text-2xl font-bold mb-1">Certifications</h2>
+                                <p className="text-sm text-gray-600">[Certificate Name Placeholder]</p>
+                                <p className="text-sm text-gray-600">[Platform / Date Placeholder]</p>
+                            </div>
                         </div>
                     )}
                 </div>
