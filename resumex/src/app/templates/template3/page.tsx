@@ -155,6 +155,26 @@ export default function Template3Page() {
                             </div>
                         </div>
                     )}
+
+                    {activeTab === "work" && (
+                        <div className="space-y-10">
+                            <div className="border-l-4 border-purple-600 pl-4">
+                                <h2 className="text-2xl font-bold mb-1">Recent Role</h2>
+                                <p className="text-sm text-gray-600">[Job Title Placeholder]</p>
+                                <p className="text-sm text-gray-600">[Company Name Placeholder]</p>
+                                <p className="text-sm text-gray-600">[Start - End] | [Location]</p>
+                                <p className="text-sm text-gray-600 mt-2">[Short description or responsibilities placeholder]</p>
+                            </div>
+
+                            <div className="border-l-4 border-purple-600 pl-4">
+                                <h2 className="text-2xl font-bold mb-1">Previous Experience</h2>
+                                <p className="text-sm text-gray-600">[Job Title Placeholder]</p>
+                                <p className="text-sm text-gray-600">[Company Name Placeholder]</p>
+                                <p className="text-sm text-gray-600">[Start - End] | [Location]</p>
+                                <p className="text-sm text-gray-600 mt-2">[Short description or responsibilities placeholder]</p>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
