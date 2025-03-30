@@ -175,6 +175,24 @@ export default function Template3Page() {
                             </div>
                         </div>
                     )}
+
+                    {activeTab === "awards" && (
+                        <div className="space-y-10">
+                            <div className="border-l-4 border-purple-600 pl-4">
+                                <h2 className="text-2xl font-bold mb-1">Award Title Placeholder</h2>
+                                <p className="text-sm text-gray-600">[Issuing Organization Placeholder]</p>
+                                <p className="text-sm text-gray-600">[Year] | [Location]</p>
+                                <p className="text-sm text-gray-600 mt-2">[Brief description placeholder]</p>
+                            </div>
+
+                            <div className="border-l-4 border-purple-600 pl-4">
+                                <h2 className="text-2xl font-bold mb-1">Another Achievement Placeholder</h2>
+                                <p className="text-sm text-gray-600">[Organization Placeholder]</p>
+                                <p className="text-sm text-gray-600">[Year] | [Location]</p>
+                                <p className="text-sm text-gray-600 mt-2">[Brief description placeholder]</p>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
