@@ -13,13 +13,24 @@ export default function Template1Page({ data }: { data: any }) {
   const [isEditingExperience, setIsEditingExperience] = useState<number | null>(null); //
   const [isEditingEducation, setIsEditingEducation] = useState<number | null>(null); // Track education edit mode
   const [isEditingProject, setIsEditingProject] = useState<number | null>(null); // Track project edit mode
+  const [isEditingSkills, setIsEditingSkills] = useState(false); // Track skills edit mode
 
   const [tempData, setTempData] = useState(resumeData); // Store temporary changes
   const [tempExperience, setTempExperience] = useState(resumeData.experienceList); // Store experience changes
   const [tempEducation, setTempEducation] = useState(resumeData.education); // Store education edits
   const [tempProjects, setTempProjects] = useState(resumeData.projects); // Store project edits
+  const [tempSkills, setTempSkills] = useState(resumeData.skills); // Store skills edits
 
   const headerRef = useRef<HTMLDivElement>(null); // Ref to track header section
+
+  const handleSkillsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTempSkills(e.target.value.split(",")); // Convert comma-separated input into an array
+  };
+
+  const cancelSkillsEdit = () => {
+    setIsEditingSkills(false);
+    setTempSkills([...resumeData.skills]); // Restore original skills data
+  };
 
   // Handle input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, field: string) => {
@@ -72,6 +83,17 @@ export default function Template1Page({ data }: { data: any }) {
     setTimeout(() => {
       setIsSaving(false);
       setIsEditingProject(null);
+    }, 1000);
+  };
+
+  const saveSkillsEdit = () => {
+    setIsSaving(true);
+    const updatedData = { ...resumeData, skills: tempSkills };
+    localStorage.setItem("resumeData", JSON.stringify(updatedData));
+    setResumeData(updatedData);
+    setTimeout(() => {
+      setIsSaving(false);
+      setIsEditingSkills(false);
     }, 1000);
   };
 
@@ -318,7 +340,36 @@ export default function Template1Page({ data }: { data: any }) {
             {/* Skills Section */}
             <div className="section mt-6">
               <h3 className="text-2xl font-semibold text-gray-800">Skills</h3>
-              <p className="text-gray-700">{data.skills.join(", ")}</p>
+              <div className="mt-4 cursor-pointer" onClick={() => setIsEditingSkills(true)}>
+                {isEditingSkills ? (
+                    <>
+                      <input
+                          type="text"
+                          value={tempSkills.join(", ")} // Convert array back to string
+                          onChange={handleSkillsChange}
+                          className="text-gray-700 border-b border-gray-300 w-full focus:outline-none focus:border-blue-500"
+                      />
+
+                      {/* Save and Cancel Buttons */}
+                      <div className="mt-4 flex justify-center gap-4">
+                        <button
+                            onClick={saveSkillsEdit}
+                            className="px-4 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition flex items-center gap-2"
+                        >
+                          <AiOutlineCheck size={18} /> Save
+                        </button>
+                        <button
+                            onClick={cancelSkillsEdit}
+                            className="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition flex items-center gap-2"
+                        >
+                          <AiOutlineClose size={18} /> Cancel
+                        </button>
+                      </div>
+                    </>
+                ) : (
+                    <p className="text-gray-700">{resumeData.skills.join(", ")}</p>
+                )}
+              </div>
             </div>
 
             {/* Interests Section */}
