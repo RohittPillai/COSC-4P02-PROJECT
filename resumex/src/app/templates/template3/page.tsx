@@ -291,18 +291,36 @@ export default function Template3Page() {
 
                     {activeTab === "awards" && (
                         <div className="space-y-10">
-                            <div className="border-l-4 border-purple-600 pl-4">
-                                <h2 className="text-2xl font-bold mb-1">Award Title Placeholder</h2>
-                                <p className="text-sm text-gray-600">[Issuing Organization Placeholder]</p>
-                                <p className="text-sm text-gray-600">[Year] | [Location]</p>
-                                <p className="text-sm text-gray-600 mt-2">[Brief description placeholder]</p>
+                            {/* Business Innovation Hackathon Winner */}
+                            <div className="border-l-4 border-purple-600 pl-4 space-y-1">
+                                <h2 className="text-2xl font-bold">Business Innovation Hackathon Winner</h2>
+                                <p className="text-sm text-gray-600">Tech4Impact Hackathon – UofT</p>
+                                <p className="text-sm text-gray-600">2023 | Toronto, ON</p>
+                                <p className="text-sm text-gray-600">Developed a retail analytics dashboard that optimized inventory turnover for small businesses using customer behavior insights.</p>
                             </div>
 
-                            <div className="border-l-4 border-purple-600 pl-4">
-                                <h2 className="text-2xl font-bold mb-1">Another Achievement Placeholder</h2>
-                                <p className="text-sm text-gray-600">[Organization Placeholder]</p>
-                                <p className="text-sm text-gray-600">[Year] | [Location]</p>
-                                <p className="text-sm text-gray-600 mt-2">[Brief description placeholder]</p>
+                            {/* Academic Excellence Award */}
+                            <div className="border-l-4 border-purple-600 pl-4 space-y-1">
+                                <h2 className="text-2xl font-bold">Academic Excellence Award</h2>
+                                <p className="text-sm text-gray-600">Brock University</p>
+                                <p className="text-sm text-gray-600">2022 | St. Catharines, ON</p>
+                                <p className="text-sm text-gray-600">Awarded for maintaining a GPA in the top 5% of the business faculty cohort.</p>
+                            </div>
+
+                            {/* Dean’s Honour List */}
+                            <div className="border-l-4 border-purple-600 pl-4 space-y-1">
+                                <h2 className="text-2xl font-bold">Dean’s Honour List</h2>
+                                <p className="text-sm text-gray-600">Goodman School of Business</p>
+                                <p className="text-sm text-gray-600">2019 – 2022 | St. Catharines, ON</p>
+                                <p className="text-sm text-gray-600">Recognized for consistent academic achievement over 6 consecutive terms.</p>
+                            </div>
+
+                            {/* Marketing Case Competition Finalist */}
+                            <div className="border-l-4 border-purple-600 pl-4 space-y-1">
+                                <h2 className="text-2xl font-bold">Marketing Case Competition Finalist</h2>
+                                <p className="text-sm text-gray-600">Inter-Collegiate Business Competition (ICBC)</p>
+                                <p className="text-sm text-gray-600">2021 | Kingston, ON</p>
+                                <p className="text-sm text-gray-600">Selected among top 5 teams nationwide for strategy presentation and solution clarity.</p>
                             </div>
                         </div>
                     )}
