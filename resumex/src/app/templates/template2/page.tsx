@@ -7,7 +7,15 @@ export default function Template2Page() {
           {/* LEFT COLUMN */}
           <div className="md:col-span-5 bg-[#1B2A41] text-white px-10 py-10 space-y-10">
             {/* Profile Picture */}
-            <div className="w-28 h-28 rounded-full bg-gray-300 mx-auto"></div>
+            <div className="relative w-28 h-28 rounded-full bg-gray-300 mx-auto">
+              {/* Camera icon overlay */}
+              <div className="absolute bottom-1 right-1 bg-white p-1 rounded-full shadow-md cursor-pointer hover:bg-gray-100">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5 text-gray-600">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75V6.75A2.25 2.25 0 014.5 4.5h2.121a1.5 1.5 0 001.06-.44l.94-.94A1.5 1.5 0 0110.061 3h3.878a1.5 1.5 0 011.06.44l.94.94a1.5 1.5 0 001.061.44H19.5a2.25 2.25 0 012.25 2.25v9a2.25 2.25 0 01-2.25 2.25H4.5a2.25 2.25 0 01-2.25-2.25z" />
+                </svg>
+              </div>
+            </div>
 
             {/* Contact */}
             <div className="space-y-2">
