@@ -2,103 +2,123 @@ import React from "react";
 
 export default function Template2Page() {
   return (
-      <div className="w-full max-w-[1200px] mx-auto px-10 py-10 bg-white rounded shadow-sm font-sans text-sm text-gray-800 leading-relaxed overflow-y-auto max-h-[calc(100vh-160px)] border border-gray-300">
-        <header className="border-b border-gray-400 pb-3 mb-5">
-          <h1 className="text-3xl font-bold text-gray-900">Anna Taylor</h1>
-          <p className="text-md font-semibold text-gray-700">Certified Medical Assistant</p>
-          <p className="mt-2 text-gray-600">
-            Motivated, patient-focused Certified Medical Assistant with 10+ years of experience providing a variety of healthcare services. Excels at prioritizing tasks, supporting organizational objectives, and ensuring excellent patient care.
-          </p>
-          <div className="border-t border-gray-400 pt-2 mt-3 text-gray-600 text-sm">
-            <div className="grid grid-cols-1 sm:grid-cols-4 justify-items-center sm:justify-items-start text-center sm:text-left gap-x-10">
-              <span className="pr-6 underline">anna@youremail.com</span>
-              <span className="underline">123-4567</span>
-              <span className="underline">Houston, TX</span>
-              <span className="underline">LinkedIn.com/anna.taylor</span>
+      <div className="w-full max-w-[850px] mx-auto px-6 py-10 bg-white shadow-xl overflow-y-auto max-h-[calc(100vh-160px)]">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+          {/* LEFT COLUMN */}
+          <div className="md:col-span-5 bg-[#1B2A41] text-white px-10 py-10 space-y-10">
+            {/* Profile Picture */}
+            <div className="w-28 h-28 rounded-full bg-gray-300 mx-auto"></div>
+
+            {/* Contact */}
+            <div className="space-y-2">
+              <h2 className="text-lg font-bold tracking-wide border-b border-white pb-2">CONTACT</h2>
+              <p className="text-sm break-words">+123-456-7890</p>
+              <p className="text-sm break-words">hello@reallygreatsite.com</p>
+              <p className="text-sm break-words">123 Anywhere St, Any City</p>
+              <p className="text-sm break-words">www.reallygreatsite.com</p>
+            </div>
+
+            {/* Education */}
+            <div className="space-y-2">
+              <h2 className="text-lg font-bold tracking-wide border-b border-white pb-2">EDUCATION</h2>
+              <div>
+                <p className="text-sm font-bold">2029 – 2030</p>
+                <p className="text-sm font-semibold">Wardiere University</p>
+                <p className="text-sm">Master of Business Management</p>
+              </div>
+              <div className="mt-3">
+                <p className="text-sm font-bold">2025 – 2029</p>
+                <p className="text-sm font-semibold">Wardiere University</p>
+                <p className="text-sm">Bachelor of Business, GPA: 3.8 / 4.0</p>
+              </div>
+            </div>
+
+            {/* Skills */}
+            <div className="space-y-2">
+              <h2 className="text-lg font-bold tracking-wide border-b border-white pb-2">SKILLS</h2>
+              <ul className="text-sm space-y-1 list-disc list-inside">
+                <li>Project Management</li>
+                <li>Public Relations</li>
+                <li>Teamwork</li>
+                <li>Time Management</li>
+                <li>Critical Thinking</li>
+                <li>Effective Communication</li>
+              </ul>
+            </div>
+
+            {/* Languages */}
+            <div className="space-y-2">
+              <h2 className="text-lg font-bold tracking-wide border-b border-white pb-2">LANGUAGES</h2>
+              <p className="text-sm">English (Fluent)</p>
+              <p className="text-sm">French (Fluent)</p>
+              <p className="text-sm">Spanish (Intermediate)</p>
             </div>
           </div>
-        </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-          <section className="space-y-6">
-            <h2 className="font-bold text-sm text-gray-700 uppercase mb-3">Work Experience</h2>
-
-            <div>
-              <div className="flex justify-between">
-                <span className="font-semibold text-gray-900">Medical Assistant</span>
-                <span className="italic text-gray-600">Houston, TX</span>
-              </div>
-              <div className="text-gray-700 font-medium">First Choice Health Institute</div>
-              <ul className="list-disc list-inside text-gray-700 mt-1">
-                <li>Supported quality assurance, infection control, and safety procedures within the clinic.</li>
-                <li>Assisted with exams and procedures and ensured all equipment was sterilized.</li>
-                <li>Recorded patients’ vitals, maintained medical records, and facilitated smooth clinic operations.</li>
-              </ul>
+          {/* RIGHT COLUMN */}
+          <div className="md:col-span-6 pr-12 pl-4 space-y-10">
+            {/* Header */}
+            <div className="space-y-1">
+              <h1 className="text-3xl font-extrabold text-[#1B2A41] uppercase">John Doe</h1>
+              <h2 className="text-md font-semibold text-[#2D72D9]">Marketing Manager</h2>
             </div>
 
+            {/* Profile */}
             <div>
-              <div className="flex justify-between">
-                <span className="font-semibold text-gray-900">Medical Assistant</span>
-                <span className="italic text-gray-600">Houston, TX</span>
-              </div>
-              <div className="text-gray-700 font-medium">Brightheart Medical Services</div>
-              <ul className="list-disc list-inside text-gray-700 mt-1">
-                <li>Coordinated patient intake and supported patient triage, including EKGs and venipuncture.</li>
-                <li>Communicated with insurance providers for pre-authorizations.</li>
-              </ul>
+              <h2 className="text-md font-bold text-[#1B2A41] border-b border-gray-300 pb-1 mb-2 uppercase">Profile</h2>
+              <p className="text-sm text-gray-800">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation.
+              </p>
             </div>
 
+            {/* Work Experience */}
             <div>
-              <div className="flex justify-between">
-                <span className="font-semibold text-gray-900">Medical Office Assistant</span>
-                <span className="italic text-gray-600">Houston, TX</span>
+              <h2 className="text-md font-bold text-[#1B2A41] border-b border-gray-300 pb-1 mb-2 uppercase">Work Experience</h2>
+              <div className="mb-5">
+                <p className="text-sm font-bold">Borcelle Studio</p>
+                <p className="text-sm text-gray-600">Marketing Manager & Specialist | 2030 – Present</p>
+                <ul className="list-disc list-inside text-sm text-gray-800 mt-1">
+                  <li>Develop and execute comprehensive marketing strategies and campaigns aligned with the company’s goals and objectives.</li>
+                  <li>Lead, mentor, and manage a high-performing marketing team.</li>
+                  <li>Collaborate with cross-functional departments to ensure brand consistency.</li>
+                </ul>
               </div>
-              <div className="text-gray-700 font-medium">Health & Wellness Medical Center</div>
-              <ul className="list-disc list-inside text-gray-700 mt-1">
-                <li>Scheduled patient appointments and supported front desk responsibilities.</li>
-                <li>Verified insurance, updated EMRs, and handled billing inquiries.</li>
-              </ul>
-            </div>
-          </section>
-
-          <aside className="space-y-8">
-            <div>
-              <h2 className="font-bold text-sm text-gray-700 uppercase mb-3">Skills</h2>
-              <div className="grid grid-cols-2 gap-y-2 gap-x-6 text-gray-700 text-sm">
-                <span className="block before:content-['•'] before:mr-2 before:font-bold">Patient Care</span>
-                <span className="block before:content-['•'] before:mr-2 before:font-bold">Database Management</span>
-                <span className="block before:content-['•'] before:mr-2 before:font-bold">Inventory Management</span>
-                <span className="block before:content-['•'] before:mr-2 before:font-bold">Medical Billing</span>
-                <span className="block before:content-['•'] before:mr-2 before:font-bold">Administrative Support</span>
-                <span className="block before:content-['•'] before:mr-2 before:font-bold">Prioritization</span>
-                <span className="block before:content-['•'] before:mr-2 before:font-bold">Health Regulatory Compliance</span>
-                <span className="block before:content-['•'] before:mr-2 before:font-bold">Conflict Resolution</span>
+              <div className="mb-5">
+                <p className="text-sm font-bold">Fauget Studios</p>
+                <p className="text-sm text-gray-600">Marketing Manager & Specialist | 2025 – 2029</p>
+                <ul className="list-disc list-inside text-sm text-gray-800 mt-1">
+                  <li>Create and manage the marketing budget, ensuring efficient allocation of resources.</li>
+                  <li>Oversee market research to identify emerging trends, customer needs, and competitors’ activities.</li>
+                  <li>Coordinate the production of marketing materials.</li>
+                </ul>
+              </div>
+              <div>
+                <p className="text-sm font-bold">Studio Showdeo</p>
+                <p className="text-sm text-gray-600">Marketing Manager & Specialist | 2024 – 2025</p>
+                <ul className="list-disc list-inside text-sm text-gray-800 mt-1">
+                  <li>Develop and manage relationships with partners, agencies, and vendors.</li>
+                  <li>Monitor and assess brand consistency across all marketing channels and materials.</li>
+                </ul>
               </div>
             </div>
 
+            {/* Reference */}
             <div>
-              <h2 className="font-bold text-sm text-gray-700 uppercase mb-3">Certificates</h2>
-              <ul className="text-gray-700 space-y-1 list-disc list-inside">
-                <li>Certified Phlebotomy Technician</li>
-                <li>CPR & First Aid Training</li>
-                <li>Medical Billing and Coding Certification</li>
-                <li>Certified Medical Assistant</li>
-                <li>Advanced Care Life Support Certification</li>
-                <li>Basic Life Support Certification</li>
-              </ul>
+              <h2 className="text-md font-bold text-[#1B2A41] border-b border-gray-300 pb-1 mb-2 uppercase">Reference</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm text-gray-800">
+                <div>
+                  <p className="font-semibold">Estelle Darcy</p>
+                  <p>Wardiere Inc. / CTO</p>
+                  <p>Phone: +123-456-7890</p>
+                </div>
+                <div>
+                  <p className="font-semibold">Harper Richard</p>
+                  <p>Wardiere Inc. / CEO</p>
+                  <p>Phone: +123-456-7890</p>
+                </div>
+              </div>
             </div>
-
-            <div>
-              <h2 className="font-bold text-sm text-gray-700 uppercase mb-3">Education</h2>
-              <p className="text-gray-800 font-semibold">Bachelor of Science in Healthcare Management</p>
-              <p className="text-gray-600">University of Houston — 2015</p>
-            </div>
-
-            <div>
-              <h2 className="font-bold text-sm text-gray-700 uppercase mb-3">Languages</h2>
-              <p className="text-gray-700">English (Fluent), Spanish (Conversational)</p>
-            </div>
-          </aside>
+          </div>
         </div>
       </div>
   );
