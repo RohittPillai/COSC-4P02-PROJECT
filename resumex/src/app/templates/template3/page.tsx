@@ -118,21 +118,70 @@ export default function Template3Page() {
                         <div className="space-y-10">
                             <div className="border-l-4 border-purple-600 pl-4">
                                 <h2 className="text-2xl font-bold mb-1">Education</h2>
-                                <p className="text-sm text-gray-600">[Your Degree Placeholder]</p>
-                                <p className="text-sm text-gray-600">[Your Institution Placeholder]</p>
-                                <p className="text-sm text-gray-600">[Year] | [Location]</p>
+
+                                {/* Master's Degree */}
+                                <div className="mb-4">
+                                    <p className="text-sm font-semibold text-gray-800">Master of Business Administration (MBA)</p>
+                                    <p className="text-sm text-gray-600">Rotman School of Management, University of Toronto</p>
+                                    <p className="text-sm text-gray-500">2022 – 2024 | Toronto, ON</p>
+                                </div>
+
+                                {/* Bachelor's Degree */}
+                                <div>
+                                    <p className="text-sm font-semibold text-gray-800">Bachelor of Commerce (BCom), Marketing</p>
+                                    <p className="text-sm text-gray-600">Brock University</p>
+                                    <p className="text-sm text-gray-500">2018 – 2022 | St. Catharines, ON</p>
+                                </div>
                             </div>
 
                             <div className="border-l-4 border-purple-600 pl-4">
                                 <h2 className="text-2xl font-bold mb-1">Project Highlight</h2>
-                                <p className="text-sm text-gray-600">[Project Title Placeholder]</p>
-                                <p className="text-sm text-gray-600">[Short Description Placeholder]</p>
+
+                                {/* Project 1 */}
+                                <div className="mb-4">
+                                    <p className="text-sm font-semibold text-gray-800 mb-1">Market Expansion Strategy for Lush Cosmetics</p>
+                                    <p className="text-sm text-gray-600 mb-1">
+                                        Led a 4-member team to design a strategic plan for expanding Lush Cosmetics into untapped Canadian markets.
+                                    </p>
+                                    <p className="text-sm text-gray-600 mb-1">
+                                        Conducted market research, competitor analysis, and consumer behavior profiling to support recommendations.
+                                    </p>
+                                    <p className="text-sm text-gray-500">Tools: SWOT Analysis, PESTEL, SurveyMonkey, Canva</p>
+                                </div>
+
+                                {/* Project 2 */}
+                                <div>
+                                    <p className="text-sm font-semibold text-gray-800 mb-1">Social Media ROI Analysis for a Nonprofit</p>
+                                    <p className="text-sm text-gray-600 mb-1">
+                                        Analyzed engagement metrics and campaign performance across Instagram, LinkedIn, and Twitter for a local nonprofit.
+                                    </p>
+                                    <p className="text-sm text-gray-600 mb-1">
+                                        Provided recommendations to improve ROI and optimize content scheduling for a 15% reach increase.
+                                    </p>
+                                    <p className="text-sm text-gray-500">Tools: Google Analytics, Hootsuite, Excel, PowerPoint</p>
+                                </div>
                             </div>
 
                             <div className="border-l-4 border-purple-600 pl-4">
                                 <h2 className="text-2xl font-bold mb-1">Certifications</h2>
-                                <p className="text-sm text-gray-600">[Certificate Name Placeholder]</p>
-                                <p className="text-sm text-gray-600">[Platform / Date Placeholder]</p>
+
+                                {/* Certification 1 */}
+                                <div className="mb-4">
+                                    <p className="text-sm font-semibold text-gray-800 mb-1">Google Digital Marketing & E-commerce Certificate</p>
+                                    <p className="text-sm text-gray-600">Coursera (Offered by Google) — Issued: May 2023</p>
+                                </div>
+
+                                {/* Certification 2 */}
+                                <div className="mb-4">
+                                    <p className="text-sm font-semibold text-gray-800 mb-1">Financial Markets</p>
+                                    <p className="text-sm text-gray-600">Yale University, Coursera — Issued: January 2023</p>
+                                </div>
+
+                                {/* Certification 3 */}
+                                <div>
+                                    <p className="text-sm font-semibold text-gray-800 mb-1">Excel Skills for Business: Essentials</p>
+                                    <p className="text-sm text-gray-600">Macquarie University, Coursera — Issued: August 2022</p>
+                                </div>
                             </div>
                         </div>
                     )}
