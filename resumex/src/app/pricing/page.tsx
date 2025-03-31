@@ -194,8 +194,8 @@ export default function PricingPage() {
           Our resume builder is used by students and professionals from top institutions.
         </p>
         <div className="mt-12 flex flex-wrap justify-center items-center gap-8">
-          <img src="/Waterloo.png" className="h-16" />
           <img src="/brock.png" className="h-16" />
+          <img src="/Waterloo.png" className="h-16" />
           <img src="/conestoga.png" className="h-16" />
           <img src="/durham.png" className="h-16" />
         </div>
