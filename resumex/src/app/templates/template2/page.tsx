@@ -21,9 +21,9 @@ export default function Template2Page() {
             <div className="space-y-2">
               <h2 className="text-lg font-bold tracking-wide border-b border-white pb-2">CONTACT</h2>
               <p className="text-sm break-words">+123-456-7890</p>
-              <p className="text-sm break-words">hello@reallygreatsite.com</p>
+              <p className="text-sm break-words">john.doe@gmail.com</p>
               <p className="text-sm break-words">123 Anywhere St, Any City</p>
-              <p className="text-sm break-words">www.reallygreatsite.com</p>
+              <p className="text-sm break-words">www.johndoesite.com</p>
             </div>
 
             {/* Education */}
