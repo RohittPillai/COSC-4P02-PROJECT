@@ -1,6 +1,26 @@
 import React from "react";
+import { useState, useEffect, useRef } from "react";
+import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
 
 export default function Template2Page() {
+
+  const [isEditingContact, setIsEditingContact] = useState(false);
+  const [contactData, setContactData] = useState({
+    phone: "+123-456-7890",
+    email: "john.doe@gmail.com",
+    address: "123 Anywhere St, Any City",
+    website: "www.johndoesite.com",
+  });
+  const [tempContact, setTempContact] = useState(contactData);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("template2Contact");
+    if (saved) {
+      setContactData(JSON.parse(saved));
+      setTempContact(JSON.parse(saved));
+    }
+  }, []);
+
   return (
       <div className="w-full max-w-[850px] mx-auto px-6 py-10 bg-white shadow-xl overflow-y-auto max-h-[calc(100vh-160px)]">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
@@ -17,13 +37,68 @@ export default function Template2Page() {
               </div>
             </div>
 
-            {/* Contact */}
+            {/* Contact (Editable) */}
             <div className="space-y-2">
               <h2 className="text-lg font-bold tracking-wide border-b border-white pb-2">CONTACT</h2>
-              <p className="text-sm break-words">+123-456-7890</p>
-              <p className="text-sm break-words">john.doe@gmail.com</p>
-              <p className="text-sm break-words">123 Anywhere St, Any City</p>
-              <p className="text-sm break-words">www.johndoesite.com</p>
+
+              {isEditingContact ? (
+                  <>
+                    <input
+                        type="text"
+                        className="text-sm text-black w-full px-2 py-1 rounded"
+                        value={tempContact.phone}
+                        onChange={(e) => setTempContact({ ...tempContact, phone: e.target.value })}
+                    />
+                    <input
+                        type="text"
+                        className="text-sm text-black w-full px-2 py-1 rounded"
+                        value={tempContact.email}
+                        onChange={(e) => setTempContact({ ...tempContact, email: e.target.value })}
+                    />
+                    <input
+                        type="text"
+                        className="text-sm text-black w-full px-2 py-1 rounded"
+                        value={tempContact.address}
+                        onChange={(e) => setTempContact({ ...tempContact, address: e.target.value })}
+                    />
+                    <input
+                        type="text"
+                        className="text-sm text-black w-full px-2 py-1 rounded"
+                        value={tempContact.website}
+                        onChange={(e) => setTempContact({ ...tempContact, website: e.target.value })}
+                    />
+
+                    {/* Save & Cancel Buttons */}
+                    <div className="mt-4 flex gap-3">
+                      <button
+                          onClick={() => {
+                            setContactData(tempContact);
+                            localStorage.setItem("template2Contact", JSON.stringify(tempContact));
+                            setIsEditingContact(false);
+                          }}
+                          className="px-3 py-1 bg-green-600 text-white rounded-full text-sm flex items-center gap-1 whitespace-nowrap"
+                      >
+                        <AiOutlineCheck size={16} /> Save
+                      </button>
+                      <button
+                          onClick={() => {
+                            setTempContact(contactData);
+                            setIsEditingContact(true);
+                          }}
+                          className="px-3 py-1 bg-red-600 text-white rounded-full text-sm flex items-center gap-1 whitespace-nowrap"
+                      >
+                        <AiOutlineClose size={16} /> Cancel
+                      </button>
+                    </div>
+                  </>
+              ) : (
+                  <div onClick={() => setIsEditingContact(true)} className="cursor-pointer space-y-1">
+                    <p className="text-sm break-words">{contactData.phone}</p>
+                    <p className="text-sm break-words">{contactData.email}</p>
+                    <p className="text-sm break-words">{contactData.address}</p>
+                    <p className="text-sm break-words">{contactData.website}</p>
+                  </div>
+              )}
             </div>
 
             {/* Education */}
