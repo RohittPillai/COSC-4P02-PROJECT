@@ -104,25 +104,34 @@ export default function PricingPage() {
       <main className="flex-grow py-10 px-6">
         <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-8">
           {/* Free Plan */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="p-8 bg-white shadow-lg rounded-lg border border-gray-300 text-center"
-          >
+         <motion.div
+           initial={{ opacity: 0, y: 20 }}
+           animate={{ opacity: 1, y: 0 }}
+           transition={{ duration: 0.8 }}
+           className="p-6 bg-white shadow-md rounded-lg border border-gray-200 text-center scale-[0.95]"
+         >
+
             <h3 className="text-sm font-semibold bg-gray-200 text-gray-700 px-3 py-1 rounded-full inline-block">
               FREE PLAN
             </h3>
             <h2 className="text-5xl font-bold mt-2">$0</h2>
             <p className="text-gray-500">Valid for 7 days</p>
-            <ul className="mt-6 space-y-2 text-gray-600 text-left">
-              <li>✅ Two resumes</li>
-              <li>✅ Few resume templates</li>
-              <li>✅ Basic resume sections</li>
-              <li>✅ resumeX branding</li>
-              <li>✅ Up to 2 years of experience</li>
-              <li>✅ Access to few design tools</li>
+            <ul className="mt-6 space-y-3 text-gray-600 text-left">
+              {[
+                "Two resumes",
+                "Few resume templates",
+                "Basic resume sections",
+                "resumeX branding",
+                "Up to 2 years of experience",
+                "Access to few design tools",
+              ].map((text, idx) => (
+                <li key={idx} className="flex items-start gap-3">
+                  <Image src="/check.png" alt="tick" width={20} height={20} />
+                  <span>{text}</span>
+                </li>
+              ))}
             </ul>
+
             <Link href="/templates">
               <button className="mt-6 px-6 py-3 border-2 border-gray-900 text-gray-900 font-semibold rounded-lg hover:bg-gray-900 hover:text-white transition">
                 Build My Resume
@@ -131,38 +140,52 @@ export default function PricingPage() {
           </motion.div>
 
           {/* Pro Plan */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="p-8 bg-white shadow-lg rounded-lg border-2 border-blue-500 text-center relative"
-          >
+         <motion.div
+           initial={{ opacity: 0, y: 20 }}
+           animate={{ opacity: 1, y: 0 }}
+           transition={{ duration: 0.8, delay: 0.2 }}
+           className="p-10 bg-white shadow-xl rounded-xl border border-gray-200 text-center scale-[1.05] z-10"
+         >
+
             <span className="absolute top-0 right-0 bg-yellow-500 text-white text-xs font-semibold px-2 py-1 rounded-bl-lg">
               SAVE 15%
             </span>
             <h3 className="text-sm font-semibold bg-blue-200 text-blue-700 px-3 py-1 rounded-full inline-block">
               PRO PLAN
             </h3>
-            <h2 className="text-5xl font-bold mt-2 text-blue-600">
-              <h2 className="text-5xl font-bold mt-2 text-blue-600">
-  {isYearly ? `$${proYearly} billed yearly` : `$${proMonthly.toFixed(2)}/mo`}
-</h2>
-            </h2>
+         <h2 className="text-5xl font-bold mt-2 text-blue-600">
+           $
+           {Math.floor(isYearly ? proYearly : proMonthly)}
+           <sup className="text-xl align-top">
+             {(isYearly ? proYearly : proMonthly).toFixed(2).split('.')[1]}
+           </sup>
+           /{isYearly ? "yr" : "mo"}
+         </h2>
+
+
             <p className="text-gray-500">
               {isYearly
                 ? `$${proYearly} billed yearly`
                 : `$${(proMonthly * 3).toFixed(2)} billed every 3 months`}
             </p>
-            <ul className="mt-6 space-y-2 text-gray-600 text-left">
-              <li>✅ 150 resumes</li>
-              <li>✅ All resume templates</li>
-              <li>✅ Real-time content suggestions</li>
-              <li>✅ ATS Check (Applicant Tracking System)</li>
-              <li>✅ Pro resume sections</li>
-              <li>✅ No branding</li>
-              <li>✅ Unlimited section items</li>
-              <li>✅ Thousands of design options</li>
+            <ul className="mt-6 space-y-3 text-gray-600 text-left">
+              {[
+                "150 resumes",
+                "All resume templates",
+                "Real-time content suggestions",
+                "ATS Check (Applicant Tracking System)",
+                "Pro resume sections",
+                "No branding",
+                "Unlimited section items",
+                "Thousands of design options",
+              ].map((text, idx) => (
+                <li key={idx} className="flex items-start gap-3">
+                  <Image src="/check.png" alt="tick" width={20} height={20} />
+                  <span>{text}</span>
+                </li>
+              ))}
             </ul>
+
             <button
               onClick={() => handleCheckout(proPriceId, setLoadingPro)}
               className={`mt-6 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition ${
