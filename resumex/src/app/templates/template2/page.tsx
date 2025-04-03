@@ -21,6 +21,30 @@ export default function Template2Page() {
     }
   }, []);
 
+  //for education section
+  const [isEditingEducation, setIsEditingEducation] = useState(false);
+  const [educationData, setEducationData] = useState([
+    {
+      year: "2029 – 2030",
+      school: "Wardiere University",
+      degree: "Master of Business Management",
+    },
+    {
+      year: "2025 – 2029",
+      school: "Wardiere University",
+      degree: "Bachelor of Business, GPA: 3.8 / 4.0",
+    },
+  ]);
+  const [tempEducation, setTempEducation] = useState(educationData);
+
+  useEffect(() => {
+    const savedEducation = localStorage.getItem("template2Education");
+    if (savedEducation) {
+      setEducationData(JSON.parse(savedEducation));
+      setTempEducation(JSON.parse(savedEducation));
+    }
+  }, []);
+
   return (
       <div className="w-full max-w-[850px] mx-auto px-6 py-10 bg-white shadow-xl overflow-y-auto max-h-[calc(100vh-160px)]">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
@@ -101,20 +125,83 @@ export default function Template2Page() {
               )}
             </div>
 
-            {/* Education */}
+            {/* Education (Editable) */}
             <div className="space-y-2">
               <h2 className="text-lg font-bold tracking-wide border-b border-white pb-2">EDUCATION</h2>
-              <div>
-                <p className="text-sm font-bold">2029 – 2030</p>
-                <p className="text-sm font-semibold">Wardiere University</p>
-                <p className="text-sm">Master of Business Management</p>
-              </div>
-              <div className="mt-3">
-                <p className="text-sm font-bold">2025 – 2029</p>
-                <p className="text-sm font-semibold">Wardiere University</p>
-                <p className="text-sm">Bachelor of Business, GPA: 3.8 / 4.0</p>
-              </div>
+
+              {isEditingEducation ? (
+                  <>
+                    {tempEducation.map((edu, index) => (
+                        <div key={index} className="space-y-1">
+                          <input
+                              type="text"
+                              className="text-sm text-black w-full px-2 py-1 rounded"
+                              value={edu.year}
+                              onChange={(e) => {
+                                const updated = [...tempEducation];
+                                updated[index].year = e.target.value;
+                                setTempEducation(updated);
+                              }}
+                          />
+                          <input
+                              type="text"
+                              className="text-sm text-black w-full px-2 py-1 rounded"
+                              value={edu.school}
+                              onChange={(e) => {
+                                const updated = [...tempEducation];
+                                updated[index].school = e.target.value;
+                                setTempEducation(updated);
+                              }}
+                          />
+                          <input
+                              type="text"
+                              className="text-sm text-black w-full px-2 py-1 rounded"
+                              value={edu.degree}
+                              onChange={(e) => {
+                                const updated = [...tempEducation];
+                                updated[index].degree = e.target.value;
+                                setTempEducation(updated);
+                              }}
+                          />
+                        </div>
+                    ))}
+
+                    {/* Save & Cancel Buttons */}
+                    <div className="mt-4 flex gap-3">
+                      <button
+                          onClick={() => {
+                            setEducationData(tempEducation);
+                            localStorage.setItem("template2Education", JSON.stringify(tempEducation));
+                            setIsEditingEducation(false);
+                          }}
+                          className="px-3 py-1 bg-green-600 text-white rounded-full text-sm flex items-center gap-1 whitespace-nowrap"
+                      >
+                        <AiOutlineCheck size={16} /> Save
+                      </button>
+                      <button
+                          onClick={() => {
+                            setTempEducation(educationData);
+                            setIsEditingEducation(true);
+                          }}
+                          className="px-3 py-1 bg-red-600 text-white rounded-full text-sm flex items-center gap-1 whitespace-nowrap"
+                      >
+                        <AiOutlineClose size={16} /> Cancel
+                      </button>
+                    </div>
+                  </>
+              ) : (
+                  <div onClick={() => setIsEditingEducation(true)} className="cursor-pointer space-y-3">
+                    {educationData.map((edu, index) => (
+                        <div key={index}>
+                          <p className="text-sm font-bold">{edu.year}</p>
+                          <p className="text-sm font-semibold">{edu.school}</p>
+                          <p className="text-sm">{edu.degree}</p>
+                        </div>
+                    ))}
+                  </div>
+              )}
             </div>
+
 
             {/* Skills */}
             <div className="space-y-2">
