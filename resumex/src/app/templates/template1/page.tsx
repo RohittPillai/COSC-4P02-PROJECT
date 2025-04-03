@@ -2,9 +2,15 @@
 import { useState, useEffect, useRef } from "react";
 import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai"; // Icons for Save & Cancel
 
+function getUserKey(key: string) {
+  const userData = localStorage.getItem("userData");
+  const userId = userData ? JSON.parse(userData)?.name : "guest";
+  return `${userId}_${key}`;
+}
+
 export default function Template1Page({ data }: { data: any }) {
   const [resumeData, setResumeData] = useState(() => {
-    const savedData = localStorage.getItem("resumeData");
+    const savedData = localStorage.getItem(getUserKey("resumeData"));
     return savedData ? JSON.parse(savedData) : data;
   });
 
@@ -32,7 +38,7 @@ export default function Template1Page({ data }: { data: any }) {
   const saveInterestsEdit = () => {
     setIsSaving(true);
     const updatedData = { ...resumeData, interests: tempInterests };
-    localStorage.setItem("resumeData", JSON.stringify(updatedData));
+    localStorage.setItem(getUserKey("resumeData"), JSON.stringify(updatedData));
     setResumeData(updatedData);
     setTimeout(() => {
       setIsSaving(false);
@@ -99,7 +105,7 @@ export default function Template1Page({ data }: { data: any }) {
   const saveProjectEdit = () => {
     setIsSaving(true);
     const updatedData = { ...resumeData, projects: tempProjects };
-    localStorage.setItem("resumeData", JSON.stringify(updatedData));
+    localStorage.setItem(getUserKey("resumeData"), JSON.stringify(updatedData));
     setResumeData(updatedData);
     setTimeout(() => {
       setIsSaving(false);
@@ -110,7 +116,7 @@ export default function Template1Page({ data }: { data: any }) {
   const saveSkillsEdit = () => {
     setIsSaving(true);
     const updatedData = { ...resumeData, skills: tempSkills };
-    localStorage.setItem("resumeData", JSON.stringify(updatedData));
+    localStorage.setItem(getUserKey("resumeData"), JSON.stringify(updatedData));
     setResumeData(updatedData);
     setTimeout(() => {
       setIsSaving(false);
@@ -122,7 +128,7 @@ export default function Template1Page({ data }: { data: any }) {
   const saveEducationEdit = () => {
     setIsSaving(true);
     const updatedData = { ...resumeData, education: tempEducation };
-    localStorage.setItem("resumeData", JSON.stringify(updatedData));
+    localStorage.setItem(getUserKey("resumeData"), JSON.stringify(updatedData));
     setResumeData(updatedData);
     setTimeout(() => {
       setIsSaving(false);
@@ -134,7 +140,7 @@ export default function Template1Page({ data }: { data: any }) {
   const saveExperienceEdit = () => {
     setIsSaving(true);
     const updatedData = { ...resumeData, experienceList: tempExperience };
-    localStorage.setItem("resumeData", JSON.stringify(updatedData));
+    localStorage.setItem(getUserKey("resumeData"), JSON.stringify(updatedData));
     setResumeData(updatedData);
     setTimeout(() => {
       setIsSaving(false);
@@ -145,7 +151,7 @@ export default function Template1Page({ data }: { data: any }) {
   // Save changes
   const saveResume = () => {
     setIsSaving(true);
-    localStorage.setItem("resumeData", JSON.stringify(tempData));
+    localStorage.setItem(getUserKey("resumeData"), JSON.stringify(tempData));
     setResumeData(tempData);
     setTimeout(() => {
       setIsSaving(false);

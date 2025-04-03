@@ -28,20 +28,21 @@ const templates = {
   },
 };
 
-function getOrCreateUserId() {
-  let uid = localStorage.getItem("resumex_userId");
-  if (!uid) {
-    uid = "user_" + Math.random().toString(36).substr(2, 9);
-    localStorage.setItem("resumex_userId", uid);
+function getLoggedInUserId() {
+  const userData = localStorage.getItem("userData");
+  if (userData) {
+    const parsed = JSON.parse(userData);
+    return parsed?.name || null;
   }
-  return uid;
+  return null;
 }
 
 export default function FreeResume() {
   const searchParams = useSearchParams();
   const template = searchParams.get("template") || "template1";
   const selectedTemplate = templates[template] || templates["template1"];
-  const userId = getOrCreateUserId();
+  const [userId, setUserId] = useState<string | null>(null);
+
 
   const [resumeContent, setResumeContent] = useState("Start typing your resume...");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -53,9 +54,13 @@ export default function FreeResume() {
   const [isFooterMinimized, setIsFooterMinimized] = useState(true); // Default: Minimized footer
 
   useEffect(() => {
-    const saved = localStorage.getItem(`${userId}_resume`);
-    if (saved) {
-      setResumeData(JSON.parse(saved));
+    const user = getLoggedInUserId();
+    if (user) {
+      setUserId(user);
+      const saved = localStorage.getItem(`${user}_resume`);
+      if (saved) {
+        setResumeData(JSON.parse(saved));
+      }
     }
   }, []);
 
@@ -63,6 +68,7 @@ export default function FreeResume() {
     setIsSaving(true);
     setTimeout(() => {
       setIsSaving(false);
+      if (!userId) return;
       const key = `${userId}_resume`;
       localStorage.setItem(key, JSON.stringify(resumeData));
       setLastSavedContent(JSON.stringify(resumeData));
