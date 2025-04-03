@@ -28,10 +28,20 @@ const templates = {
   },
 };
 
+function getOrCreateUserId() {
+  let uid = localStorage.getItem("resumex_userId");
+  if (!uid) {
+    uid = "user_" + Math.random().toString(36).substr(2, 9);
+    localStorage.setItem("resumex_userId", uid);
+  }
+  return uid;
+}
+
 export default function FreeResume() {
   const searchParams = useSearchParams();
   const template = searchParams.get("template") || "template1";
   const selectedTemplate = templates[template] || templates["template1"];
+  const userId = getOrCreateUserId();
 
   const [resumeContent, setResumeContent] = useState("Start typing your resume...");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -42,15 +52,22 @@ export default function FreeResume() {
   const [lastSavedContent, setLastSavedContent] = useState("");
   const [isFooterMinimized, setIsFooterMinimized] = useState(true); // Default: Minimized footer
 
+  useEffect(() => {
+    const saved = localStorage.getItem(`${userId}_resume`);
+    if (saved) {
+      setResumeData(JSON.parse(saved));
+    }
+  }, []);
 
   const saveResume = () => {
     setIsSaving(true);
     setTimeout(() => {
       setIsSaving(false);
+      const key = `${userId}_resume`;
+      localStorage.setItem(key, JSON.stringify(resumeData));
       setLastSavedContent(JSON.stringify(resumeData));
-      console.log("Resume saved:", resumeData);
-      localStorage.setItem("resumeData", JSON.stringify(resumeData)); // Save to localStorage
-    }, 1000);
+     // alert("Resume saved for your user ID!");
+    }, 500);
   };
 
   useEffect(() => {
@@ -77,7 +94,7 @@ export default function FreeResume() {
     alert("Resume link copied to clipboard!");
   };
 
-  const resumeData = {
+  const [resumeData, setResumeData] = useState<any>({
     firstName: "John",
     lastName: "Doe",
     email: "john.doe@gmail.com",
@@ -122,7 +139,7 @@ export default function FreeResume() {
     ],
     skills: ["JavaScript", "React", "Node.js", "Next.js", "CSS", "HTML"],
     interests: ["Football", "Programming", "Gaming"],
-  };
+  });
 
   return (
       <div className="flex flex-col min-h-screen w-full bg-gray-100">
