@@ -56,14 +56,15 @@ export default function PricingPage() {
 
       {/* Hero Section */}
       <section className="bg-gray-900 text-white text-center py-20 px-6">
-        <motion.h1
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-5xl font-extrabold"
-        >
-          Build a strikingly powerful resume approved by recruiters
-        </motion.h1>
+     <motion.h1
+       initial={{ opacity: 0, y: -20 }}
+       animate={{ opacity: 1, y: 0 }}
+       transition={{ duration: 0.8 }}
+       className="text-4xl md:text-5xl font-extrabold leading-snug"
+     >
+      <span className="block">Create a powerful resume</span>
+      <span className="block mt-2">trusted by top recruiters</span>
+    </motion.h1>
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
