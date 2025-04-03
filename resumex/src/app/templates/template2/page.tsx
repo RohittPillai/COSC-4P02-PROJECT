@@ -114,6 +114,49 @@ export default function Template2Page() {
     }
   }, []);
 
+  // for work experience section
+  const [isEditingExperience, setIsEditingExperience] = useState(false);
+  const [experienceData, setExperienceData] = useState([
+    {
+      company: "Borcelle Studio",
+      role: "Marketing Manager & Specialist",
+      years: "2030 – Present",
+      bullets: [
+        "Develop and execute comprehensive marketing strategies and campaigns aligned with the company’s goals and objectives.",
+        "Lead, mentor, and manage a high-performing marketing team.",
+        "Collaborate with cross-functional departments to ensure brand consistency."
+      ]
+    },
+    {
+      company: "Fauget Studios",
+      role: "Marketing Manager & Specialist",
+      years: "2025 – 2029",
+      bullets: [
+        "Create and manage the marketing budget, ensuring efficient allocation of resources.",
+        "Oversee market research to identify emerging trends, customer needs, and competitors’ activities.",
+        "Coordinate the production of marketing materials."
+      ]
+    },
+    {
+      company: "Studio Showdeo",
+      role: "Marketing Manager & Specialist",
+      years: "2024 – 2025",
+      bullets: [
+        "Develop and manage relationships with partners, agencies, and vendors.",
+        "Monitor and assess brand consistency across all marketing channels and materials."
+      ]
+    }
+  ]);
+  const [tempExperience, setTempExperience] = useState(experienceData);
+
+  useEffect(() => {
+    const savedExp = localStorage.getItem("template2Experience");
+    if (savedExp) {
+      setExperienceData(JSON.parse(savedExp));
+      setTempExperience(JSON.parse(savedExp));
+    }
+  }, []);
+
   return (
       <div className="w-full max-w-[850px] mx-auto px-6 py-10 bg-white shadow-xl overflow-y-auto max-h-[calc(100vh-160px)]">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
@@ -503,32 +546,95 @@ export default function Template2Page() {
             {/* Work Experience */}
             <div>
               <h2 className="text-md font-bold text-[#1B2A41] border-b border-gray-300 pb-1 mb-2 uppercase">Work Experience</h2>
-              <div className="mb-5">
-                <p className="text-sm font-bold">Borcelle Studio</p>
-                <p className="text-sm text-gray-600">Marketing Manager & Specialist | 2030 – Present</p>
-                <ul className="list-disc list-inside text-sm text-gray-800 mt-1">
-                  <li>Develop and execute comprehensive marketing strategies and campaigns aligned with the company’s goals and objectives.</li>
-                  <li>Lead, mentor, and manage a high-performing marketing team.</li>
-                  <li>Collaborate with cross-functional departments to ensure brand consistency.</li>
-                </ul>
-              </div>
-              <div className="mb-5">
-                <p className="text-sm font-bold">Fauget Studios</p>
-                <p className="text-sm text-gray-600">Marketing Manager & Specialist | 2025 – 2029</p>
-                <ul className="list-disc list-inside text-sm text-gray-800 mt-1">
-                  <li>Create and manage the marketing budget, ensuring efficient allocation of resources.</li>
-                  <li>Oversee market research to identify emerging trends, customer needs, and competitors’ activities.</li>
-                  <li>Coordinate the production of marketing materials.</li>
-                </ul>
-              </div>
-              <div>
-                <p className="text-sm font-bold">Studio Showdeo</p>
-                <p className="text-sm text-gray-600">Marketing Manager & Specialist | 2024 – 2025</p>
-                <ul className="list-disc list-inside text-sm text-gray-800 mt-1">
-                  <li>Develop and manage relationships with partners, agencies, and vendors.</li>
-                  <li>Monitor and assess brand consistency across all marketing channels and materials.</li>
-                </ul>
-              </div>
+
+              {isEditingExperience ? (
+                  <>
+                    {tempExperience.map((exp, i) => (
+                        <div key={i} className="mb-5 space-y-1">
+                          <input
+                              type="text"
+                              className="text-sm text-black w-full px-2 py-1 rounded border"
+                              value={exp.company}
+                              onChange={(e) => {
+                                const updated = [...tempExperience];
+                                updated[i].company = e.target.value;
+                                setTempExperience(updated);
+                              }}
+                          />
+                          <input
+                              type="text"
+                              className="text-sm text-black w-full px-2 py-1 rounded border"
+                              value={exp.role}
+                              onChange={(e) => {
+                                const updated = [...tempExperience];
+                                updated[i].role = e.target.value;
+                                setTempExperience(updated);
+                              }}
+                          />
+                          <input
+                              type="text"
+                              className="text-sm text-black w-full px-2 py-1 rounded border"
+                              value={exp.years}
+                              onChange={(e) => {
+                                const updated = [...tempExperience];
+                                updated[i].years = e.target.value;
+                                setTempExperience(updated);
+                              }}
+                          />
+                          {exp.bullets.map((b, j) => (
+                              <input
+                                  key={j}
+                                  type="text"
+                                  className="text-sm text-black w-full px-2 py-1 rounded border"
+                                  value={b}
+                                  onChange={(e) => {
+                                    const updated = [...tempExperience];
+                                    updated[i].bullets[j] = e.target.value;
+                                    setTempExperience(updated);
+                                  }}
+                              />
+                          ))}
+                        </div>
+                    ))}
+
+                    <div className="mt-4 flex gap-3">
+                      <button
+                          onClick={() => {
+                            setExperienceData(tempExperience);
+                            localStorage.setItem("template2Experience", JSON.stringify(tempExperience));
+                            setIsEditingExperience(false);
+                          }}
+                          className="px-3 py-1 bg-green-600 text-white rounded-full text-sm flex items-center gap-1"
+                      >
+                        <AiOutlineCheck size={16} /> Save
+                      </button>
+                      <button
+                          onClick={() => {
+                            setTempExperience(JSON.parse(JSON.stringify(experienceData)));
+                            setIsEditingExperience(true);
+                          }}
+                          className="px-3 py-1 bg-red-600 text-white rounded-full text-sm flex items-center gap-1"
+                      >
+                        <AiOutlineClose size={16} /> Cancel
+                      </button>
+                    </div>
+                  </>
+              ) : (
+                  <div onClick={() => {
+                    setTempExperience(JSON.parse(JSON.stringify(experienceData)));
+                    setIsEditingExperience(true);
+                  }} className="cursor-pointer">
+                    {experienceData.map((exp, i) => (
+                        <div key={i} className="mb-5">
+                          <p className="text-sm font-bold">{exp.company}</p>
+                          <p className="text-sm text-gray-600">{exp.role} | {exp.years}</p>
+                          <ul className="list-disc list-inside text-sm text-gray-800 mt-1">
+                            {exp.bullets.map((b, j) => <li key={j}>{b}</li>)}
+                          </ul>
+                        </div>
+                    ))}
+                  </div>
+              )}
             </div>
 
             {/* Reference */}
