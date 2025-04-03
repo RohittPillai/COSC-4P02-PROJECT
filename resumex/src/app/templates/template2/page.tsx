@@ -139,7 +139,7 @@ export default function Template2Page() {
                               value={edu.year}
                               onChange={(e) => {
                                 const updated = [...tempEducation];
-                                updated[index].year = e.target.value;
+                                updated[index] = { ...updated[index], year: e.target.value };
                                 setTempEducation(updated);
                               }}
                           />
@@ -149,7 +149,7 @@ export default function Template2Page() {
                               value={edu.school}
                               onChange={(e) => {
                                 const updated = [...tempEducation];
-                                updated[index].school = e.target.value;
+                                updated[index] = { ...updated[index], school: e.target.value };
                                 setTempEducation(updated);
                               }}
                           />
@@ -159,7 +159,7 @@ export default function Template2Page() {
                               value={edu.degree}
                               onChange={(e) => {
                                 const updated = [...tempEducation];
-                                updated[index].degree = e.target.value;
+                                updated[index] = { ...updated[index], degree: e.target.value };
                                 setTempEducation(updated);
                               }}
                           />
@@ -180,8 +180,8 @@ export default function Template2Page() {
                       </button>
                       <button
                           onClick={() => {
-                            setTempEducation(educationData);
-                            setIsEditingEducation(true);
+                            setTempEducation(educationData.map(entry => ({ ...entry }))); // deep copy!
+                            setIsEditingEducation(true); // stay in edit mode
                           }}
                           className="px-3 py-1 bg-red-600 text-white rounded-full text-sm flex items-center gap-1 whitespace-nowrap"
                       >
@@ -190,7 +190,13 @@ export default function Template2Page() {
                     </div>
                   </>
               ) : (
-                  <div onClick={() => setIsEditingEducation(true)} className="cursor-pointer space-y-3">
+                  <div
+                      onClick={() => {
+                        setTempEducation(educationData.map(entry => ({ ...entry }))); // deep copy!
+                        setIsEditingEducation(true);
+                      }}
+                      className="cursor-pointer space-y-3"
+                  >
                     {educationData.map((edu, index) => (
                         <div key={index}>
                           <p className="text-sm font-bold">{edu.year}</p>
