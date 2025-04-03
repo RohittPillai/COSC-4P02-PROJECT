@@ -45,6 +45,25 @@ export default function Template2Page() {
     }
   }, []);
 
+  const [isEditingSkills, setIsEditingSkills] = useState(false);
+  const [skillsData, setSkillsData] = useState([
+    "Project Management",
+    "Public Relations",
+    "Teamwork",
+    "Time Management",
+    "Critical Thinking",
+    "Effective Communication",
+  ]);
+  const [tempSkills, setTempSkills] = useState(skillsData);
+
+  useEffect(() => {
+    const savedSkills = localStorage.getItem("template2Skills");
+    if (savedSkills) {
+      setSkillsData(JSON.parse(savedSkills));
+      setTempSkills(JSON.parse(savedSkills));
+    }
+  }, []);
+
   return (
       <div className="w-full max-w-[850px] mx-auto px-6 py-10 bg-white shadow-xl overflow-y-auto max-h-[calc(100vh-160px)]">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
@@ -209,17 +228,62 @@ export default function Template2Page() {
             </div>
 
 
-            {/* Skills */}
+            {/* Skills (Editable) */}
             <div className="space-y-2">
               <h2 className="text-lg font-bold tracking-wide border-b border-white pb-2">SKILLS</h2>
-              <ul className="text-sm space-y-1 list-disc list-inside">
-                <li>Project Management</li>
-                <li>Public Relations</li>
-                <li>Teamwork</li>
-                <li>Time Management</li>
-                <li>Critical Thinking</li>
-                <li>Effective Communication</li>
-              </ul>
+
+              {isEditingSkills ? (
+                  <>
+                    {tempSkills.map((skill, index) => (
+                        <input
+                            key={index}
+                            type="text"
+                            className="text-sm text-black w-full px-2 py-1 rounded"
+                            value={skill}
+                            onChange={(e) => {
+                              const updated = [...tempSkills];
+                              updated[index] = e.target.value;
+                              setTempSkills(updated);
+                            }}
+                        />
+                    ))}
+
+                    {/* Save & Cancel Buttons */}
+                    <div className="mt-4 flex gap-3">
+                      <button
+                          onClick={() => {
+                            setSkillsData(tempSkills);
+                            localStorage.setItem("template2Skills", JSON.stringify(tempSkills));
+                            setIsEditingSkills(false);
+                          }}
+                          className="px-3 py-1 bg-green-600 text-white rounded-full text-sm flex items-center gap-1 whitespace-nowrap"
+                      >
+                        <AiOutlineCheck size={16} /> Save
+                      </button>
+                      <button
+                          onClick={() => {
+                            setTempSkills([...skillsData]);
+                            setIsEditingSkills(true); // stay in edit mode
+                          }}
+                          className="px-3 py-1 bg-red-600 text-white rounded-full text-sm flex items-center gap-1 whitespace-nowrap"
+                      >
+                        <AiOutlineClose size={16} /> Cancel
+                      </button>
+                    </div>
+                  </>
+              ) : (
+                  <ul
+                      className="text-sm space-y-1 list-disc list-inside cursor-pointer"
+                      onClick={() => {
+                        setTempSkills([...skillsData]);
+                        setIsEditingSkills(true);
+                      }}
+                  >
+                    {skillsData.map((skill, index) => (
+                        <li key={index}>{skill}</li>
+                    ))}
+                  </ul>
+              )}
             </div>
 
             {/* Languages */}
