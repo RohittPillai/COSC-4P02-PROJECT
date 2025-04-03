@@ -80,6 +80,20 @@ export default function Template2Page() {
     }
   }, []);
 
+  const [isEditingHeader, setIsEditingHeader] = useState(false);
+  const [headerData, setHeaderData] = useState({
+    name: "John Doe",
+    title: "Marketing Manager",
+  });
+  const [tempHeader, setTempHeader] = useState(headerData);
+
+  useEffect(() => {
+    const savedHeader = localStorage.getItem("template2Header");
+    if (savedHeader) {
+      setHeaderData(JSON.parse(savedHeader));
+      setTempHeader(JSON.parse(savedHeader));
+    }
+  }, []);
 
   return (
       <div className="w-full max-w-[850px] mx-auto px-6 py-10 bg-white shadow-xl overflow-y-auto max-h-[calc(100vh-160px)]">
@@ -365,8 +379,59 @@ export default function Template2Page() {
           <div className="md:col-span-6 pr-12 pl-4 space-y-10">
             {/* Header */}
             <div className="space-y-1">
-              <h1 className="text-3xl font-extrabold text-[#1B2A41] uppercase">John Doe</h1>
-              <h2 className="text-md font-semibold text-[#2D72D9]">Marketing Manager</h2>
+              {isEditingHeader ? (
+                  <>
+                    <input
+                        type="text"
+                        className="text-2xl font-extrabold text-[#1B2A41] uppercase w-full px-2 py-1 rounded border text-black"
+                        value={tempHeader.name}
+                        onChange={(e) => setTempHeader({ ...tempHeader, name: e.target.value })}
+                    />
+                    <input
+                        type="text"
+                        className="text-md font-semibold text-[#2D72D9] w-full px-2 py-1 rounded border text-black"
+                        value={tempHeader.title}
+                        onChange={(e) => setTempHeader({ ...tempHeader, title: e.target.value })}
+                    />
+
+                    <div className="mt-3 flex gap-3">
+                      <button
+                          onClick={() => {
+                            setHeaderData(tempHeader);
+                            localStorage.setItem("template2Header", JSON.stringify(tempHeader));
+                            setIsEditingHeader(false);
+                          }}
+                          className="px-3 py-1 bg-green-600 text-white rounded-full text-sm flex items-center gap-1 whitespace-nowrap"
+                      >
+                        <AiOutlineCheck size={16} /> Save
+                      </button>
+                      <button
+                          onClick={() => {
+                            setTempHeader(headerData);
+                            setIsEditingHeader(true); // stay in edit
+                          }}
+                          className="px-3 py-1 bg-red-600 text-white rounded-full text-sm flex items-center gap-1 whitespace-nowrap"
+                      >
+                        <AiOutlineClose size={16} /> Cancel
+                      </button>
+                    </div>
+                  </>
+              ) : (
+                  <div
+                      onClick={() => {
+                        setTempHeader(headerData);
+                        setIsEditingHeader(true);
+                      }}
+                      className="cursor-pointer space-y-1"
+                  >
+                    <h1 className="text-3xl font-extrabold text-[#1B2A41] uppercase">
+                      {headerData.name}
+                    </h1>
+                    <h2 className="text-md font-semibold text-[#2D72D9]">
+                      {headerData.title}
+                    </h2>
+                  </div>
+              )}
             </div>
 
             {/* Profile */}
