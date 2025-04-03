@@ -4,6 +4,7 @@ import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
 
 export default function Template2Page() {
 
+  //for contact section
   const [isEditingContact, setIsEditingContact] = useState(false);
   const [contactData, setContactData] = useState({
     phone: "+123-456-7890",
@@ -45,6 +46,7 @@ export default function Template2Page() {
     }
   }, []);
 
+  //for skills section
   const [isEditingSkills, setIsEditingSkills] = useState(false);
   const [skillsData, setSkillsData] = useState([
     "Project Management",
@@ -64,6 +66,7 @@ export default function Template2Page() {
     }
   }, []);
 
+  //for language section
   const [isEditingLanguages, setIsEditingLanguages] = useState(false);
   const [languagesData, setLanguagesData] = useState([
     "English (Fluent)",
@@ -80,6 +83,7 @@ export default function Template2Page() {
     }
   }, []);
 
+  //for header section
   const [isEditingHeader, setIsEditingHeader] = useState(false);
   const [headerData, setHeaderData] = useState({
     name: "John Doe",
@@ -92,6 +96,21 @@ export default function Template2Page() {
     if (savedHeader) {
       setHeaderData(JSON.parse(savedHeader));
       setTempHeader(JSON.parse(savedHeader));
+    }
+  }, []);
+
+  //for profile section
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [profileData, setProfileData] = useState(
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation."
+  );
+  const [tempProfile, setTempProfile] = useState(profileData);
+
+  useEffect(() => {
+    const savedProfile = localStorage.getItem("template2Profile");
+    if (savedProfile) {
+      setProfileData(JSON.parse(savedProfile));
+      setTempProfile(JSON.parse(savedProfile));
     }
   }, []);
 
@@ -437,9 +456,48 @@ export default function Template2Page() {
             {/* Profile */}
             <div>
               <h2 className="text-md font-bold text-[#1B2A41] border-b border-gray-300 pb-1 mb-2 uppercase">Profile</h2>
-              <p className="text-sm text-gray-800">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation.
-              </p>
+
+              {isEditingProfile ? (
+                  <>
+                    <textarea
+                        className="w-full text-sm text-black p-2 rounded border"
+                        rows={5}
+                        value={tempProfile}
+                        onChange={(e) => setTempProfile(e.target.value)}
+                    />
+                    <div className="mt-3 flex gap-3">
+                      <button
+                          onClick={() => {
+                            setProfileData(tempProfile);
+                            localStorage.setItem("template2Profile", JSON.stringify(tempProfile));
+                            setIsEditingProfile(false);
+                          }}
+                          className="px-3 py-1 bg-green-600 text-white rounded-full text-sm flex items-center gap-1"
+                      >
+                        <AiOutlineCheck size={16} /> Save
+                      </button>
+                      <button
+                          onClick={() => {
+                            setTempProfile(profileData);
+                            setIsEditingProfile(true); // stay in edit
+                          }}
+                          className="px-3 py-1 bg-red-600 text-white rounded-full text-sm flex items-center gap-1"
+                      >
+                        <AiOutlineClose size={16} /> Cancel
+                      </button>
+                    </div>
+                  </>
+              ) : (
+                  <p
+                      className="text-sm text-gray-800 cursor-pointer"
+                      onClick={() => {
+                        setTempProfile(profileData);
+                        setIsEditingProfile(true);
+                      }}
+                  >
+                    {profileData}
+                  </p>
+              )}
             </div>
 
             {/* Work Experience */}
