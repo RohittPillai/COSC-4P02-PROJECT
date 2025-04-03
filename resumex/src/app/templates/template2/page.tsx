@@ -157,6 +157,30 @@ export default function Template2Page() {
     }
   }, []);
 
+  // for reference section
+  const [isEditingReference, setIsEditingReference] = useState(false);
+  const [referenceData, setReferenceData] = useState([
+    {
+      name: "Estelle Darcy",
+      title: "Wardiere Inc. / CTO",
+      phone: "+123-456-7890"
+    },
+    {
+      name: "Harper Richard",
+      title: "Wardiere Inc. / CEO",
+      phone: "+123-456-7890"
+    }
+  ]);
+  const [tempReference, setTempReference] = useState(referenceData);
+
+  useEffect(() => {
+    const savedRef = localStorage.getItem("template2Reference");
+    if (savedRef) {
+      setReferenceData(JSON.parse(savedRef));
+      setTempReference(JSON.parse(savedRef));
+    }
+  }, []);
+
   return (
       <div className="w-full max-w-[850px] mx-auto px-6 py-10 bg-white shadow-xl overflow-y-auto max-h-[calc(100vh-160px)]">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
@@ -640,18 +664,83 @@ export default function Template2Page() {
             {/* Reference */}
             <div>
               <h2 className="text-md font-bold text-[#1B2A41] border-b border-gray-300 pb-1 mb-2 uppercase">Reference</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm text-gray-800">
-                <div>
-                  <p className="font-semibold">Estelle Darcy</p>
-                  <p>Wardiere Inc. / CTO</p>
-                  <p>Phone: +123-456-7890</p>
-                </div>
-                <div>
-                  <p className="font-semibold">Harper Richard</p>
-                  <p>Wardiere Inc. / CEO</p>
-                  <p>Phone: +123-456-7890</p>
-                </div>
-              </div>
+              {isEditingReference ? (
+                  <>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm text-gray-800">
+                      {tempReference.map((ref, i) => (
+                          <div key={i} className="space-y-1">
+                            <input
+                                type="text"
+                                className="text-sm text-black w-full px-2 py-1 rounded border"
+                                value={ref.name}
+                                onChange={(e) => {
+                                  const updated = [...tempReference];
+                                  updated[i].name = e.target.value;
+                                  setTempReference(updated);
+                                }}
+                            />
+                            <input
+                                type="text"
+                                className="text-sm text-black w-full px-2 py-1 rounded border"
+                                value={ref.title}
+                                onChange={(e) => {
+                                  const updated = [...tempReference];
+                                  updated[i].title = e.target.value;
+                                  setTempReference(updated);
+                                }}
+                            />
+                            <input
+                                type="text"
+                                className="text-sm text-black w-full px-2 py-1 rounded border"
+                                value={ref.phone}
+                                onChange={(e) => {
+                                  const updated = [...tempReference];
+                                  updated[i].phone = e.target.value;
+                                  setTempReference(updated);
+                                }}
+                            />
+                          </div>
+                      ))}
+                    </div>
+                    <div className="mt-4 flex gap-3">
+                      <button
+                          onClick={() => {
+                            setReferenceData(tempReference);
+                            localStorage.setItem("template2Reference", JSON.stringify(tempReference));
+                            setIsEditingReference(false);
+                          }}
+                          className="px-3 py-1 bg-green-600 text-white rounded-full text-sm flex items-center gap-1"
+                      >
+                        <AiOutlineCheck size={16} /> Save
+                      </button>
+                      <button
+                          onClick={() => {
+                            setTempReference(JSON.parse(JSON.stringify(referenceData)));
+                            setIsEditingReference(true);
+                          }}
+                          className="px-3 py-1 bg-red-600 text-white rounded-full text-sm flex items-center gap-1"
+                      >
+                        <AiOutlineClose size={16} /> Cancel
+                      </button>
+                    </div>
+                  </>
+              ) : (
+                  <div
+                      className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm text-gray-800 cursor-pointer"
+                      onClick={() => {
+                        setTempReference(JSON.parse(JSON.stringify(referenceData)));
+                        setIsEditingReference(true);
+                      }}
+                  >
+                    {referenceData.map((ref, i) => (
+                        <div key={i}>
+                          <p className="font-semibold">{ref.name}</p>
+                          <p>{ref.title}</p>
+                          <p>Phone: {ref.phone}</p>
+                        </div>
+                    ))}
+                  </div>
+              )}
             </div>
           </div>
         </div>
