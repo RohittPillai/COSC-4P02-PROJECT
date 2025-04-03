@@ -64,6 +64,23 @@ export default function Template2Page() {
     }
   }, []);
 
+  const [isEditingLanguages, setIsEditingLanguages] = useState(false);
+  const [languagesData, setLanguagesData] = useState([
+    "English (Fluent)",
+    "French (Fluent)",
+    "Spanish (Intermediate)",
+  ]);
+  const [tempLanguages, setTempLanguages] = useState(languagesData);
+
+  useEffect(() => {
+    const savedLanguages = localStorage.getItem("template2Languages");
+    if (savedLanguages) {
+      setLanguagesData(JSON.parse(savedLanguages));
+      setTempLanguages(JSON.parse(savedLanguages));
+    }
+  }, []);
+
+
   return (
       <div className="w-full max-w-[850px] mx-auto px-6 py-10 bg-white shadow-xl overflow-y-auto max-h-[calc(100vh-160px)]">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
@@ -227,7 +244,6 @@ export default function Template2Page() {
               )}
             </div>
 
-
             {/* Skills (Editable) */}
             <div className="space-y-2">
               <h2 className="text-lg font-bold tracking-wide border-b border-white pb-2">SKILLS</h2>
@@ -286,12 +302,62 @@ export default function Template2Page() {
               )}
             </div>
 
-            {/* Languages */}
+            {/* Languages (Editable) */}
             <div className="space-y-2">
               <h2 className="text-lg font-bold tracking-wide border-b border-white pb-2">LANGUAGES</h2>
-              <p className="text-sm">English (Fluent)</p>
-              <p className="text-sm">French (Fluent)</p>
-              <p className="text-sm">Spanish (Intermediate)</p>
+
+              {isEditingLanguages ? (
+                  <>
+                    {tempLanguages.map((lang, index) => (
+                        <input
+                            key={index}
+                            type="text"
+                            className="text-sm text-black w-full px-2 py-1 rounded"
+                            value={lang}
+                            onChange={(e) => {
+                              const updated = [...tempLanguages];
+                              updated[index] = e.target.value;
+                              setTempLanguages(updated);
+                            }}
+                        />
+                    ))}
+
+                    {/* Save & Cancel Buttons */}
+                    <div className="mt-4 flex gap-3">
+                      <button
+                          onClick={() => {
+                            setLanguagesData(tempLanguages);
+                            localStorage.setItem("template2Languages", JSON.stringify(tempLanguages));
+                            setIsEditingLanguages(false);
+                          }}
+                          className="px-3 py-1 bg-green-600 text-white rounded-full text-sm flex items-center gap-1 whitespace-nowrap"
+                      >
+                        <AiOutlineCheck size={16} /> Save
+                      </button>
+                      <button
+                          onClick={() => {
+                            setTempLanguages([...languagesData]);
+                            setIsEditingLanguages(true); // stay in edit mode
+                          }}
+                          className="px-3 py-1 bg-red-600 text-white rounded-full text-sm flex items-center gap-1 whitespace-nowrap"
+                      >
+                        <AiOutlineClose size={16} /> Cancel
+                      </button>
+                    </div>
+                  </>
+              ) : (
+                  <div
+                      onClick={() => {
+                        setTempLanguages([...languagesData]);
+                        setIsEditingLanguages(true);
+                      }}
+                      className="cursor-pointer space-y-1"
+                  >
+                    {languagesData.map((lang, index) => (
+                        <p key={index} className="text-sm">{lang}</p>
+                    ))}
+                  </div>
+              )}
             </div>
           </div>
 
