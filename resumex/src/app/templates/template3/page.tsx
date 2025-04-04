@@ -41,6 +41,26 @@ export default function Template3Page() {
         }
     }, []);
 
+    // Editable Contact Info
+    const [isEditingContact, setIsEditingContact] = useState(false);
+    const [contactInfo, setContactInfo] = useState({
+        phone: "+1 123 456 789",
+        email: "abc@gmail.com",
+        addressLine1: "Someplace, 5",
+        addressLine2: "ON, Canada",
+        addressLine3: "A1B 2C3"
+    });
+    const [tempContactInfo, setTempContactInfo] = useState(contactInfo);
+
+    useEffect(() => {
+        const savedContact = localStorage.getItem("template3Contact");
+        if (savedContact) {
+            const parsed = JSON.parse(savedContact);
+            setContactInfo(parsed);
+            setTempContactInfo(parsed);
+        }
+    }, []);
+
     return (
         <div className="w-full max-w-[1200px] mx-auto px-10 py-10 bg-white rounded shadow-sm font-sans text-gray-800 leading-relaxed overflow-y-auto max-h-[calc(100vh-160px)] border border-gray-300">
             {/* HEADER */}
@@ -70,18 +90,18 @@ export default function Template3Page() {
                                     localStorage.setItem("template3Header", JSON.stringify(tempHeader));
                                     setIsEditingHeader(false);
                                 }}
-                                className="bg-green-600 text-white px-4 py-1 rounded-full text-sm"
+                                className="bg-green-600 text-white px-4 py-1 rounded-full text-sm flex items-center gap-1"
                             >
-                                Save
+                                <AiOutlineCheck size={16} /> Save
                             </button>
                             <button
                                 onClick={() => {
                                     setTempHeader(headerData);
                                     setIsEditingHeader(true);
                                 }}
-                                className="bg-red-600 text-white px-4 py-1 rounded-full text-sm"
+                                className="bg-red-600 text-white px-4 py-1 rounded-full text-sm flex items-center gap-1"
                             >
-                                Cancel
+                                <AiOutlineClose size={16} /> Cancel
                             </button>
                         </div>
                     </div>
@@ -140,12 +160,12 @@ export default function Template3Page() {
 
                         {isEditingHello ? (
                             <>
-      <textarea
-          className="text-sm text-black w-full px-3 py-2 border rounded"
-          rows={4}
-          value={tempHelloText}
-          onChange={(e) => setTempHelloText(e.target.value)}
-      />
+                                <textarea
+                                    className="text-sm text-black w-full px-3 py-2 border rounded"
+                                    rows={4}
+                                    value={tempHelloText}
+                                    onChange={(e) => setTempHelloText(e.target.value)}
+                                />
                                 <div className="flex gap-2">
                                     <button
                                         onClick={() => {
@@ -183,14 +203,82 @@ export default function Template3Page() {
 
                     <div className="space-y-2">
                         <h2 className="text-lg font-bold">Contact details</h2>
-                        <p className="text-purple-600 text-sm font-semibold">Phone:</p>
-                        <p>+1 123 456 789</p>
-                        <p className="text-purple-600 text-sm font-semibold">Email:</p>
-                        <p>abc@gmail.com</p>
-                        <p className="text-purple-600 text-sm font-semibold">Address:</p>
-                        <p>Someplace, 5</p>
-                        <p>ON, Canada</p>
-                        <p>A1B 2C3</p>
+
+                        {isEditingContact ? (
+                            <>
+                                <label className="block text-purple-600 text-sm font-semibold">Phone:</label>
+                                <input
+                                    className="w-full text-sm border px-2 py-1 rounded mb-1"
+                                    value={tempContactInfo.phone}
+                                    onChange={(e) => setTempContactInfo({ ...tempContactInfo, phone: e.target.value })}
+                                />
+
+                                <label className="block text-purple-600 text-sm font-semibold">Email:</label>
+                                <input
+                                    className="w-full text-sm border px-2 py-1 rounded mb-1"
+                                    value={tempContactInfo.email}
+                                    onChange={(e) => setTempContactInfo({ ...tempContactInfo, email: e.target.value })}
+                                />
+
+                                <label className="block text-purple-600 text-sm font-semibold">Address:</label>
+                                <input
+                                    className="w-full text-sm border px-2 py-1 rounded mb-1"
+                                    value={tempContactInfo.addressLine1}
+                                    onChange={(e) => setTempContactInfo({ ...tempContactInfo, addressLine1: e.target.value })}
+                                />
+                                <input
+                                    className="w-full text-sm border px-2 py-1 rounded mb-1"
+                                    value={tempContactInfo.addressLine2}
+                                    onChange={(e) => setTempContactInfo({ ...tempContactInfo, addressLine2: e.target.value })}
+                                />
+                                <input
+                                    className="w-full text-sm border px-2 py-1 rounded"
+                                    value={tempContactInfo.addressLine3}
+                                    onChange={(e) => setTempContactInfo({ ...tempContactInfo, addressLine3: e.target.value })}
+                                />
+
+                                <div className="flex gap-2 mt-2">
+                                    <button
+                                        onClick={() => {
+                                            setContactInfo(tempContactInfo);
+                                            localStorage.setItem("template3Contact", JSON.stringify(tempContactInfo));
+                                            setIsEditingContact(false);
+                                        }}
+                                        className="bg-green-600 text-white px-4 py-1 rounded-full text-sm flex items-center gap-1"
+                                    >
+                                        <AiOutlineCheck size={16} /> Save
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            setTempContactInfo(contactInfo);
+                                            setIsEditingContact(true);
+                                        }}
+                                        className="bg-red-600 text-white px-4 py-1 rounded-full text-sm flex items-center gap-1"
+                                    >
+                                        <AiOutlineClose size={16} /> Cancel
+                                    </button>
+                                </div>
+                            </>
+                        ) : (
+                            <div
+                                className="cursor-pointer"
+                                onClick={() => {
+                                    setTempContactInfo(contactInfo);
+                                    setIsEditingContact(true);
+                                }}
+                            >
+                                <p className="text-purple-600 text-sm font-semibold">Phone:</p>
+                                <p>{contactInfo.phone}</p>
+
+                                <p className="text-purple-600 text-sm font-semibold">Email:</p>
+                                <p>{contactInfo.email}</p>
+
+                                <p className="text-purple-600 text-sm font-semibold">Address:</p>
+                                <p>{contactInfo.addressLine1}</p>
+                                <p>{contactInfo.addressLine2}</p>
+                                <p>{contactInfo.addressLine3}</p>
+                            </div>
+                        )}
                     </div>
 
                     <a href="mailto:abc@gmail.com"
