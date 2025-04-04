@@ -240,9 +240,10 @@ export default function Template3Page() {
                                 <div className="flex gap-2 mt-2">
                                     <button
                                         onClick={() => {
-                                            setContactInfo(tempContactInfo);
+                                            setContactInfo({ ...tempContactInfo }); // ensure fresh reference
                                             localStorage.setItem("template3Contact", JSON.stringify(tempContactInfo));
                                             setIsEditingContact(false);
+                                            console.log("Updated email to:", tempContactInfo.email);
                                         }}
                                         className="bg-green-600 text-white px-4 py-1 rounded-full text-sm flex items-center gap-1"
                                     >
@@ -281,10 +282,16 @@ export default function Template3Page() {
                         )}
                     </div>
 
-                    <a href="mailto:abc@gmail.com"
-                       className="inline-block bg-purple-600 text-white px-4 py-2 mt-4 rounded-md text-sm hover:bg-purple-700 transition">
-                        Send me a message
-                    </a>
+                    {contactInfo.email ? (
+                        <a
+                            href={`mailto:${contactInfo.email}`}
+                            className="inline-block bg-purple-600 text-white px-4 py-2 mt-4 rounded-md text-sm hover:bg-purple-700 transition"
+                        >
+                            Send me a message
+                        </a>
+                    ) : (
+                        <p className="text-sm text-red-600 mt-4">Please enter your email above to activate this button.</p>
+                    )}
 
                     <div>
                         <h2 className="text-lg font-bold mt-8 mb-2">Get social</h2>
