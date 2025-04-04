@@ -28,6 +28,19 @@ export default function Template3Page() {
         }
     }, []);
 
+    // Editable "Hello!" Section
+    const [isEditingHello, setIsEditingHello] = useState(false);
+    const [helloText, setHelloText] = useState("I'm passionate about technology and human behavior, hardworker and a fast-learner with experience in around 10 different countries studying, working and volunteering.");
+    const [tempHelloText, setTempHelloText] = useState(helloText);
+
+    useEffect(() => {
+        const savedHello = localStorage.getItem("template3Hello");
+        if (savedHello) {
+            setHelloText(savedHello);
+            setTempHelloText(savedHello);
+        }
+    }, []);
+
     return (
         <div className="w-full max-w-[1200px] mx-auto px-10 py-10 bg-white rounded shadow-sm font-sans text-gray-800 leading-relaxed overflow-y-auto max-h-[calc(100vh-160px)] border border-gray-300">
             {/* HEADER */}
@@ -124,9 +137,48 @@ export default function Template3Page() {
 
                     <div className="space-y-3">
                         <h2 className="text-lg font-bold">Hello!</h2>
-                        <p className="text-sm">I'm passionate about technology and human behavior, hardworker and a
-                            fast-learner with experience in around 10 different countries studying, working and
-                            volunteering.</p>
+
+                        {isEditingHello ? (
+                            <>
+      <textarea
+          className="text-sm text-black w-full px-3 py-2 border rounded"
+          rows={4}
+          value={tempHelloText}
+          onChange={(e) => setTempHelloText(e.target.value)}
+      />
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={() => {
+                                            setHelloText(tempHelloText);
+                                            localStorage.setItem("template3Hello", tempHelloText);
+                                            setIsEditingHello(false);
+                                        }}
+                                        className="bg-green-600 text-white px-4 py-1 rounded-full text-sm flex items-center gap-1"
+                                    >
+                                        <AiOutlineCheck size={16} /> Save
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            setTempHelloText(helloText);
+                                            setIsEditingHello(true); // stay in edit mode
+                                        }}
+                                        className="bg-red-600 text-white px-4 py-1 rounded-full text-sm flex items-center gap-1"
+                                    >
+                                        <AiOutlineClose size={16} /> Cancel
+                                    </button>
+                                </div>
+                            </>
+                        ) : (
+                            <p
+                                className="text-sm cursor-pointer"
+                                onClick={() => {
+                                    setTempHelloText(helloText);
+                                    setIsEditingHello(true);
+                                }}
+                            >
+                                {helloText}
+                            </p>
+                        )}
                     </div>
 
                     <div className="space-y-2">
