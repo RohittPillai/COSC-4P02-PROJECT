@@ -140,6 +140,39 @@ export default function Template3Page() {
         }
     }, []);
 
+    // for Interests & Hobbies
+    const [isEditingInterests, setIsEditingInterests] = useState(false);
+    const [interestsList, setInterestsList] = useState([
+        "Visiting new places",
+        "Meeting people",
+        "Having new experiences",
+        "Hiking and Biking",
+        "Web Developing",
+        "Computer Gaming",
+        "Manga and Anime"
+    ]);
+    const [tempInterestsList, setTempInterestsList] = useState([...interestsList]);
+
+    useEffect(() => {
+        const saved = localStorage.getItem("template3Interests");
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            setInterestsList(parsed);
+            setTempInterestsList(parsed);
+        }
+    }, []);
+
+    const [interestIntro, setInterestIntro] = useState("I'm passionate about technology and human behavior, both determine almost all my interests and hobbies:");
+    const [tempInterestIntro, setTempInterestIntro] = useState(interestIntro);
+
+    useEffect(() => {
+        const saved = localStorage.getItem("template3InterestIntro");
+        if (saved) {
+            setInterestIntro(saved);
+            setTempInterestIntro(saved);
+        }
+    }, []);
+
     return (
         <div className="w-full max-w-[1200px] mx-auto px-10 py-10 bg-white rounded shadow-sm font-sans text-gray-800 leading-relaxed overflow-y-auto max-h-[calc(100vh-160px)] border border-gray-300">
             {/* HEADER */}
@@ -559,7 +592,6 @@ export default function Template3Page() {
 
                             <div>
                                 <h2 className="text-xl font-bold mb-2">Philosophy</h2>
-
                                 {isEditingPhilosophy ? (
                                     <>
                                         <textarea
@@ -651,17 +683,91 @@ export default function Template3Page() {
 
                             <div>
                                 <h2 className="text-xl font-bold mb-2">Interests & Hobbies</h2>
-                                <p className="text-sm">I'm passionate about technology and human behavior, both
-                                    determine almost all my interests and hobbies:</p>
-                                <ul className="list-disc list-inside text-sm mt-2">
-                                    <li>Visiting new places</li>
-                                    <li>Meeting people</li>
-                                    <li>Having new experiences</li>
-                                    <li>Hiking and Biking</li>
-                                    <li>Web Developing</li>
-                                    <li>Computer Gaming</li>
-                                    <li>Manga and Anime</li>
-                                </ul>
+                                {isEditingInterests ? (
+                                    <>
+                                        <textarea
+                                            className="text-sm w-full border px-3 py-2 rounded mb-2"
+                                            rows={2}
+                                            value={tempInterestIntro}
+                                             onChange={(e) => setTempInterestIntro(e.target.value)}
+                                        />
+                                        <div className="space-y-2">
+                                            {tempInterestsList.map((item, idx) => (
+                                                <div key={idx} className="flex gap-2 items-center">
+                                                    <input
+                                                        className="w-full border px-2 py-1 rounded text-sm"
+                                                        value={item}
+                                                        onChange={(e) => {
+                                                            const updated = [...tempInterestsList];
+                                                            updated[idx] = e.target.value;
+                                                            setTempInterestsList(updated);
+                                                        }}
+                                                    />
+                                                    <button
+                                                        onClick={() => {
+                                                            const updated = [...tempInterestsList];
+                                                            updated.splice(idx, 1);
+                                                            setTempInterestsList(updated);
+                                                        }}
+                                                        className="text-red-600 hover:text-red-800 text-sm"
+                                                        title="Remove"
+                                                    >
+                                                        ✕
+                                                    </button>
+                                                </div>
+                                            ))}
+                                            <button
+                                                className="text-blue-600 text-sm mt-1 underline"
+                                                onClick={() => setTempInterestsList([...tempInterestsList, ""])}
+                                            >
+                                                + Add Interest
+                                            </button>
+                                        </div>
+
+                                        <div className="flex gap-2 mt-4">
+                                            <button
+                                                onClick={() => {
+                                                    setInterestsList(tempInterestsList);
+                                                    setInterestIntro(tempInterestIntro);
+                                                    localStorage.setItem("template3Interests", JSON.stringify(tempInterestsList));
+                                                    localStorage.setItem("template3InterestIntro", tempInterestIntro);
+                                                    setIsEditingInterests(false);
+                                                }}
+                                                className="bg-green-600 text-white px-4 py-1 rounded-full text-sm flex items-center gap-1"
+                                            >
+                                                <AiOutlineCheck size={16} /> Save
+                                            </button>
+                                            <button
+                                                onClick={() => {
+                                                    setTempInterestsList([...interestsList]);
+                                                    setTempInterestIntro(interestIntro);
+                                                    setIsEditingInterests(true);
+                                                }}
+                                                className="bg-red-600 text-white px-4 py-1 rounded-full text-sm flex items-center gap-1"
+                                            >
+                                                <AiOutlineClose size={16} /> Cancel
+                                            </button>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <p
+                                            className="text-sm cursor-pointer mb-2"
+                                            onClick={() => {
+                                                setTempInterestsList([...interestsList]);
+                                                setTempInterestIntro(interestIntro);
+                                                setIsEditingInterests(true);
+                                            }}
+                                        >
+                                            {interestIntro}
+                                        </p>
+                                        <ul className="list-disc list-inside text-sm mt-2">
+                                            {interestsList.map((item, idx) => (
+                                                <li key={idx}>{item}</li>
+                                            ))}
+                                        </ul>
+                                    </>
+                                )}
                             </div>
                         </>
                     )}
