@@ -113,6 +113,33 @@ export default function Template3Page() {
         }
     }, []);
 
+    //for philosphy section
+    const [philosophyText, setPhilosophyText] = useState("I believe in ethic and moral, not imposed rules... life is made from different shades of grey... as a human being... our duty is to treat others well...");
+    const [tempPhilosophyText, setTempPhilosophyText] = useState(philosophyText);
+    const [isEditingPhilosophy, setIsEditingPhilosophy] = useState(false);
+
+    useEffect(() => {
+        const savedPhilosophy = localStorage.getItem("template3Philosophy");
+        if (savedPhilosophy) {
+            setPhilosophyText(savedPhilosophy);
+            setTempPhilosophyText(savedPhilosophy);
+        }
+    }, []);
+
+    const [philosophyTraits, setPhilosophyTraits] = useState([
+        "Pragmatic", "Honest", "Respectful", "Open-minded", "Coherent"
+    ]);
+    const [tempTraits, setTempTraits] = useState([...philosophyTraits]);
+
+    useEffect(() => {
+        const saved = localStorage.getItem("template3PhilosophyTraits");
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            setPhilosophyTraits(parsed);
+            setTempTraits(parsed);
+        }
+    }, []);
+
     return (
         <div className="w-full max-w-[1200px] mx-auto px-10 py-10 bg-white rounded shadow-sm font-sans text-gray-800 leading-relaxed overflow-y-auto max-h-[calc(100vh-160px)] border border-gray-300">
             {/* HEADER */}
@@ -487,15 +514,14 @@ export default function Template3Page() {
 
                             <div>
                                 <h2 className="text-xl font-bold mb-2">A few words about me</h2>
-
                                 {isEditingAboutMe ? (
                                     <>
-            <textarea
-                className="w-full border px-3 py-2 rounded text-sm"
-                rows={4}
-                value={tempAboutMeText}
-                onChange={(e) => setTempAboutMeText(e.target.value)}
-            />
+                                        <textarea
+                                            className="w-full border px-3 py-2 rounded text-sm"
+                                            rows={4}
+                                            value={tempAboutMeText}
+                                            onChange={(e) => setTempAboutMeText(e.target.value)}
+                                        />
                                         <div className="flex gap-2 mt-2">
                                             <button
                                                 onClick={() => {
@@ -533,17 +559,96 @@ export default function Template3Page() {
 
                             <div>
                                 <h2 className="text-xl font-bold mb-2">Philosophy</h2>
-                                <p className="text-sm">I believe in ethic and moral, not imposed rules... life is made
-                                    from different shades of grey... as a human being... our duty is to treat others
-                                    well...</p>
-                                <ul className="list-disc list-inside text-sm mt-2">
-                                    <li>Pragmatic</li>
-                                    <li>Honest</li>
-                                    <li>Respectful</li>
-                                    <li>Open-minded</li>
-                                    <li>Coherent</li>
-                                </ul>
+
+                                {isEditingPhilosophy ? (
+                                    <>
+                                        <textarea
+                                            className="w-full border px-3 py-2 rounded text-sm"
+                                            rows={4}
+                                            value={tempPhilosophyText}
+                                            onChange={(e) => setTempPhilosophyText(e.target.value)}
+                                        />
+
+                                        <div className="mt-4 space-y-2">
+                                            {tempTraits.map((trait, index) => (
+                                                <div key={index} className="flex gap-2 items-center">
+                                                    <input
+                                                        className="w-full border px-2 py-1 rounded text-sm"
+                                                        value={trait}
+                                                        onChange={(e) => {
+                                                            const newTraits = [...tempTraits];
+                                                            newTraits[index] = e.target.value;
+                                                            setTempTraits(newTraits);
+                                                        }}
+                                                    />
+                                                    <button
+                                                        onClick={() => {
+                                                            const updated = [...tempTraits];
+                                                            updated.splice(index, 1);
+                                                            setTempTraits(updated);
+                                                        }}
+                                                        className="text-red-600 hover:text-red-800 text-sm"
+                                                        title="Remove"
+                                                    >
+                                                        ✕
+                                                    </button>
+                                                </div>
+                                            ))}
+
+                                            <button
+                                                className="text-blue-600 text-sm mt-1 underline"
+                                                onClick={() => setTempTraits([...tempTraits, ""])}
+                                            >
+                                                + Add Trait
+                                            </button>
+                                        </div>
+
+                                        <div className="flex gap-2 mt-4">
+                                            <button
+                                                onClick={() => {
+                                                    setPhilosophyText(tempPhilosophyText);
+                                                    setPhilosophyTraits(tempTraits);
+                                                    localStorage.setItem("template3Philosophy", tempPhilosophyText);
+                                                    localStorage.setItem("template3PhilosophyTraits", JSON.stringify(tempTraits));
+                                                    setIsEditingPhilosophy(false);
+                                                }}
+                                                className="bg-green-600 text-white px-4 py-1 rounded-full text-sm flex items-center gap-1"
+                                            >
+                                                <AiOutlineCheck size={16} /> Save
+                                            </button>
+                                            <button
+                                                onClick={() => {
+                                                    setTempPhilosophyText(philosophyText);
+                                                    setTempTraits([...philosophyTraits]);
+                                                    setIsEditingPhilosophy(true);
+                                                }}
+                                                className="bg-red-600 text-white px-4 py-1 rounded-full text-sm flex items-center gap-1"
+                                            >
+                                                <AiOutlineClose size={16} /> Cancel
+                                            </button>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <p
+                                            className="text-sm cursor-pointer"
+                                            onClick={() => {
+                                                setTempPhilosophyText(philosophyText);
+                                                setTempTraits([...philosophyTraits]);
+                                                setIsEditingPhilosophy(true);
+                                            }}
+                                        >
+                                            {philosophyText}
+                                        </p>
+                                        <ul className="list-disc list-inside text-sm mt-2">
+                                            {philosophyTraits.map((trait, i) => (
+                                                <li key={i}>{trait}</li>
+                                            ))}
+                                        </ul>
+                                    </>
+                                )}
                             </div>
+
                             <div>
                                 <h2 className="text-xl font-bold mb-2">Interests & Hobbies</h2>
                                 <p className="text-sm">I'm passionate about technology and human behavior, both
