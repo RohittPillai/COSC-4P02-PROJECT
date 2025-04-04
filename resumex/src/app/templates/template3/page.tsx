@@ -61,6 +61,24 @@ export default function Template3Page() {
         }
     }, []);
 
+    const [showSocialModal, setShowSocialModal] = useState(false);
+    const [editingPlatform, setEditingPlatform] = useState(""); // "facebook", "twitter", "linkedin"
+    const [socialLinks, setSocialLinks] = useState({
+        facebook: "",
+        twitter: "",
+        linkedin: ""
+    });
+    const [tempSocialLinks, setTempSocialLinks] = useState({ ...socialLinks });
+
+    useEffect(() => {
+        const saved = localStorage.getItem("template3Social");
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            setSocialLinks(parsed);
+            setTempSocialLinks(parsed);
+        }
+    }, []);
+
     return (
         <div className="w-full max-w-[1200px] mx-auto px-10 py-10 bg-white rounded shadow-sm font-sans text-gray-800 leading-relaxed overflow-y-auto max-h-[calc(100vh-160px)] border border-gray-300">
             {/* HEADER */}
@@ -295,12 +313,82 @@ export default function Template3Page() {
 
                     <div>
                         <h2 className="text-lg font-bold mt-8 mb-2">Get social</h2>
+
                         <ul className="text-sm space-y-1">
-                            <li><a href="#" className="text-blue-700 hover:underline">Facebook</a></li>
-                            <li><a href="#" className="text-blue-500 hover:underline">Twitter</a></li>
-                            <li><a href="#" className="text-blue-800 hover:underline">LinkedIn</a></li>
+                            {["facebook", "twitter", "linkedin"].map((platform) => (
+                                <li key={platform}>
+                                    <button
+                                        onClick={() => {
+                                            setEditingPlatform(platform);
+                                            setShowSocialModal(true);
+                                        }}
+                                        className={`text-sm capitalize text-blue-600 hover:underline`}
+                                    >
+                                        {platform.charAt(0).toUpperCase() + platform.slice(1)}
+                                    </button>
+                                </li>
+                            ))}
                         </ul>
                     </div>
+                    {showSocialModal && (
+                        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+                            <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+                                <h2 className="text-lg font-bold mb-4">
+                                    {`Edit ${editingPlatform.charAt(0).toUpperCase() + editingPlatform.slice(1)} Link`}
+                                </h2>
+
+                                <input
+                                    type="text"
+                                    placeholder={`https://${editingPlatform}.com/your-profile`}
+                                    value={tempSocialLinks[editingPlatform]}
+                                    onChange={(e) =>
+                                        setTempSocialLinks({
+                                            ...tempSocialLinks,
+                                            [editingPlatform]: e.target.value
+                                        })
+                                    }
+                                    className="w-full border px-3 py-2 rounded mb-4 text-sm"
+                                />
+
+                                <div className="flex justify-end gap-2">
+                                    <a
+                                        href={tempSocialLinks[editingPlatform]}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="bg-blue-600 text-white px-4 py-1 rounded text-sm"
+                                    >
+                                        Open
+                                    </a>
+                                    <button
+                                        onClick={() => {
+                                            const updated = { ...socialLinks, [editingPlatform]: tempSocialLinks[editingPlatform] };
+                                            setSocialLinks(updated);
+                                            localStorage.setItem("template3Social", JSON.stringify(updated));
+                                            setShowSocialModal(false);
+                                            setEditingPlatform("");
+                                        }}
+                                        className="bg-green-600 text-white px-4 py-1 rounded text-sm"
+                                    >
+                                        Save
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            const clearedLinks = { ...socialLinks, [editingPlatform]: "" };
+                                            setSocialLinks(clearedLinks);
+                                            setTempSocialLinks(clearedLinks);
+                                            localStorage.setItem("template3Social", JSON.stringify(clearedLinks));
+                                            setShowSocialModal(false);
+                                            setEditingPlatform("");
+                                        }}
+                                        className="bg-gray-400 text-white px-4 py-1 rounded-full text-sm"
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
                 </div>
 
                 {/* RIGHT COLUMN CONTENT */}
