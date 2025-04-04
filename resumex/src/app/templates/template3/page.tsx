@@ -61,6 +61,7 @@ export default function Template3Page() {
         }
     }, []);
 
+    //for social section
     const [showSocialModal, setShowSocialModal] = useState(false);
     const [editingPlatform, setEditingPlatform] = useState(""); // "facebook", "twitter", "linkedin"
     const [socialLinks, setSocialLinks] = useState({
@@ -76,6 +77,26 @@ export default function Template3Page() {
             const parsed = JSON.parse(saved);
             setSocialLinks(parsed);
             setTempSocialLinks(parsed);
+        }
+    }, []);
+
+    //for profile section
+    const [isEditingProfile, setIsEditingProfile] = useState(false);
+    const [profileText, setProfileText] = useState(`"There is no end to education... The whole of life... is a process of learning."`);
+    const [tempProfileText, setTempProfileText] = useState(profileText);
+    const [profileAuthor, setProfileAuthor] = useState("Jiddu Krishnamurti");
+    const [tempProfileAuthor, setTempProfileAuthor] = useState(profileAuthor);
+
+    useEffect(() => {
+        const savedProfile = localStorage.getItem("template3Profile");
+        const savedProfileAuthor = localStorage.getItem("template3ProfileAuthor");
+        if (savedProfile) {
+            setProfileText(savedProfile);
+            setTempProfileText(savedProfile);
+        }
+        if (savedProfileAuthor) {
+            setProfileAuthor(savedProfileAuthor);
+            setTempProfileAuthor(savedProfileAuthor);
         }
     }, []);
 
@@ -388,7 +409,6 @@ export default function Template3Page() {
                             </div>
                         </div>
                     )}
-
                 </div>
 
                 {/* RIGHT COLUMN CONTENT */}
@@ -397,11 +417,59 @@ export default function Template3Page() {
                         <>
                             <div className="space-y-4">
                                 <h1 className="text-2xl font-bold">Profile</h1>
-                                <blockquote className="italic border-l-4 border-purple-600 pl-4">
-                                    <p>"There is no end to education... The whole of life... is a process of
-                                        learning."</p>
-                                    <p className="text-sm">- Jiddu Krishnamurti</p>
-                                </blockquote>
+
+                                {isEditingProfile ? (
+                                    <>
+                                        <textarea
+                                            className="w-full border px-3 py-2 rounded text-sm"
+                                            rows={3}
+                                            value={tempProfileText}
+                                            onChange={(e) => setTempProfileText(e.target.value)}
+                                        />
+                                        <input
+                                            className="w-full border px-3 py-2 rounded text-sm mt-2"
+                                            placeholder="Author"
+                                            value={tempProfileAuthor}
+                                            onChange={(e) => setTempProfileAuthor(e.target.value)}
+                                        />
+                                        <div className="flex gap-2 mt-2">
+                                            <button
+                                                onClick={() => {
+                                                    setProfileText(tempProfileText);
+                                                    setProfileAuthor(tempProfileAuthor);
+                                                    localStorage.setItem("template3Profile", tempProfileText);
+                                                    localStorage.setItem("template3ProfileAuthor", tempProfileAuthor);
+                                                    setIsEditingProfile(false);
+                                                }}
+                                                className="bg-green-600 text-white px-4 py-1 rounded-full text-sm flex items-center gap-1"
+                                            >
+                                                <AiOutlineCheck size={16} /> Save
+                                            </button>
+                                            <button
+                                                onClick={() => {
+                                                    setTempProfileText(profileText);
+                                                    setTempProfileAuthor(profileAuthor);
+                                                    setIsEditingProfile(true);
+                                                }}
+                                                className="bg-red-600 text-white px-4 py-1 rounded-full text-sm flex items-center gap-1"
+                                            >
+                                                <AiOutlineClose size={16} /> Cancel
+                                            </button>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <blockquote
+                                        className="italic border-l-4 border-purple-600 pl-4 cursor-pointer"
+                                        onClick={() => {
+                                            setTempProfileText(profileText);
+                                            setTempProfileAuthor(profileAuthor);
+                                            setIsEditingProfile(true);
+                                        }}
+                                    >
+                                        <p>{profileText}</p>
+                                        <p className="text-sm">- {profileAuthor}</p>
+                                    </blockquote>
+                                )}
                             </div>
                             <div>
                                 <h2 className="text-xl font-bold mb-2">A few words about me</h2>
