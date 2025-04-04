@@ -1,19 +1,95 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
+import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
 
 export default function Template3Page() {
     const [activeTab, setActiveTab] = useState("profile");
-
     const tabs = ["profile", "education & projects", "skills", "work", "awards"];
 
+    // Editable Header
+    const [isEditingHeader, setIsEditingHeader] = useState(false);
+    const [headerData, setHeaderData] = useState({
+        name: "John Doe",
+        title: "Frontend Web Developer"
+    });
+    const [tempHeader, setTempHeader] = useState(headerData);
+
+    useEffect(() => {
+        try {
+            const saved = localStorage.getItem("template3Header");
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                if (parsed?.name && parsed?.title) {
+                    setHeaderData(parsed);
+                    setTempHeader(parsed);
+                }
+            }
+        } catch (err) {
+            console.warn("Failed to load header data:", err);
+        }
+    }, []);
+
     return (
-        <div
-            className="w-full max-w-[1200px] mx-auto px-10 py-10 bg-white rounded shadow-sm font-sans text-gray-800 leading-relaxed overflow-y-auto max-h-[calc(100vh-160px)] border border-gray-300">
+        <div className="w-full max-w-[1200px] mx-auto px-10 py-10 bg-white rounded shadow-sm font-sans text-gray-800 leading-relaxed overflow-y-auto max-h-[calc(100vh-160px)] border border-gray-300">
             {/* HEADER */}
             <div className="flex justify-between items-center mb-6">
-                <div>
-                    <h1 className="text-4xl font-extrabold">John <span className="text-purple-600">Doe</span></h1>
-                    <h2 className="text-lg uppercase tracking-wide text-gray-500 mt-1">Frontend Web Developer</h2>
-                </div>
+                {isEditingHeader ? (
+                    <div className="w-full space-y-2">
+                        <input
+                            type="text"
+                            className="text-3xl font-bold w-full px-3 py-2 border rounded"
+                            value={tempHeader.name}
+                            onChange={(e) =>
+                                setTempHeader({ ...tempHeader, name: e.target.value })
+                            }
+                        />
+                        <input
+                            type="text"
+                            className="text-md uppercase text-gray-500 w-full px-3 py-2 border rounded"
+                            value={tempHeader.title}
+                            onChange={(e) =>
+                                setTempHeader({ ...tempHeader, title: e.target.value })
+                            }
+                        />
+                        <div className="flex gap-2 mt-2">
+                            <button
+                                onClick={() => {
+                                    setHeaderData(tempHeader);
+                                    localStorage.setItem("template3Header", JSON.stringify(tempHeader));
+                                    setIsEditingHeader(false);
+                                }}
+                                className="bg-green-600 text-white px-4 py-1 rounded-full text-sm"
+                            >
+                                Save
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setTempHeader(headerData);
+                                    setIsEditingHeader(true);
+                                }}
+                                className="bg-red-600 text-white px-4 py-1 rounded-full text-sm"
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                ) : (
+                    <div
+                        onClick={() => setIsEditingHeader(true)}
+                        className="cursor-pointer"
+                    >
+                        <h1 className="text-4xl font-extrabold">
+                            {headerData.name ? headerData.name.split(" ")[0] : ""}
+                            {" "}
+                            <span className="text-purple-600">
+                                {headerData.name ? headerData.name.split(" ").slice(1).join(" ") : ""}
+                            </span>
+                        </h1>
+
+                        <h2 className="text-lg uppercase tracking-wide text-gray-500 mt-1">
+                            {headerData.title}
+                        </h2>
+                    </div>
+                )}
             </div>
 
             {/* TABS */}
