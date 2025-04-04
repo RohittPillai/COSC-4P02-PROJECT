@@ -100,6 +100,19 @@ export default function Template3Page() {
         }
     }, []);
 
+    //few words about me section
+    const [aboutMeText, setAboutMeText] = useState("Until now, in my life, I change from active moments... I consider myself a tolerant and respectful person... I really like to listen to people stories...");
+    const [tempAboutMeText, setTempAboutMeText] = useState(aboutMeText);
+    const [isEditingAboutMe, setIsEditingAboutMe] = useState(false);
+
+    useEffect(() => {
+        const savedAboutMe = localStorage.getItem("template3AboutMe");
+        if (savedAboutMe) {
+            setAboutMeText(savedAboutMe);
+            setTempAboutMeText(savedAboutMe);
+        }
+    }, []);
+
     return (
         <div className="w-full max-w-[1200px] mx-auto px-10 py-10 bg-white rounded shadow-sm font-sans text-gray-800 leading-relaxed overflow-y-auto max-h-[calc(100vh-160px)] border border-gray-300">
             {/* HEADER */}
@@ -471,12 +484,53 @@ export default function Template3Page() {
                                     </blockquote>
                                 )}
                             </div>
+
                             <div>
                                 <h2 className="text-xl font-bold mb-2">A few words about me</h2>
-                                <p className="text-sm">Until now, in my life, I change from active moments... I consider
-                                    myself a tolerant and respectful person... I really like to listen to people
-                                    stories...</p>
+
+                                {isEditingAboutMe ? (
+                                    <>
+            <textarea
+                className="w-full border px-3 py-2 rounded text-sm"
+                rows={4}
+                value={tempAboutMeText}
+                onChange={(e) => setTempAboutMeText(e.target.value)}
+            />
+                                        <div className="flex gap-2 mt-2">
+                                            <button
+                                                onClick={() => {
+                                                    setAboutMeText(tempAboutMeText);
+                                                    localStorage.setItem("template3AboutMe", tempAboutMeText);
+                                                    setIsEditingAboutMe(false);
+                                                }}
+                                                className="bg-green-600 text-white px-4 py-1 rounded-full text-sm flex items-center gap-1"
+                                            >
+                                                <AiOutlineCheck size={16} /> Save
+                                            </button>
+                                            <button
+                                                onClick={() => {
+                                                    setTempAboutMeText(aboutMeText);
+                                                    setIsEditingAboutMe(true);
+                                                }}
+                                                className="bg-red-600 text-white px-4 py-1 rounded-full text-sm flex items-center gap-1"
+                                            >
+                                                <AiOutlineClose size={16} /> Cancel
+                                            </button>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <p
+                                        className="text-sm cursor-pointer"
+                                        onClick={() => {
+                                            setTempAboutMeText(aboutMeText);
+                                            setIsEditingAboutMe(true);
+                                        }}
+                                    >
+                                        {aboutMeText}
+                                    </p>
+                                )}
                             </div>
+
                             <div>
                                 <h2 className="text-xl font-bold mb-2">Philosophy</h2>
                                 <p className="text-sm">I believe in ethic and moral, not imposed rules... life is made
