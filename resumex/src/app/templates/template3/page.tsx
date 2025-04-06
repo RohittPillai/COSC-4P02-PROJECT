@@ -207,6 +207,40 @@ export default function Template3Page() {
         //setEditingEducationIndex(null);
     };
 
+    // for project highlight section
+    const [projectList, setProjectList] = useState([
+        {
+            title: "Market Expansion Strategy for Lush Cosmetics",
+            description1: "Led a 4-member team to design a strategic plan for expanding Lush Cosmetics into untapped Canadian markets.",
+            description2: "Conducted market research, competitor analysis, and consumer behavior profiling to support recommendations.",
+            tools: "Tools: SWOT Analysis, PESTEL, SurveyMonkey, Canva"
+        },
+        {
+            title: "Social Media ROI Analysis for a Nonprofit",
+            description1: "Analyzed engagement metrics and campaign performance across Instagram, LinkedIn, and Twitter for a local nonprofit.",
+            description2: "Provided recommendations to improve ROI and optimize content scheduling for a 15% reach increase.",
+            tools: "Tools: Google Analytics, Hootsuite, Excel, PowerPoint"
+        }
+    ]);
+    const [tempProjectList, setTempProjectList] = useState([...projectList]);
+    const [editingProjectIndex, setEditingProjectIndex] = useState<number | null>(null);
+
+    const handleProjectChange = (index: number, field: string, value: string) => {
+        const updated = [...tempProjectList];
+        updated[index] = { ...updated[index], [field]: value };
+        setTempProjectList(updated);
+    };
+
+    const saveProject = () => {
+        setProjectList(tempProjectList);
+        setEditingProjectIndex(null);
+    };
+
+    const cancelProject = () => {
+        setTempProjectList([...projectList]);
+        //setEditingProjectIndex(null);
+    };
+
     return (
         <div className="w-full max-w-[1200px] mx-auto px-10 py-10 bg-white rounded shadow-sm font-sans text-gray-800 leading-relaxed overflow-y-auto max-h-[calc(100vh-160px)] border border-gray-300">
             {/* HEADER */}
@@ -884,37 +918,76 @@ export default function Template3Page() {
                             <div className="border-l-4 border-purple-600 pl-4">
                                 <h2 className="text-2xl font-bold mb-1">Project Highlight</h2>
 
-                                {/* Project 1 */}
-                                <div className="mb-4">
-                                    <p className="text-sm font-semibold text-gray-800 mb-1">Market Expansion Strategy
-                                        for Lush Cosmetics</p>
-                                    <p className="text-sm text-gray-600 mb-1">
-                                        Led a 4-member team to design a strategic plan for expanding Lush Cosmetics into
-                                        untapped Canadian markets.
-                                    </p>
-                                    <p className="text-sm text-gray-600 mb-1">
-                                        Conducted market research, competitor analysis, and consumer behavior profiling
-                                        to support recommendations.
-                                    </p>
-                                    <p className="text-sm text-gray-500">Tools: SWOT Analysis, PESTEL, SurveyMonkey,
-                                        Canva</p>
-                                </div>
+                                {projectList.map((project, index) => (
+                                    <div
+                                        key={index}
+                                        className="mb-4 cursor-pointer relative"
+                                        onClick={
+                                            editingProjectIndex === index
+                                                ? undefined
+                                                : () => setEditingProjectIndex(index)
+                                        }
+                                    >
+                                        {editingProjectIndex === index ? (
+                                            <>
+                                                <input
+                                                    type="text"
+                                                    value={tempProjectList[index].title}
+                                                    onChange={(e) =>
+                                                        handleProjectChange(index, "title", e.target.value)
+                                                    }
+                                                    className="text-sm font-semibold border-b border-gray-300 w-full"
+                                                />
+                                                <textarea
+                                                    rows={2}
+                                                    value={tempProjectList[index].description1}
+                                                    onChange={(e) =>
+                                                        handleProjectChange(index, "description1", e.target.value)
+                                                    }
+                                                    className="text-sm text-gray-600 border-b border-gray-300 w-full"
+                                                />
+                                                <textarea
+                                                    rows={2}
+                                                    value={tempProjectList[index].description2}
+                                                    onChange={(e) =>
+                                                        handleProjectChange(index, "description2", e.target.value)
+                                                    }
+                                                    className="text-sm text-gray-600 border-b border-gray-300 w-full"
+                                                />
+                                                <input
+                                                    type="text"
+                                                    value={tempProjectList[index].tools}
+                                                    onChange={(e) =>
+                                                        handleProjectChange(index, "tools", e.target.value)
+                                                    }
+                                                    className="text-sm text-gray-500 border-b border-gray-300 w-full"
+                                                />
 
-                                {/* Project 2 */}
-                                <div>
-                                    <p className="text-sm font-semibold text-gray-800 mb-1">Social Media ROI Analysis
-                                        for a Nonprofit</p>
-                                    <p className="text-sm text-gray-600 mb-1">
-                                        Analyzed engagement metrics and campaign performance across Instagram, LinkedIn,
-                                        and Twitter for a local nonprofit.
-                                    </p>
-                                    <p className="text-sm text-gray-600 mb-1">
-                                        Provided recommendations to improve ROI and optimize content scheduling for a
-                                        15% reach increase.
-                                    </p>
-                                    <p className="text-sm text-gray-500">Tools: Google Analytics, Hootsuite, Excel,
-                                        PowerPoint</p>
-                                </div>
+                                                <div className="mt-4 flex justify-center gap-4">
+                                                    <button
+                                                        onClick={saveProject}
+                                                        className="px-4 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition flex items-center gap-2"
+                                                    >
+                                                        <AiOutlineCheck size={18} /> Save
+                                                    </button>
+                                                    <button
+                                                        onClick={cancelProject}
+                                                        className="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition flex items-center gap-2"
+                                                    >
+                                                        <AiOutlineClose size={18} /> Cancel
+                                                    </button>
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <div>
+                                                <p className="text-sm font-semibold text-gray-800 mb-1">{project.title}</p>
+                                                <p className="text-sm text-gray-600 mb-1">{project.description1}</p>
+                                                <p className="text-sm text-gray-600 mb-1">{project.description2}</p>
+                                                <p className="text-sm text-gray-500">{project.tools}</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
                             </div>
 
                             <div className="border-l-4 border-purple-600 pl-4">
