@@ -241,6 +241,43 @@ export default function Template3Page() {
         //setEditingProjectIndex(null);
     };
 
+    // for certifications section
+    const [certificationList, setCertificationList] = useState([
+        {
+            title: "Google Digital Marketing & E-commerce Certificate",
+            issuer: "Coursera (Offered by Google)",
+            date: "Issued: May 2023"
+        },
+        {
+            title: "Financial Markets",
+            issuer: "Yale University, Coursera",
+            date: "Issued: January 2023"
+        },
+        {
+            title: "Excel Skills for Business: Essentials",
+            issuer: "Macquarie University, Coursera",
+            date: "Issued: August 2022"
+        }
+    ]);
+    const [tempCertificationList, setTempCertificationList] = useState([...certificationList]);
+    const [editingCertIndex, setEditingCertIndex] = useState<number | null>(null);
+
+    const handleCertChange = (index: number, field: string, value: string) => {
+        const updated = [...tempCertificationList];
+        updated[index] = { ...updated[index], [field]: value };
+        setTempCertificationList(updated);
+    };
+
+    const saveCert = () => {
+        setCertificationList(tempCertificationList);
+        setEditingCertIndex(null);
+    };
+
+    const cancelCert = () => {
+        setTempCertificationList([...certificationList]);
+        //setEditingCertIndex(null);
+    };
+
     return (
         <div className="w-full max-w-[1200px] mx-auto px-10 py-10 bg-white rounded shadow-sm font-sans text-gray-800 leading-relaxed overflow-y-auto max-h-[calc(100vh-160px)] border border-gray-300">
             {/* HEADER */}
@@ -993,28 +1030,56 @@ export default function Template3Page() {
                             <div className="border-l-4 border-purple-600 pl-4">
                                 <h2 className="text-2xl font-bold mb-1">Certifications</h2>
 
-                                {/* Certification 1 */}
-                                <div className="mb-4">
-                                    <p className="text-sm font-semibold text-gray-800 mb-1">Google Digital Marketing &
-                                        E-commerce Certificate</p>
-                                    <p className="text-sm text-gray-600">Coursera (Offered by Google) — Issued: May
-                                        2023</p>
-                                </div>
+                                {certificationList.map((cert, index) => (
+                                    <div
+                                        key={index}
+                                        className="mb-4 cursor-pointer"
+                                        onClick={editingCertIndex === index ? undefined : () => setEditingCertIndex(index)}
+                                    >
+                                        {editingCertIndex === index ? (
+                                            <>
+                                                <input
+                                                    type="text"
+                                                    value={tempCertificationList[index].title}
+                                                    onChange={(e) => handleCertChange(index, "title", e.target.value)}
+                                                    className="text-sm font-semibold border-b border-gray-300 w-full mb-1"
+                                                />
+                                                <input
+                                                    type="text"
+                                                    value={tempCertificationList[index].issuer}
+                                                    onChange={(e) => handleCertChange(index, "issuer", e.target.value)}
+                                                    className="text-sm text-gray-600 border-b border-gray-300 w-full mb-1"
+                                                />
+                                                <input
+                                                    type="text"
+                                                    value={tempCertificationList[index].date}
+                                                    onChange={(e) => handleCertChange(index, "date", e.target.value)}
+                                                    className="text-sm text-gray-600 border-b border-gray-300 w-full"
+                                                />
 
-                                {/* Certification 2 */}
-                                <div className="mb-4">
-                                    <p className="text-sm font-semibold text-gray-800 mb-1">Financial Markets</p>
-                                    <p className="text-sm text-gray-600">Yale University, Coursera — Issued: January
-                                        2023</p>
-                                </div>
-
-                                {/* Certification 3 */}
-                                <div>
-                                    <p className="text-sm font-semibold text-gray-800 mb-1">Excel Skills for Business:
-                                        Essentials</p>
-                                    <p className="text-sm text-gray-600">Macquarie University, Coursera — Issued: August
-                                        2022</p>
-                                </div>
+                                                <div className="mt-3 flex justify-center gap-4">
+                                                    <button
+                                                        onClick={saveCert}
+                                                        className="px-4 py-1 bg-green-600 text-white rounded-full hover:bg-green-700 flex items-center gap-2 text-sm"
+                                                    >
+                                                        <AiOutlineCheck size={16} /> Save
+                                                    </button>
+                                                    <button
+                                                        onClick={cancelCert}
+                                                        className="px-4 py-1 bg-red-600 text-white rounded-full hover:bg-red-700 flex items-center gap-2 text-sm"
+                                                    >
+                                                        <AiOutlineClose size={16} /> Cancel
+                                                    </button>
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <div>
+                                                <p className="text-sm font-semibold text-gray-800">{cert.title}</p>
+                                                <p className="text-sm text-gray-600">{cert.issuer} — {cert.date}</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     )}
