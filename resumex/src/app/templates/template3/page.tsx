@@ -301,6 +301,43 @@ export default function Template3Page() {
     ]);
     const [tempLanguages, setTempLanguages] = useState([...languages]);
 
+    // Work Experience
+    const [workList, setWorkList] = useState([
+        {
+            title: "Marketing Intern",
+            company: "Nestlé Canada",
+            location: "Toronto, ON",
+            duration: "May 2023 – Aug 2023",
+            description: "Assisted in launching a new snack product line and analyzed consumer engagement.",
+        },
+        {
+            title: "Sales Associate",
+            company: "Hudson's Bay Company",
+            location: "St. Catharines, ON",
+            duration: "May 2021 – Aug 2022",
+            description: "Provided customer service, maintained merchandising standards, and supported inventory.",
+        }
+    ]);
+
+    const [tempWorkList, setTempWorkList] = useState([...workList]);
+    const [editingWorkIndex, setEditingWorkIndex] = useState<number | null>(null);
+
+    const handleWorkChange = (index: number, field: string, value: string) => {
+        const updated = [...tempWorkList];
+        updated[index] = { ...updated[index], [field]: value };
+        setTempWorkList(updated);
+    };
+
+    const saveWork = () => {
+        setWorkList(tempWorkList);
+        setEditingWorkIndex(null);
+    };
+
+    const cancelWork = () => {
+        setTempWorkList([...workList]);
+        //setEditingWorkIndex(null);
+    };
+
     return (
         <div className="w-full max-w-[1200px] mx-auto px-10 py-10 bg-white rounded shadow-sm font-sans text-gray-800 leading-relaxed overflow-y-auto max-h-[calc(100vh-160px)] border border-gray-300">
             {/* HEADER */}
@@ -1119,7 +1156,7 @@ export default function Template3Page() {
                                             rows={3}
                                             value={tempTechSkills}
                                             onChange={(e) => setTempTechSkills(e.target.value)}
-                                        />
+                                    />
                                         <div className="flex gap-2 mt-2">
                                             <button
                                                 onClick={() => {
@@ -1301,45 +1338,80 @@ export default function Template3Page() {
                         </div>
                     )}
 
-                    {activeTab === "work" && (
-                        <div className="space-y-10">
-                            {/* Recent Role */}
-                            <div className="border-l-4 border-purple-600 pl-4 space-y-2">
-                                <h2 className="text-2xl font-bold">Recent Role</h2>
-                                <p className="text-sm font-semibold text-gray-800">Marketing Intern</p>
-                                <p className="text-sm text-gray-600">Nestlé Canada</p>
-                                <p className="text-sm text-gray-600">May 2023 – August 2023 | Toronto, ON</p>
-                                <p className="text-sm text-gray-600">Assisted in launching a new snack product line
-                                    through campaign planning and consumer engagement analysis.</p>
-                                <p className="text-sm text-gray-600">Collaborated with cross-functional teams to align
-                                    digital and in-store marketing efforts.</p>
-                            </div>
+                    <div className="space-y-10">
+                        <div className="border-l-4 border-purple-600 pl-4">
+                            <h2 className="text-2xl font-bold mb-2">Work Experience</h2>
 
-                            {/* Previous Experience */}
-                            <div className="border-l-4 border-purple-600 pl-4 space-y-2">
-                                <h2 className="text-2xl font-bold">Previous Experience</h2>
-                                <p className="text-sm font-semibold text-gray-800">Sales Associate</p>
-                                <p className="text-sm text-gray-600">Hudson's Bay Company</p>
-                                <p className="text-sm text-gray-600">May 2021 – August 2022 | St. Catharines, ON</p>
-                                <p className="text-sm text-gray-600">Provided customer service, maintained merchandising
-                                    standards, and supported inventory tracking.</p>
-                                <p className="text-sm text-gray-600">Frequently praised for communication and
-                                    interpersonal skills with a diverse customer base.</p>
-                            </div>
+                            {tempWorkList.map((job, index) => (
+                                <div key={index} className="mb-6">
+                                    {editingWorkIndex === index ? (
+                                        <>
+                                            <input
+                                                type="text"
+                                                value={tempWorkList[index].title}
+                                                onChange={(e) => handleWorkChange(index, "title", e.target.value)}
+                                                className="text-sm font-semibold border-b border-gray-300 w-full"
+                                            />
+                                            <input
+                                                type="text"
+                                                value={tempWorkList[index].company}
+                                                onChange={(e) => handleWorkChange(index, "company", e.target.value)}
+                                                className="text-sm text-gray-600 border-b border-gray-300 w-full"
+                                            />
+                                            <input
+                                                type="text"
+                                                value={tempWorkList[index].location}
+                                                onChange={(e) => handleWorkChange(index, "location", e.target.value)}
+                                                className="text-sm text-gray-600 border-b border-gray-300 w-full"
+                                            />
+                                            <input
+                                                type="text"
+                                                value={tempWorkList[index].duration}
+                                                onChange={(e) => handleWorkChange(index, "duration", e.target.value)}
+                                                className="text-sm text-gray-600 border-b border-gray-300 w-full"
+                                            />
+                                            <textarea
+                                                rows={2}
+                                                value={tempWorkList[index].description}
+                                                onChange={(e) => handleWorkChange(index, "description", e.target.value)}
+                                                className="text-sm text-gray-600 border-b border-gray-300 w-full"
+                                            />
 
-                            {/* Part-Time Marketing Assistant */}
-                            <div className="border-l-4 border-purple-600 pl-4 space-y-2">
-                                <h2 className="text-2xl font-bold">Other Experience</h2>
-                                <p className="text-sm font-semibold text-gray-800">Part-Time Marketing Assistant</p>
-                                <p className="text-sm text-gray-600">Brock University – Goodman School of Business</p>
-                                <p className="text-sm text-gray-600">January 2020 – April 2021 | St. Catharines, ON</p>
-                                <p className="text-sm text-gray-600">Supported the marketing team in promoting academic events
-                                    and workshops through social media and email campaigns.</p>
-                                <p className="text-sm text-gray-600">Designed student-facing promotional material and assisted
-                                    with data entry and survey analysis.</p>
-                            </div>
+                                            {/* Save + Cancel Buttons */}
+                                            <div className="mt-4 flex justify-center gap-4">
+                                                <button
+                                                    onClick={saveWork}
+                                                    className="px-4 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition flex items-center gap-2"
+                                                >
+                                                    <AiOutlineCheck size={18} /> Save
+                                                </button>
+                                                <button
+                                                    onClick={cancelWork}
+                                                    className="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition flex items-center gap-2"
+                                                >
+                                                    <AiOutlineClose size={18} /> Cancel
+                                                </button>
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <div
+                                            className="cursor-pointer"
+                                            onClick={() => {
+                                                if (editingWorkIndex === null) {
+                                                    setEditingWorkIndex(index);
+                                                }
+                                            }}
+                                        >
+                                            <p className="text-sm font-semibold text-gray-800">{job.title}</p>
+                                            <p className="text-sm text-gray-600">{job.company}</p>
+                                            <p className="text-sm text-gray-600">{job.duration} | {job.location}</p>
+                                            <p className="text-sm text-gray-600">{job.description}</p>
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
                         </div>
-                    )}
+                    </div>
 
                     {activeTab === "awards" && (
                         <div className="space-y-10">
