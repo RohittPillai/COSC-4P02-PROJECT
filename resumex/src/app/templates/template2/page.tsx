@@ -2,6 +2,12 @@ import React from "react";
 import { useState, useEffect, useRef } from "react";
 import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
 
+function getUserKey(key: string) {
+  const userData = localStorage.getItem("userData");
+  const userId = userData ? JSON.parse(userData)?.name : "guest";
+  return `${userId}_template2_${key}`;
+}
+
 export default function Template2Page() {
 
   //for contact section
@@ -15,10 +21,11 @@ export default function Template2Page() {
   const [tempContact, setTempContact] = useState(contactData);
 
   useEffect(() => {
-    const saved = localStorage.getItem("template2Contact");
+    const saved = localStorage.getItem(getUserKey("contact"));
     if (saved) {
-      setContactData(JSON.parse(saved));
-      setTempContact(JSON.parse(saved));
+      const parsed = JSON.parse(saved);
+      setContactData(parsed);
+      setTempContact(parsed);
     }
   }, []);
 
@@ -39,10 +46,11 @@ export default function Template2Page() {
   const [tempEducation, setTempEducation] = useState(educationData);
 
   useEffect(() => {
-    const savedEducation = localStorage.getItem("template2Education");
+    const savedEducation = localStorage.getItem(getUserKey("education"));
     if (savedEducation) {
-      setEducationData(JSON.parse(savedEducation));
-      setTempEducation(JSON.parse(savedEducation));
+      const parsed = JSON.parse(savedEducation);
+      setEducationData(parsed);
+      setTempEducation(parsed);
     }
   }, []);
 
@@ -59,10 +67,11 @@ export default function Template2Page() {
   const [tempSkills, setTempSkills] = useState(skillsData);
 
   useEffect(() => {
-    const savedSkills = localStorage.getItem("template2Skills");
+    const savedSkills = localStorage.getItem(getUserKey("skills"));
     if (savedSkills) {
-      setSkillsData(JSON.parse(savedSkills));
-      setTempSkills(JSON.parse(savedSkills));
+      const parsed = JSON.parse(savedSkills);
+      setSkillsData(parsed);
+      setTempSkills(parsed);
     }
   }, []);
 
@@ -76,10 +85,11 @@ export default function Template2Page() {
   const [tempLanguages, setTempLanguages] = useState(languagesData);
 
   useEffect(() => {
-    const savedLanguages = localStorage.getItem("template2Languages");
+    const savedLanguages = localStorage.getItem(getUserKey("languages"));
     if (savedLanguages) {
-      setLanguagesData(JSON.parse(savedLanguages));
-      setTempLanguages(JSON.parse(savedLanguages));
+      const parsed = JSON.parse(savedLanguages);
+      setLanguagesData(parsed);
+      setTempLanguages(parsed);
     }
   }, []);
 
@@ -92,10 +102,11 @@ export default function Template2Page() {
   const [tempHeader, setTempHeader] = useState(headerData);
 
   useEffect(() => {
-    const savedHeader = localStorage.getItem("template2Header");
+    const savedHeader = localStorage.getItem(getUserKey("header"));
     if (savedHeader) {
-      setHeaderData(JSON.parse(savedHeader));
-      setTempHeader(JSON.parse(savedHeader));
+      const parsed = JSON.parse(savedHeader);
+      setHeaderData(parsed);
+      setTempHeader(parsed);
     }
   }, []);
 
@@ -107,10 +118,11 @@ export default function Template2Page() {
   const [tempProfile, setTempProfile] = useState(profileData);
 
   useEffect(() => {
-    const savedProfile = localStorage.getItem("template2Profile");
+    const savedProfile = localStorage.getItem(getUserKey("profile"));
     if (savedProfile) {
-      setProfileData(JSON.parse(savedProfile));
-      setTempProfile(JSON.parse(savedProfile));
+      const parsed = JSON.parse(savedProfile);
+      setProfileData(parsed);
+      setTempProfile(parsed);
     }
   }, []);
 
@@ -150,10 +162,11 @@ export default function Template2Page() {
   const [tempExperience, setTempExperience] = useState(experienceData);
 
   useEffect(() => {
-    const savedExp = localStorage.getItem("template2Experience");
+    const savedExp = localStorage.getItem(getUserKey("experience"));
     if (savedExp) {
-      setExperienceData(JSON.parse(savedExp));
-      setTempExperience(JSON.parse(savedExp));
+      const parsed = JSON.parse(savedExp);
+      setExperienceData(parsed);
+      setTempExperience(parsed);
     }
   }, []);
 
@@ -174,10 +187,11 @@ export default function Template2Page() {
   const [tempReference, setTempReference] = useState(referenceData);
 
   useEffect(() => {
-    const savedRef = localStorage.getItem("template2Reference");
+    const savedRef = localStorage.getItem(getUserKey("reference"));
     if (savedRef) {
-      setReferenceData(JSON.parse(savedRef));
-      setTempReference(JSON.parse(savedRef));
+      const parsed = JSON.parse(savedRef);
+      setReferenceData(parsed);
+      setTempReference(parsed);
     }
   }, []);
 
@@ -233,7 +247,7 @@ export default function Template2Page() {
                       <button
                           onClick={() => {
                             setContactData(tempContact);
-                            localStorage.setItem("template2Contact", JSON.stringify(tempContact));
+                            localStorage.setItem(getUserKey("contact"), JSON.stringify(tempContact));
                             setIsEditingContact(false);
                           }}
                           className="px-3 py-1 bg-green-600 text-white rounded-full text-sm flex items-center gap-1 whitespace-nowrap"
@@ -307,7 +321,7 @@ export default function Template2Page() {
                       <button
                           onClick={() => {
                             setEducationData(tempEducation);
-                            localStorage.setItem("template2Education", JSON.stringify(tempEducation));
+                            localStorage.setItem(getUserKey("education"), JSON.stringify(tempEducation));
                             setIsEditingEducation(false);
                           }}
                           className="px-3 py-1 bg-green-600 text-white rounded-full text-sm flex items-center gap-1 whitespace-nowrap"
@@ -369,7 +383,7 @@ export default function Template2Page() {
                       <button
                           onClick={() => {
                             setSkillsData(tempSkills);
-                            localStorage.setItem("template2Skills", JSON.stringify(tempSkills));
+                            localStorage.setItem(getUserKey("skills"), JSON.stringify(tempSkills));
                             setIsEditingSkills(false);
                           }}
                           className="px-3 py-1 bg-green-600 text-white rounded-full text-sm flex items-center gap-1 whitespace-nowrap"
@@ -427,7 +441,7 @@ export default function Template2Page() {
                       <button
                           onClick={() => {
                             setLanguagesData(tempLanguages);
-                            localStorage.setItem("template2Languages", JSON.stringify(tempLanguages));
+                            localStorage.setItem(getUserKey("languages"), JSON.stringify(tempLanguages));
                             setIsEditingLanguages(false);
                           }}
                           className="px-3 py-1 bg-green-600 text-white rounded-full text-sm flex items-center gap-1 whitespace-nowrap"
@@ -484,7 +498,7 @@ export default function Template2Page() {
                       <button
                           onClick={() => {
                             setHeaderData(tempHeader);
-                            localStorage.setItem("template2Header", JSON.stringify(tempHeader));
+                            localStorage.setItem(getUserKey("header"), JSON.stringify(tempHeader));
                             setIsEditingHeader(false);
                           }}
                           className="px-3 py-1 bg-green-600 text-white rounded-full text-sm flex items-center gap-1 whitespace-nowrap"
@@ -536,7 +550,7 @@ export default function Template2Page() {
                       <button
                           onClick={() => {
                             setProfileData(tempProfile);
-                            localStorage.setItem("template2Profile", JSON.stringify(tempProfile));
+                            localStorage.setItem(getUserKey("profile"), JSON.stringify(tempProfile));
                             setIsEditingProfile(false);
                           }}
                           className="px-3 py-1 bg-green-600 text-white rounded-full text-sm flex items-center gap-1"
@@ -625,7 +639,7 @@ export default function Template2Page() {
                       <button
                           onClick={() => {
                             setExperienceData(tempExperience);
-                            localStorage.setItem("template2Experience", JSON.stringify(tempExperience));
+                            localStorage.setItem(getUserKey("experience"), JSON.stringify(tempExperience));
                             setIsEditingExperience(false);
                           }}
                           className="px-3 py-1 bg-green-600 text-white rounded-full text-sm flex items-center gap-1"
@@ -706,7 +720,7 @@ export default function Template2Page() {
                       <button
                           onClick={() => {
                             setReferenceData(tempReference);
-                            localStorage.setItem("template2Reference", JSON.stringify(tempReference));
+                            localStorage.setItem(getUserKey("reference"), JSON.stringify(tempReference));
                             setIsEditingReference(false);
                           }}
                           className="px-3 py-1 bg-green-600 text-white rounded-full text-sm flex items-center gap-1"
