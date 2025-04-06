@@ -1,6 +1,12 @@
 import React, {useState, useEffect} from "react";
 import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
 
+function getUserKey(key: string) {
+    const userData = localStorage.getItem("userData");
+    const userId = userData ? JSON.parse(userData)?.name : "guest";
+    return `${userId}_template3_${key}`;
+}
+
 export default function Template3Page() {
     const [activeTab, setActiveTab] = useState("profile");
     const tabs = ["profile", "education & projects", "skills", "work", "awards"];
@@ -15,7 +21,7 @@ export default function Template3Page() {
 
     useEffect(() => {
         try {
-            const saved = localStorage.getItem("template3Header");
+            const saved = localStorage.getItem(getUserKey("Header"));
             if (saved) {
                 const parsed = JSON.parse(saved);
                 if (parsed?.name && parsed?.title) {
@@ -34,7 +40,7 @@ export default function Template3Page() {
     const [tempHelloText, setTempHelloText] = useState(helloText);
 
     useEffect(() => {
-        const savedHello = localStorage.getItem("template3Hello");
+        const savedHello = localStorage.getItem(getUserKey("Hello"));
         if (savedHello) {
             setHelloText(savedHello);
             setTempHelloText(savedHello);
@@ -53,7 +59,7 @@ export default function Template3Page() {
     const [tempContactInfo, setTempContactInfo] = useState(contactInfo);
 
     useEffect(() => {
-        const savedContact = localStorage.getItem("template3Contact");
+        const savedContact = localStorage.getItem(getUserKey("Contact"));
         if (savedContact) {
             const parsed = JSON.parse(savedContact);
             setContactInfo(parsed);
@@ -72,7 +78,7 @@ export default function Template3Page() {
     const [tempSocialLinks, setTempSocialLinks] = useState({ ...socialLinks });
 
     useEffect(() => {
-        const saved = localStorage.getItem("template3Social");
+        const saved = localStorage.getItem(getUserKey("Social"));
         if (saved) {
             const parsed = JSON.parse(saved);
             setSocialLinks(parsed);
@@ -88,8 +94,8 @@ export default function Template3Page() {
     const [tempProfileAuthor, setTempProfileAuthor] = useState(profileAuthor);
 
     useEffect(() => {
-        const savedProfile = localStorage.getItem("template3Profile");
-        const savedProfileAuthor = localStorage.getItem("template3ProfileAuthor");
+        const savedProfile = localStorage.getItem(getUserKey("Profile"));
+        const savedProfileAuthor = localStorage.getItem(getUserKey("ProfileAuthor"));
         if (savedProfile) {
             setProfileText(savedProfile);
             setTempProfileText(savedProfile);
@@ -106,7 +112,7 @@ export default function Template3Page() {
     const [isEditingAboutMe, setIsEditingAboutMe] = useState(false);
 
     useEffect(() => {
-        const savedAboutMe = localStorage.getItem("template3AboutMe");
+        const savedAboutMe = localStorage.getItem(getUserKey("AboutMe"));
         if (savedAboutMe) {
             setAboutMeText(savedAboutMe);
             setTempAboutMeText(savedAboutMe);
@@ -119,7 +125,7 @@ export default function Template3Page() {
     const [isEditingPhilosophy, setIsEditingPhilosophy] = useState(false);
 
     useEffect(() => {
-        const savedPhilosophy = localStorage.getItem("template3Philosophy");
+        const savedPhilosophy = localStorage.getItem(getUserKey("Philosophy"));
         if (savedPhilosophy) {
             setPhilosophyText(savedPhilosophy);
             setTempPhilosophyText(savedPhilosophy);
@@ -132,7 +138,7 @@ export default function Template3Page() {
     const [tempTraits, setTempTraits] = useState([...philosophyTraits]);
 
     useEffect(() => {
-        const saved = localStorage.getItem("template3PhilosophyTraits");
+        const saved = localStorage.getItem(getUserKey("PhilosophyTraits"));
         if (saved) {
             const parsed = JSON.parse(saved);
             setPhilosophyTraits(parsed);
@@ -154,7 +160,7 @@ export default function Template3Page() {
     const [tempInterestsList, setTempInterestsList] = useState([...interestsList]);
 
     useEffect(() => {
-        const saved = localStorage.getItem("template3Interests");
+        const saved = localStorage.getItem(getUserKey("Interests"));
         if (saved) {
             const parsed = JSON.parse(saved);
             setInterestsList(parsed);
@@ -166,7 +172,7 @@ export default function Template3Page() {
     const [tempInterestIntro, setTempInterestIntro] = useState(interestIntro);
 
     useEffect(() => {
-        const saved = localStorage.getItem("template3InterestIntro");
+        const saved = localStorage.getItem(getUserKey("InterestIntro"));
         if (saved) {
             setInterestIntro(saved);
             setTempInterestIntro(saved);
@@ -200,12 +206,22 @@ export default function Template3Page() {
     const saveEducation = () => {
         setEducationList(tempEducationList);
         setEditingEducationIndex(null);
+        localStorage.setItem(getUserKey("Education"), JSON.stringify(tempEducationList));
     };
 
     const cancelEducation = () => {
         setTempEducationList([...educationList]);
         //setEditingEducationIndex(null);
     };
+
+    useEffect(() => {
+        const saved = localStorage.getItem(getUserKey("Education"));
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            setEducationList(parsed);
+            setTempEducationList(parsed);
+        }
+    }, []);
 
     // for project highlight section
     const [projectList, setProjectList] = useState([
@@ -234,12 +250,22 @@ export default function Template3Page() {
     const saveProject = () => {
         setProjectList(tempProjectList);
         setEditingProjectIndex(null);
+        localStorage.setItem(getUserKey("Project"), JSON.stringify(tempProjectList));
     };
 
     const cancelProject = () => {
         setTempProjectList([...projectList]);
         //setEditingProjectIndex(null);
     };
+
+    useEffect(() => {
+        const saved = localStorage.getItem(getUserKey("Project"));
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            setProjectList(parsed);
+            setTempProjectList(parsed);
+        }
+    }, []);
 
     // for certifications section
     const [certificationList, setCertificationList] = useState([
@@ -271,12 +297,22 @@ export default function Template3Page() {
     const saveCert = () => {
         setCertificationList(tempCertificationList);
         setEditingCertIndex(null);
+        localStorage.setItem(getUserKey("Certifications"), JSON.stringify(tempCertificationList));
     };
 
     const cancelCert = () => {
         setTempCertificationList([...certificationList]);
         //setEditingCertIndex(null);
     };
+
+    useEffect(() => {
+        const saved = localStorage.getItem(getUserKey("Certifications"));
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            setCertificationList(parsed);
+            setTempCertificationList(parsed);
+        }
+    }, []);
 
     //for skills section
     const [isEditingTechSkills, setIsEditingTechSkills] = useState(false);
@@ -300,6 +336,34 @@ export default function Template3Page() {
         "Hindi — Native"
     ]);
     const [tempLanguages, setTempLanguages] = useState([...languages]);
+
+    // Technical Skills
+    useEffect(() => {
+        const saved = localStorage.getItem(getUserKey("TechSkills"));
+        if (saved) {
+            setTechSkills(saved);
+            setTempTechSkills(saved);
+        }
+    }, []);
+
+    // Soft Skills
+    useEffect(() => {
+        const saved = localStorage.getItem(getUserKey("SoftSkills"));
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            setSoftSkills(parsed);
+            setTempSoftSkills(parsed);
+        }
+    }, []);
+
+    useEffect(() => {
+        const saved = localStorage.getItem(getUserKey("Languages"));
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            setLanguages(parsed);
+            setTempLanguages(parsed);
+        }
+    }, []);
 
     // Work Experience
     const [workList, setWorkList] = useState([
@@ -330,6 +394,7 @@ export default function Template3Page() {
 
     const saveWork = () => {
         setWorkList(tempWorkList);
+        localStorage.setItem(getUserKey("Work"), JSON.stringify(tempWorkList));
         setEditingWorkIndex(null);
     };
 
@@ -337,6 +402,15 @@ export default function Template3Page() {
         setTempWorkList([...workList]);
         //setEditingWorkIndex(null);
     };
+
+    useEffect(() => {
+        const saved = localStorage.getItem(getUserKey("Work"));
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            setWorkList(parsed);
+            setTempWorkList(parsed);
+        }
+    }, []);
 
     // for awards section
     const [awardList, setAwardList] = useState([
@@ -377,6 +451,7 @@ export default function Template3Page() {
 
     const saveAward = () => {
         setAwardList(tempAwardList);
+        localStorage.setItem(getUserKey("Awards"), JSON.stringify(tempAwardList));
         setEditingAwardIndex(null);
     };
 
@@ -384,6 +459,15 @@ export default function Template3Page() {
         setTempAwardList([...awardList]);
         //setEditingAwardIndex(null);
     };
+
+    useEffect(() => {
+        const saved = localStorage.getItem(getUserKey("Awards"));
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            setAwardList(parsed);
+            setTempAwardList(parsed);
+        }
+    }, []);
 
     return (
         <div className="w-full max-w-[1200px] mx-auto px-10 py-10 bg-white rounded shadow-sm font-sans text-gray-800 leading-relaxed overflow-y-auto max-h-[calc(100vh-160px)] border border-gray-300">
@@ -411,7 +495,7 @@ export default function Template3Page() {
                             <button
                                 onClick={() => {
                                     setHeaderData(tempHeader);
-                                    localStorage.setItem("template3Header", JSON.stringify(tempHeader));
+                                    localStorage.setItem(getUserKey("Header"), JSON.stringify(tempHeader));
                                     setIsEditingHeader(false);
                                 }}
                                 className="bg-green-600 text-white px-4 py-1 rounded-full text-sm flex items-center gap-1"
@@ -494,7 +578,7 @@ export default function Template3Page() {
                                     <button
                                         onClick={() => {
                                             setHelloText(tempHelloText);
-                                            localStorage.setItem("template3Hello", tempHelloText);
+                                            localStorage.setItem(getUserKey("Hello"), tempHelloText);
                                             setIsEditingHello(false);
                                         }}
                                         className="bg-green-600 text-white px-4 py-1 rounded-full text-sm flex items-center gap-1"
@@ -565,7 +649,7 @@ export default function Template3Page() {
                                     <button
                                         onClick={() => {
                                             setContactInfo({ ...tempContactInfo }); // ensure fresh reference
-                                            localStorage.setItem("template3Contact", JSON.stringify(tempContactInfo));
+                                            localStorage.setItem(getUserKey("Contact"), JSON.stringify(tempContactInfo));
                                             setIsEditingContact(false);
                                             console.log("Updated email to:", tempContactInfo.email);
                                         }}
@@ -669,7 +753,7 @@ export default function Template3Page() {
                                         onClick={() => {
                                             const updated = { ...socialLinks, [editingPlatform]: tempSocialLinks[editingPlatform] };
                                             setSocialLinks(updated);
-                                            localStorage.setItem("template3Social", JSON.stringify(updated));
+                                            localStorage.setItem(getUserKey("Social"), JSON.stringify(updated));
                                             setShowSocialModal(false);
                                             setEditingPlatform("");
                                         }}
@@ -682,7 +766,7 @@ export default function Template3Page() {
                                             const clearedLinks = { ...socialLinks, [editingPlatform]: "" };
                                             setSocialLinks(clearedLinks);
                                             setTempSocialLinks(clearedLinks);
-                                            localStorage.setItem("template3Social", JSON.stringify(clearedLinks));
+                                            localStorage.setItem(getUserKey("Social"), JSON.stringify(clearedLinks));
                                             setShowSocialModal(false);
                                             setEditingPlatform("");
                                         }}
@@ -722,8 +806,8 @@ export default function Template3Page() {
                                                 onClick={() => {
                                                     setProfileText(tempProfileText);
                                                     setProfileAuthor(tempProfileAuthor);
-                                                    localStorage.setItem("template3Profile", tempProfileText);
-                                                    localStorage.setItem("template3ProfileAuthor", tempProfileAuthor);
+                                                    localStorage.setItem(getUserKey("Profile"), tempProfileText);
+                                                    localStorage.setItem(getUserKey("ProfileAuthor"), tempProfileAuthor);
                                                     setIsEditingProfile(false);
                                                 }}
                                                 className="bg-green-600 text-white px-4 py-1 rounded-full text-sm flex items-center gap-1"
@@ -771,7 +855,7 @@ export default function Template3Page() {
                                             <button
                                                 onClick={() => {
                                                     setAboutMeText(tempAboutMeText);
-                                                    localStorage.setItem("template3AboutMe", tempAboutMeText);
+                                                    localStorage.setItem(getUserKey("AboutMe"), tempAboutMeText);
                                                     setIsEditingAboutMe(false);
                                                 }}
                                                 className="bg-green-600 text-white px-4 py-1 rounded-full text-sm flex items-center gap-1"
@@ -852,8 +936,8 @@ export default function Template3Page() {
                                                 onClick={() => {
                                                     setPhilosophyText(tempPhilosophyText);
                                                     setPhilosophyTraits(tempTraits);
-                                                    localStorage.setItem("template3Philosophy", tempPhilosophyText);
-                                                    localStorage.setItem("template3PhilosophyTraits", JSON.stringify(tempTraits));
+                                                    localStorage.setItem(getUserKey("Philosophy"), tempPhilosophyText);
+                                                    localStorage.setItem(getUserKey("PhilosophyTraits"), JSON.stringify(tempTraits));
                                                     setIsEditingPhilosophy(false);
                                                 }}
                                                 className="bg-green-600 text-white px-4 py-1 rounded-full text-sm flex items-center gap-1"
@@ -941,8 +1025,8 @@ export default function Template3Page() {
                                                 onClick={() => {
                                                     setInterestsList(tempInterestsList);
                                                     setInterestIntro(tempInterestIntro);
-                                                    localStorage.setItem("template3Interests", JSON.stringify(tempInterestsList));
-                                                    localStorage.setItem("template3InterestIntro", tempInterestIntro);
+                                                    localStorage.setItem(getUserKey("Interests"), JSON.stringify(tempInterestsList));
+                                                    localStorage.setItem(getUserKey("InterestIntro"), tempInterestIntro);
                                                     setIsEditingInterests(false);
                                                 }}
                                                 className="bg-green-600 text-white px-4 py-1 rounded-full text-sm flex items-center gap-1"
@@ -1208,7 +1292,7 @@ export default function Template3Page() {
                                             <button
                                                 onClick={() => {
                                                     setTechSkills(tempTechSkills);
-                                                    localStorage.setItem("template3TechSkills", tempTechSkills);
+                                                    localStorage.setItem(getUserKey("TechSkills"), tempTechSkills);
                                                     setIsEditingTechSkills(false);
                                                 }}
                                                 className="bg-green-600 text-white px-4 py-1 rounded-full text-sm flex items-center gap-1"
@@ -1278,7 +1362,7 @@ export default function Template3Page() {
                                             <button
                                                 onClick={() => {
                                                     setSoftSkills(tempSoftSkills);
-                                                    localStorage.setItem("template3SoftSkills", JSON.stringify(tempSoftSkills));
+                                                    localStorage.setItem(getUserKey("SoftSkills"), JSON.stringify(tempSoftSkills));
                                                     setIsEditingSoftSkills(false);
                                                 }}
                                                 className="bg-green-600 text-white px-4 py-1 rounded-full text-sm flex items-center gap-1"
@@ -1350,7 +1434,7 @@ export default function Template3Page() {
                                             <button
                                                 onClick={() => {
                                                     setLanguages(tempLanguages);
-                                                    localStorage.setItem("template3Languages", JSON.stringify(tempLanguages));
+                                                    localStorage.setItem(getUserKey("Languages"), JSON.stringify(tempLanguages));
                                                     setIsEditingLanguages(false);
                                                 }}
                                                 className="bg-green-600 text-white px-4 py-1 rounded-full text-sm flex items-center gap-1"
