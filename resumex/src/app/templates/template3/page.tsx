@@ -278,6 +278,29 @@ export default function Template3Page() {
         //setEditingCertIndex(null);
     };
 
+    //for skills section
+    const [isEditingTechSkills, setIsEditingTechSkills] = useState(false);
+    const [techSkills, setTechSkills] = useState("Microsoft Excel (VLOOKUP, PivotTables, Macros), PowerPoint, Google Analytics, Hootsuite, Tableau, Power BI, SurveyMonkey, Qualtrics");
+    const [tempTechSkills, setTempTechSkills] = useState(techSkills);
+
+    const [isEditingSoftSkills, setIsEditingSoftSkills] = useState(false);
+    const [softSkills, setSoftSkills] = useState([
+        "Strategic Thinking",
+        "Team Collaboration",
+        "Public Speaking & Presentation",
+        "Problem Solving",
+        "Adaptability & Time Management"
+    ]);
+    const [tempSoftSkills, setTempSoftSkills] = useState([...softSkills]);
+
+    const [isEditingLanguages, setIsEditingLanguages] = useState(false);
+    const [languages, setLanguages] = useState([
+        "English — Full Professional Proficiency",
+        "French — Intermediate",
+        "Hindi — Native"
+    ]);
+    const [tempLanguages, setTempLanguages] = useState([...languages]);
+
     return (
         <div className="w-full max-w-[1200px] mx-auto px-10 py-10 bg-white rounded shadow-sm font-sans text-gray-800 leading-relaxed overflow-y-auto max-h-[calc(100vh-160px)] border border-gray-300">
             {/* HEADER */}
@@ -1086,34 +1109,195 @@ export default function Template3Page() {
 
                     {activeTab === "skills" && (
                         <div className="space-y-10">
+                            {/* TECHNICAL SKILLS */}
                             <div className="border-l-4 border-purple-600 pl-4">
                                 <h2 className="text-2xl font-bold mb-1">Technical Skills</h2>
-                                <p className="text-sm text-gray-600">
-                                    Microsoft Excel (VLOOKUP, PivotTables, Macros), PowerPoint, Google Analytics,
-                                    Hootsuite, Tableau, Power BI, SurveyMonkey, Qualtrics
-                                </p>
+                                {isEditingTechSkills ? (
+                                    <>
+                                        <textarea
+                                            className="w-full border px-3 py-2 rounded text-sm"
+                                            rows={3}
+                                            value={tempTechSkills}
+                                            onChange={(e) => setTempTechSkills(e.target.value)}
+                                        />
+                                        <div className="flex gap-2 mt-2">
+                                            <button
+                                                onClick={() => {
+                                                    setTechSkills(tempTechSkills);
+                                                    localStorage.setItem("template3TechSkills", tempTechSkills);
+                                                    setIsEditingTechSkills(false);
+                                                }}
+                                                className="bg-green-600 text-white px-4 py-1 rounded-full text-sm flex items-center gap-1"
+                                            >
+                                                <AiOutlineCheck size={16} /> Save
+                                            </button>
+                                            <button
+                                                onClick={() => {
+                                                    setTempTechSkills(techSkills);
+                                                    setIsEditingTechSkills(true);
+                                                }}
+                                                className="bg-red-600 text-white px-4 py-1 rounded-full text-sm flex items-center gap-1"
+                                            >
+                                                <AiOutlineClose size={16} /> Cancel
+                                            </button>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <p
+                                        className="text-sm text-gray-600 cursor-pointer"
+                                        onClick={() => {
+                                            setTempTechSkills(techSkills);
+                                            setIsEditingTechSkills(true);
+                                        }}
+                                    >
+                                        {techSkills}
+                                    </p>
+                                )}
                             </div>
 
+                            {/* SOFT SKILLS */}
                             <div className="border-l-4 border-purple-600 pl-4">
                                 <h2 className="text-2xl font-bold mb-1">Soft Skills</h2>
-                                <ul className="list-disc list-inside text-sm text-gray-600">
-                                    <li>Strategic Thinking</li>
-                                    <li>Team Collaboration</li>
-                                    <li>Public Speaking & Presentation</li>
-                                    <li>Problem Solving</li>
-                                    <li>Adaptability & Time Management</li>
-                                </ul>
+                                {isEditingSoftSkills ? (
+                                    <>
+                                        {tempSoftSkills.map((skill, index) => (
+                                            <div key={index} className="flex gap-2 items-center mb-1">
+                                                <input
+                                                    className="w-full border px-2 py-1 rounded text-sm"
+                                                    value={skill}
+                                                    onChange={(e) => {
+                                                        const updated = [...tempSoftSkills];
+                                                        updated[index] = e.target.value;
+                                                        setTempSoftSkills(updated);
+                                                    }}
+                                                />
+                                                <button
+                                                    onClick={() => {
+                                                        const updated = [...tempSoftSkills];
+                                                        updated.splice(index, 1);
+                                                        setTempSoftSkills(updated);
+                                                    }}
+                                                    className="text-red-600 hover:text-red-800 text-sm"
+                                                    title="Remove"
+                                                >
+                                                    ✕
+                                                </button>
+                                            </div>
+                                        ))}
+                                        <button
+                                            onClick={() => setTempSoftSkills([...tempSoftSkills, ""])}
+                                            className="text-blue-600 text-sm underline mt-1"
+                                        >
+                                            + Add Skill
+                                        </button>
+                                        <div className="flex gap-2 mt-2">
+                                            <button
+                                                onClick={() => {
+                                                    setSoftSkills(tempSoftSkills);
+                                                    localStorage.setItem("template3SoftSkills", JSON.stringify(tempSoftSkills));
+                                                    setIsEditingSoftSkills(false);
+                                                }}
+                                                className="bg-green-600 text-white px-4 py-1 rounded-full text-sm flex items-center gap-1"
+                                            >
+                                                <AiOutlineCheck size={16} /> Save
+                                            </button>
+                                            <button
+                                                onClick={() => {
+                                                    setTempSoftSkills([...softSkills]);
+                                                    setIsEditingSoftSkills(true);
+                                                }}
+                                                className="bg-red-600 text-white px-4 py-1 rounded-full text-sm flex items-center gap-1"
+                                            >
+                                                <AiOutlineClose size={16} /> Cancel
+                                            </button>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <ul
+                                        className="list-disc list-inside text-sm text-gray-600 cursor-pointer"
+                                        onClick={() => {
+                                            setTempSoftSkills([...softSkills]);
+                                            setIsEditingSoftSkills(true);
+                                        }}
+                                    >
+                                        {softSkills.map((skill, index) => (
+                                            <li key={index}>{skill}</li>
+                                        ))}
+                                    </ul>
+                                )}
                             </div>
 
+                            {/* LANGUAGES */}
                             <div className="border-l-4 border-purple-600 pl-4">
                                 <h2 className="text-2xl font-bold mb-1">Languages</h2>
-                                <ul className="list-disc list-inside text-sm text-gray-600">
-                                    <li>English — Full Professional Proficiency</li>
-                                    <li>French — Intermediate</li>
-                                    <li>Hindi — Native</li>
-                                </ul>
+                                {isEditingLanguages ? (
+                                    <>
+                                        {tempLanguages.map((lang, index) => (
+                                            <div key={index} className="flex gap-2 items-center mb-1">
+                                                <input
+                                                    className="w-full border px-2 py-1 rounded text-sm"
+                                                    value={lang}
+                                                    onChange={(e) => {
+                                                        const updated = [...tempLanguages];
+                                                        updated[index] = e.target.value;
+                                                        setTempLanguages(updated);
+                                                    }}
+                                                />
+                                                <button
+                                                    onClick={() => {
+                                                        const updated = [...tempLanguages];
+                                                        updated.splice(index, 1);
+                                                        setTempLanguages(updated);
+                                                    }}
+                                                    className="text-red-600 hover:text-red-800 text-sm"
+                                                    title="Remove"
+                                                >
+                                                    ✕
+                                                </button>
+                                            </div>
+                                        ))}
+                                        <button
+                                            onClick={() => setTempLanguages([...tempLanguages, ""])}
+                                            className="text-blue-600 text-sm underline mt-1"
+                                        >
+                                            + Add Language
+                                        </button>
+                                        <div className="flex gap-2 mt-2">
+                                            <button
+                                                onClick={() => {
+                                                    setLanguages(tempLanguages);
+                                                    localStorage.setItem("template3Languages", JSON.stringify(tempLanguages));
+                                                    setIsEditingLanguages(false);
+                                                }}
+                                                className="bg-green-600 text-white px-4 py-1 rounded-full text-sm flex items-center gap-1"
+                                            >
+                                                <AiOutlineCheck size={16} /> Save
+                                            </button>
+                                            <button
+                                                onClick={() => {
+                                                    setTempLanguages([...languages]);
+                                                    setIsEditingLanguages(true);
+                                                }}
+                                                className="bg-red-600 text-white px-4 py-1 rounded-full text-sm flex items-center gap-1"
+                                            >
+                                                <AiOutlineClose size={16} /> Cancel
+                                            </button>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <ul
+                                        className="list-disc list-inside text-sm text-gray-600 cursor-pointer"
+                                        onClick={() => {
+                                            setTempLanguages([...languages]);
+                                            setIsEditingLanguages(true);
+                                        }}
+                                    >
+                                        {languages.map((lang, index) => (
+                                            <li key={index}>{lang}</li>
+                                        ))}
+                                    </ul>
+                                )}
                             </div>
-
                         </div>
                     )}
 
