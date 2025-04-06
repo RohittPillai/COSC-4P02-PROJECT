@@ -338,6 +338,53 @@ export default function Template3Page() {
         //setEditingWorkIndex(null);
     };
 
+    // for awards section
+    const [awardList, setAwardList] = useState([
+        {
+            title: "Business Innovation Hackathon Winner",
+            org: "Tech4Impact Hackathon – UofT",
+            dateLocation: "2023 | Toronto, ON",
+            description: "Developed a retail analytics dashboard that optimized inventory turnover for small businesses using customer behavior insights."
+        },
+        {
+            title: "Academic Excellence Award",
+            org: "Brock University",
+            dateLocation: "2022 | St. Catharines, ON",
+            description: "Awarded for maintaining a GPA in the top 5% of the business faculty cohort."
+        },
+        {
+            title: "Dean’s Honour List",
+            org: "Goodman School of Business",
+            dateLocation: "2019 – 2022 | St. Catharines, ON",
+            description: "Recognized for consistent academic achievement over 6 consecutive terms."
+        },
+        {
+            title: "Marketing Case Competition Finalist",
+            org: "Inter-Collegiate Business Competition (ICBC)",
+            dateLocation: "2021 | Kingston, ON",
+            description: "Selected among top 5 teams nationwide for strategy presentation and solution clarity."
+        }
+    ]);
+
+    const [tempAwardList, setTempAwardList] = useState([...awardList]);
+    const [editingAwardIndex, setEditingAwardIndex] = useState<number | null>(null);
+
+    const handleAwardChange = (index: number, field: string, value: string) => {
+        const updated = [...tempAwardList];
+        updated[index] = { ...updated[index], [field]: value };
+        setTempAwardList(updated);
+    };
+
+    const saveAward = () => {
+        setAwardList(tempAwardList);
+        setEditingAwardIndex(null);
+    };
+
+    const cancelAward = () => {
+        setTempAwardList([...awardList]);
+        //setEditingAwardIndex(null);
+    };
+
     return (
         <div className="w-full max-w-[1200px] mx-auto px-10 py-10 bg-white rounded shadow-sm font-sans text-gray-800 leading-relaxed overflow-y-auto max-h-[calc(100vh-160px)] border border-gray-300">
             {/* HEADER */}
@@ -1338,6 +1385,7 @@ export default function Template3Page() {
                         </div>
                     )}
 
+                    {activeTab === "work" && (
                     <div className="space-y-10">
                         <div className="border-l-4 border-purple-600 pl-4">
                             <h2 className="text-2xl font-bold mb-2">Work Experience</h2>
@@ -1412,39 +1460,79 @@ export default function Template3Page() {
                             ))}
                         </div>
                     </div>
+                    )}
 
                     {activeTab === "awards" && (
                         <div className="space-y-10">
-                            {/* Business Innovation Hackathon Winner */}
-                            <div className="border-l-4 border-purple-600 pl-4 space-y-1">
-                                <h2 className="text-2xl font-bold">Business Innovation Hackathon Winner</h2>
-                                <p className="text-sm text-gray-600">Tech4Impact Hackathon – UofT</p>
-                                <p className="text-sm text-gray-600">2023 | Toronto, ON</p>
-                                <p className="text-sm text-gray-600">Developed a retail analytics dashboard that optimized inventory turnover for small businesses using customer behavior insights.</p>
-                            </div>
+                            <div className="border-l-4 border-purple-600 pl-4">
+                                <h2 className="text-2xl font-bold mb-4">Awards & Recognition</h2>
 
-                            {/* Academic Excellence Award */}
-                            <div className="border-l-4 border-purple-600 pl-4 space-y-1">
-                                <h2 className="text-2xl font-bold">Academic Excellence Award</h2>
-                                <p className="text-sm text-gray-600">Brock University</p>
-                                <p className="text-sm text-gray-600">2022 | St. Catharines, ON</p>
-                                <p className="text-sm text-gray-600">Awarded for maintaining a GPA in the top 5% of the business faculty cohort.</p>
-                            </div>
+                                {awardList.map((award, index) => (
+                                    <div
+                                        key={index}
+                                        className="mb-4 cursor-pointer"
+                                        onClick={editingAwardIndex === index ? undefined : () => setEditingAwardIndex(index)}
+                                    >
+                                        {editingAwardIndex === index ? (
+                                            <>
+                                                <input
+                                                    type="text"
+                                                    value={tempAwardList[index].title}
+                                                    onChange={(e) =>
+                                                        handleAwardChange(index, "title", e.target.value)
+                                                    }
+                                                    className="text-sm font-semibold border-b border-gray-300 w-full mb-1"
+                                                />
+                                                <input
+                                                    type="text"
+                                                    value={tempAwardList[index].org}
+                                                    onChange={(e) =>
+                                                        handleAwardChange(index, "org", e.target.value)
+                                                    }
+                                                    className="text-sm text-gray-600 border-b border-gray-300 w-full mb-1"
+                                                />
+                                                <input
+                                                    type="text"
+                                                    value={tempAwardList[index].dateLocation}
+                                                    onChange={(e) =>
+                                                        handleAwardChange(index, "dateLocation", e.target.value)
+                                                    }
+                                                    className="text-sm text-gray-600 border-b border-gray-300 w-full mb-1"
+                                                />
+                                                <textarea
+                                                    rows={2}
+                                                    value={tempAwardList[index].description}
+                                                    onChange={(e) =>
+                                                        handleAwardChange(index, "description", e.target.value)
+                                                    }
+                                                    className="text-sm text-gray-600 border-b border-gray-300 w-full"
+                                                />
 
-                            {/* Dean’s Honour List */}
-                            <div className="border-l-4 border-purple-600 pl-4 space-y-1">
-                                <h2 className="text-2xl font-bold">Dean’s Honour List</h2>
-                                <p className="text-sm text-gray-600">Goodman School of Business</p>
-                                <p className="text-sm text-gray-600">2019 – 2022 | St. Catharines, ON</p>
-                                <p className="text-sm text-gray-600">Recognized for consistent academic achievement over 6 consecutive terms.</p>
-                            </div>
-
-                            {/* Marketing Case Competition Finalist */}
-                            <div className="border-l-4 border-purple-600 pl-4 space-y-1">
-                                <h2 className="text-2xl font-bold">Marketing Case Competition Finalist</h2>
-                                <p className="text-sm text-gray-600">Inter-Collegiate Business Competition (ICBC)</p>
-                                <p className="text-sm text-gray-600">2021 | Kingston, ON</p>
-                                <p className="text-sm text-gray-600">Selected among top 5 teams nationwide for strategy presentation and solution clarity.</p>
+                                                <div className="mt-3 flex justify-center gap-4">
+                                                    <button
+                                                        onClick={saveAward}
+                                                        className="px-4 py-1 bg-green-600 text-white rounded-full hover:bg-green-700 flex items-center gap-2 text-sm"
+                                                    >
+                                                        <AiOutlineCheck size={16} /> Save
+                                                    </button>
+                                                    <button
+                                                        onClick={cancelAward}
+                                                        className="px-4 py-1 bg-red-600 text-white rounded-full hover:bg-red-700 flex items-center gap-2 text-sm"
+                                                    >
+                                                        <AiOutlineClose size={16} /> Cancel
+                                                    </button>
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <div>
+                                                <h3 className="text-sm font-semibold text-gray-800">{award.title}</h3>
+                                                <p className="text-sm text-gray-600">{award.org}</p>
+                                                <p className="text-sm text-gray-600">{award.dateLocation}</p>
+                                                <p className="text-sm text-gray-600">{award.description}</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     )}
