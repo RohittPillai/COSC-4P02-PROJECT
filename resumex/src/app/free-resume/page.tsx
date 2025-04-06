@@ -8,6 +8,8 @@ import { jsPDF } from "jspdf";
 import { saveAs } from "file-saver";
 import { AiOutlineLeft, AiOutlineRight, AiOutlineClose, AiOutlineSync, AiOutlineCheck, AiOutlineUp, AiOutlineDown } from "react-icons/ai";
 import dynamic from "next/dynamic";
+import { useRef } from "react";
+import html2canvas from "html2canvas";
 
 const Template1Page = dynamic(() => import("../templates/template1/page"));
 const Template2Page = dynamic(() => import("../templates/template2/page"));
@@ -42,7 +44,7 @@ export default function FreeResume() {
   const template = searchParams.get("template") || "template1";
   const selectedTemplate = templates[template] || templates["template1"];
   const [userId, setUserId] = useState<string | null>(null);
-
+  const resumeRef = useRef(null);
 
   const [resumeContent, setResumeContent] = useState("Start typing your resume...");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -84,14 +86,51 @@ export default function FreeResume() {
     return () => clearTimeout(autoSaveInterval);
   }, [resumeContent]);
 
-  const downloadAsPDF = () => {
-    const doc = new jsPDF();
-    doc.text(resumeContent, 10, 10);
-    doc.save(`${template}-resume.pdf`);
+  const downloadAsPDF = async () => {
+    if (!resumeRef.current) return;
+
+    const element = resumeRef.current;
+
+    // Temporarily show hidden export version
+    element.style.display = "block";
+
+    // Let browser paint it fully before capturing
+    setTimeout(async () => {
+      try {
+        const canvas = await html2canvas(element, {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: "#ffffff",
+        });
+
+        const imgData = canvas.toDataURL("image/png"); // Always PNG
+        const pdf = new jsPDF("p", "pt", "a4");
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+        pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+        pdf.save(`${template}-resume.pdf`);
+      } catch (error) {
+        console.error("PDF export failed:", error);
+        alert("PDF generation failed. Please try again.");
+      } finally {
+        element.style.display = "none"; // Hide again
+      }
+    }, 300); // Give enough time to flush styles
   };
 
   const downloadAsWord = () => {
-    const blob = new Blob([resumeContent], { type: "application/msword" });
+    if (!resumeRef.current) return;
+
+    const content = resumeRef.current.innerHTML;
+    const blob = new Blob(
+        [
+          `<html><head><meta charset="utf-8"><title>Resume</title></head><body>${content}</body></html>`
+        ],
+        {
+          type: "application/msword",
+        }
+    );
     saveAs(blob, `${template}-resume.doc`);
   };
 
@@ -227,11 +266,28 @@ export default function FreeResume() {
           </aside>
 
           <section className="flex-1 p-6 h-[96vh] flex flex-col justify-center items-center bg-gray-100 pt-20 mb-32">
-            <h1 className="text-4xl font-extrabold text-gray-900 mb-4">Editing: {selectedTemplate.name}</h1>
-            <div className="w-full max-w-2xl p-4 border border-gray-400 rounded-lg shadow-xl bg-white">
-              {selectedTemplate.component && <selectedTemplate.component data={resumeData} />}
+            <h1 className="text-4xl font-extrabold text-gray-900 mb-4">
+              Editing: {selectedTemplate.name}
+            </h1>
+            <div
+                className="w-full max-w-2xl p-4 border border-gray-400 rounded-lg shadow-xl bg-white"
+            >
+              {selectedTemplate.component && (
+                  <selectedTemplate.component data={resumeData} />
+              )}
             </div>
           </section>
+
+          {/* Hidden Resume for PDF Export */}
+          <div
+              ref={resumeRef}
+              style={{ display: "none" }}
+              className="absolute top-0 left-0 w-[794px] min-h-[1123px] bg-white p-6 z-[-1]"
+          >
+            {selectedTemplate.component && (
+                <selectedTemplate.component data={resumeData} />
+            )}
+          </div>
         </main>
 
         {/* Collapsible Footer */}
