@@ -89,50 +89,144 @@ export default function FreeResume() {
   const downloadAsPDF = async () => {
     if (!resumeRef.current) return;
 
-    const element = resumeRef.current;
+    const original = resumeRef.current;
 
-    // Temporarily show hidden export version
-    element.style.display = "block";
+    // Clone the node
+    const clone = original.cloneNode(true) as HTMLElement;
+    clone.style.maxHeight = "none";
+    clone.style.overflow = "visible";
+    clone.style.height = "auto";
+    clone.style.display = "block";
+    clone.style.position = "absolute";
+    clone.style.top = "0";
+    clone.style.left = "-9999px";
+    clone.style.zIndex = "-1";
+    clone.style.backgroundColor = "#ffffff";
 
-    // Let browser paint it fully before capturing
-    setTimeout(async () => {
-      try {
-        const canvas = await html2canvas(element, {
-          scale: 2,
-          useCORS: true,
-          backgroundColor: "#ffffff",
-        });
+    document.body.appendChild(clone);
 
-        const imgData = canvas.toDataURL("image/png"); // Always PNG
-        const pdf = new jsPDF("p", "pt", "a4");
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+    try {
+      await new Promise((res) => setTimeout(res, 300)); // let it render
 
-        pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-        pdf.save(`${template}-resume.pdf`);
-      } catch (error) {
-        console.error("PDF export failed:", error);
-        alert("PDF generation failed. Please try again.");
-      } finally {
-        element.style.display = "none"; // Hide again
+      const canvas = await html2canvas(clone, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+      });
+
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "pt", "a4");
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const imgHeight = (canvas.height * pdfWidth) / canvas.width;
+      const pageHeight = pdf.internal.pageSize.getHeight();
+
+      let heightLeft = imgHeight;
+      let position = 0;
+
+      pdf.addImage(imgData, "PNG", 0, position, pdfWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft > 0) {
+        position -= pageHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, "PNG", 0, position, pdfWidth, imgHeight);
+        heightLeft -= pageHeight;
       }
-    }, 300); // Give enough time to flush styles
+
+      pdf.save(`${template}-resume.pdf`);
+    } catch (error) {
+      console.error("PDF export failed:", error);
+      alert("PDF generation failed. Please try again.");
+    } finally {
+      document.body.removeChild(clone);
+    }
   };
 
   const downloadAsWord = () => {
     if (!resumeRef.current) return;
 
     const content = resumeRef.current.innerHTML;
-    const blob = new Blob(
-        [
-          `<html><head><meta charset="utf-8"><title>Resume</title></head><body>${content}</body></html>`
-        ],
-        {
-          type: "application/msword",
-        }
-    );
+
+    const leftContent =
+        resumeRef.current.querySelector(".left-column")?.innerHTML ||
+        resumeRef.current.querySelector("div[class*='col-span-5']")?.innerHTML;
+
+    const rightContent =
+        resumeRef.current.querySelector(".right-column")?.innerHTML ||
+        resumeRef.current.querySelector("div[class*='col-span-6']")?.innerHTML;
+
+    const isSplitLayout = template === "template2" || template === "template3";
+
+    const html = `
+  <html xmlns:o='urn:schemas-microsoft-com:office:office'
+        xmlns:w='urn:schemas-microsoft-com:office:word'
+        xmlns='http://www.w3.org/TR/REC-html40'>
+  <head>
+    <meta charset='utf-8'>
+    <title>Resume</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background: white;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      td {
+        vertical-align: top;
+        padding: 10px;
+      }
+      .left-column {
+        width: 30%;
+        background-color: #1e293b;
+        color: white;
+        padding: 20px;
+      }
+      .right-column {
+        width: 70%;
+        background-color: #f9fafb;
+        padding: 20px;
+      }
+      h1, h2, h3 {
+        margin-top: 0;
+      }
+      a {
+        color: #3b82f6;
+      }
+    </style>
+  </head>
+  <body>
+    ${
+        isSplitLayout
+            ? `
+      <table>
+        <tr>
+          <td class="left-column">
+            ${leftContent || "<p>Left side missing</p>"}
+          </td>
+          <td class="right-column">
+            ${rightContent || content}
+          </td>
+        </tr>
+      </table>
+    `
+            : `
+      <div>${content}</div>
+    `
+    }
+  </body>
+  </html>
+`;
+
+    const blob = new Blob(["\ufeff", html], {
+      type: "application/msword",
+    });
+
     saveAs(blob, `${template}-resume.doc`);
   };
+
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText("https://resumex.com/my-resume");

@@ -548,7 +548,7 @@ export default function Template3Page() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
                 {/* LEFT COLUMN */}
-                <div className="space-y-10 md:col-span-1">
+                <div className="space-y-10 md:col-span-1 left-column">
                     <div className="relative w-32 h-32 rounded-full bg-gray-300 mx-auto">
                         {/* Camera icon overlay */}
                         <div
@@ -781,7 +781,7 @@ export default function Template3Page() {
                 </div>
 
                 {/* RIGHT COLUMN CONTENT */}
-                <div className="md:col-span-2 space-y-10">
+                <div className="md:col-span-2 space-y-10 right-column">
                     {activeTab === "profile" && (
                         <>
                             <div className="space-y-4">
