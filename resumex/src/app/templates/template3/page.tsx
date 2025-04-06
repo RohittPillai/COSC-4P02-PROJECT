@@ -173,6 +173,40 @@ export default function Template3Page() {
         }
     }, []);
 
+    //for education section
+    const [educationList, setEducationList] = useState([
+        {
+            school: "Rotman School of Management, University of Toronto",
+            degree: "MBA",
+            year: "2022 – 2024",
+            location: "Toronto, ON",
+        },
+        {
+            school: "Brock University",
+            degree: "BCom, Marketing",
+            year: "2018 – 2022",
+            location: "St. Catharines, ON",
+        },
+    ]);
+    const [tempEducationList, setTempEducationList] = useState([...educationList]);
+    const [editingEducationIndex, setEditingEducationIndex] = useState<number | null>(null);
+
+    const handleEducationChange = (index: number, field: string, value: string) => {
+        const updated = [...tempEducationList];
+        updated[index] = { ...updated[index], [field]: value };
+        setTempEducationList(updated);
+    };
+
+    const saveEducation = () => {
+        setEducationList(tempEducationList);
+        setEditingEducationIndex(null);
+    };
+
+    const cancelEducation = () => {
+        setTempEducationList([...educationList]);
+        //setEditingEducationIndex(null);
+    };
+
     return (
         <div className="w-full max-w-[1200px] mx-auto px-10 py-10 bg-white rounded shadow-sm font-sans text-gray-800 leading-relaxed overflow-y-auto max-h-[calc(100vh-160px)] border border-gray-300">
             {/* HEADER */}
@@ -775,24 +809,76 @@ export default function Template3Page() {
                     {activeTab === "education & projects" && (
                         <div className="space-y-10">
                             <div className="border-l-4 border-purple-600 pl-4">
-                                <h2 className="text-2xl font-bold mb-1">Education</h2>
+                                <h2 className="text-2xl font-bold mb-2">Education</h2>
+                            {educationList.map((edu, index) => (
+                                <div
+                                    key={index}
+                                    className="mb-4 cursor-pointer relative"
+                                    onClick={
+                                        editingEducationIndex === index
+                                            ? undefined
+                                            : () => setEditingEducationIndex(index)
+                                    }
+                                >
+                                {editingEducationIndex === index ? (
+                                        <>
+                                            <input
+                                                type="text"
+                                                value={tempEducationList[index].degree}
+                                                onChange={(e) =>
+                                                    handleEducationChange(index, "degree", e.target.value)
+                                                }
+                                                className="text-sm font-semibold border-b border-gray-300 w-full"
+                                            />
+                                            <input
+                                                type="text"
+                                                value={tempEducationList[index].school}
+                                                onChange={(e) =>
+                                                    handleEducationChange(index, "school", e.target.value)
+                                                }
+                                                className="text-sm text-gray-600 border-b border-gray-300 w-full"
+                                            />
+                                            <input
+                                                type="text"
+                                                value={tempEducationList[index].year}
+                                                onChange={(e) =>
+                                                    handleEducationChange(index, "year", e.target.value)
+                                                }
+                                                className="text-sm text-gray-600 border-b border-gray-300 w-full"
+                                            />
+                                            <input
+                                                type="text"
+                                                value={tempEducationList[index].location}
+                                                onChange={(e) =>
+                                                    handleEducationChange(index, "location", e.target.value)
+                                                }
+                                                className="text-sm text-gray-600 border-b border-gray-300 w-full"
+                                            />
 
-                                {/* Master's Degree */}
-                                <div className="mb-4">
-                                    <p className="text-sm font-semibold text-gray-800">Master of Business Administration
-                                        (MBA)</p>
-                                    <p className="text-sm text-gray-600">Rotman School of Management, University of
-                                        Toronto</p>
-                                    <p className="text-sm text-gray-500">2022 – 2024 | Toronto, ON</p>
+                                            <div className="mt-4 flex justify-center gap-4">
+                                                <button
+                                                    onClick={saveEducation}
+                                                    className="px-4 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition flex items-center gap-2"
+                                                >
+                                                    <AiOutlineCheck size={18} /> Save
+                                                </button>
+                                                <button
+                                                    onClick={cancelEducation}
+                                                    className="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition flex items-center gap-2"
+                                                >
+                                                    <AiOutlineClose size={18} /> Cancel
+                                                </button>
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <div>
+                                            <p className="text-sm font-semibold text-gray-800">{edu.degree}</p>
+                                            <p className="text-sm text-gray-600">{edu.school}</p>
+                                            <p className="text-sm text-gray-500">{edu.year} | {edu.location}</p>
+                                        </div>
+                                    )}
                                 </div>
-
-                                {/* Bachelor's Degree */}
-                                <div>
-                                    <p className="text-sm font-semibold text-gray-800">Bachelor of Commerce (BCom),
-                                        Marketing</p>
-                                    <p className="text-sm text-gray-600">Brock University</p>
-                                    <p className="text-sm text-gray-500">2018 – 2022 | St. Catharines, ON</p>
-                                </div>
+                            ))}
                             </div>
 
                             <div className="border-l-4 border-purple-600 pl-4">
