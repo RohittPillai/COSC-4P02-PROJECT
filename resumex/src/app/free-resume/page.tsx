@@ -44,7 +44,7 @@ export default function FreeResume() {
   const template = searchParams.get("template") || "template1";
   const selectedTemplate = templates[template] || templates["template1"];
   const [userId, setUserId] = useState<string | null>(null);
-  const resumeRef = useRef(null);
+  const resumeRef = useRef<HTMLDivElement>(null);
 
   const [resumeContent, setResumeContent] = useState("Start typing your resume...");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
