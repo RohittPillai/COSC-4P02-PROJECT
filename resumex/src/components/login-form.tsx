@@ -25,6 +25,7 @@ export function LoginForm({
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<{ name: string } | null>(null); // New changes: Hides the form for logged-in users and provides a logout button.
+  const [showResetPopup, setShowResetPopup] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -38,6 +39,10 @@ export function LoginForm({
     // Logs out the user by clearing localStorage.
     localStorage.removeItem("userData");
     setUser(null);
+  }
+
+  function showForgotPasswordPopup() {
+    setShowResetPopup(true);
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -64,6 +69,16 @@ export function LoginForm({
 
   return (
     <>
+      {showResetPopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+          <div className="p-4 bg-white rounded-lg shadow-lg flex flex-col items-center gap-4">
+            <p>Please check your inbox for a password reset link</p>
+            <Button onClick={() => setShowResetPopup(false)}>
+              Close
+            </Button>
+          </div>
+        </div>
+      )}
       {user ? (
         // If user is logged in, display logout prompt and hide the form.
         <div className="flex flex-col gap-6">
@@ -125,6 +140,7 @@ export function LoginForm({
                         <a
                           href="#"
                           className="ml-auto text-sm underline-offset-4 hover:underline"
+                          onClick={showForgotPasswordPopup}
                         >
                           Forgot your password?
                         </a>
