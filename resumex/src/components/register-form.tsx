@@ -56,6 +56,14 @@ export function RegisterForm({ className, ...props }: React.ComponentPropsWithou
       setLoading(false);
       return;
     }
+
+    const passwordRegex = /^[A-Za-z0-9]{8,32}$/;
+    if (!passwordRegex.test(formData.password)) {
+      setError("Weak password. Please use 8-32 characters with letters and numbers.");
+      setLoading(false);
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match.");
       setLoading(false);
@@ -144,12 +152,6 @@ export function RegisterForm({ className, ...props }: React.ComponentPropsWithou
                   <div className="grid gap-2">
                     <div className="flex items-center">
                       <Label htmlFor="password">Password</Label>
-                      <a
-                        href="#"
-                        className="ml-auto text-sm underline-offset-4 hover:underline"
-                      >
-                        Forgot your password?
-                      </a>
                     </div>
                     <Input id="password" name="password" type="password" required onChange={handleChange} />
                   </div>
@@ -163,6 +165,7 @@ export function RegisterForm({ className, ...props }: React.ComponentPropsWithou
                       onChange={handleChange}
                     />
                   </div>
+                  {error && <p className="text-red-500 text-center mt-2">{error}</p>}
                   <Button type="submit" className="w-full" disabled={loading}>
                     {loading ? "Registering..." : "Sign Up"}
                   </Button>
