@@ -171,6 +171,7 @@ export function RegisterForm({ className, ...props }: React.ComponentPropsWithou
                       onChange={handleChange}
                     />
                   </div>
+                  {error && <p className="text-red-500 text-center mt-2">{error}</p>}
                   <Button type="submit" className="w-full" disabled={loading}>
                     {loading ? "Registering..." : "Sign Up"}
                   </Button>
