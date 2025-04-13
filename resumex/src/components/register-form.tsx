@@ -56,6 +56,14 @@ export function RegisterForm({ className, ...props }: React.ComponentPropsWithou
       setLoading(false);
       return;
     }
+
+    const passwordRegex = /^[A-Za-z0-9]{8,32}$/;
+    if (!passwordRegex.test(formData.password)) {
+      setError("Weak password. Please use 8-32 characters with letters and numbers.");
+      setLoading(false);
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match.");
       setLoading(false);
