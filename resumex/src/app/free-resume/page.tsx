@@ -88,11 +88,10 @@ export default function FreeResume() {
 
   const downloadAsPDF = async () => {
     if (!resumeRef.current) return;
-
+  
+    // Clone the node to capture it without affecting layout.
     const original = resumeRef.current;
-
-    // Clone the node
-    const clone = original.cloneNode(true) as HTMLElement;
+    const clone = original.cloneNode(true);
     clone.style.maxHeight = "none";
     clone.style.overflow = "visible";
     clone.style.height = "auto";
@@ -102,37 +101,43 @@ export default function FreeResume() {
     clone.style.left = "-9999px";
     clone.style.zIndex = "-1";
     clone.style.backgroundColor = "#ffffff";
-
     document.body.appendChild(clone);
-
+  
     try {
-      await new Promise((res) => setTimeout(res, 300)); // let it render
-
+      // Allow the clone to render.
+      await new Promise((res) => setTimeout(res, 300));
+  
+      // Capture the clone as a canvas.
       const canvas = await html2canvas(clone, {
         scale: 2,
         useCORS: true,
         backgroundColor: "#ffffff",
       });
-
+  
+      // Convert the captured canvas to a data URL.
       const imgData = canvas.toDataURL("image/png");
+  
+      // Initialize jsPDF with A4 dimensions in portrait (measured in points).
       const pdf = new jsPDF("p", "pt", "a4");
       const pdfWidth = pdf.internal.pageSize.getWidth();
-      const imgHeight = (canvas.height * pdfWidth) / canvas.width;
-      const pageHeight = pdf.internal.pageSize.getHeight();
-
-      let heightLeft = imgHeight;
-      let position = 0;
-
-      pdf.addImage(imgData, "PNG", 0, position, pdfWidth, imgHeight);
-      heightLeft -= pageHeight;
-
-      while (heightLeft > 0) {
-        position -= pageHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, "PNG", 0, position, pdfWidth, imgHeight);
-        heightLeft -= pageHeight;
-      }
-
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+  
+      // Compute scale factors for width and height.
+      const scaleWidth = pdfWidth / canvas.width;
+      const scaleHeight = pdfHeight / canvas.height;
+      // Choose the smaller scale factor so the whole canvas fits on one page.
+      const scaleFactor = Math.min(scaleWidth, scaleHeight);
+  
+      // Calculate the dimensions of the image when drawn on the PDF.
+      const imgDisplayWidth = canvas.width * scaleFactor;
+      const imgDisplayHeight = canvas.height * scaleFactor;
+  
+      // Center the image on the PDF page.
+      const marginX = (pdfWidth - imgDisplayWidth) / 2;
+      const marginY = (pdfHeight - imgDisplayHeight) / 2;
+  
+      // Add the image to the PDF on a single page.
+      pdf.addImage(imgData, "PNG", marginX, marginY, imgDisplayWidth, imgDisplayHeight);
       pdf.save(`${template}-resume.pdf`);
     } catch (error) {
       console.error("PDF export failed:", error);
@@ -141,7 +146,7 @@ export default function FreeResume() {
       document.body.removeChild(clone);
     }
   };
-
+  
   const downloadAsWord = () => {
     if (!resumeRef.current) return;
 
