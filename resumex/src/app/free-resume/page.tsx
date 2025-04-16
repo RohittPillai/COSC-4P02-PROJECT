@@ -8,6 +8,8 @@ import { jsPDF } from "jspdf";
 import { saveAs } from "file-saver";
 import { AiOutlineLeft, AiOutlineRight, AiOutlineClose, AiOutlineSync, AiOutlineCheck, AiOutlineUp, AiOutlineDown } from "react-icons/ai";
 import dynamic from "next/dynamic";
+import { useRef } from "react";
+import html2canvas from "html2canvas";
 
 const Template1Page = dynamic(() => import("../templates/template1/page"));
 const Template2Page = dynamic(() => import("../templates/template2/page"));
@@ -42,7 +44,7 @@ export default function FreeResume() {
   const template = searchParams.get("template") || "template1";
   const selectedTemplate = templates[template] || templates["template1"];
   const [userId, setUserId] = useState<string | null>(null);
-
+  const resumeRef = useRef<HTMLDivElement>(null);
 
   const [resumeContent, setResumeContent] = useState("Start typing your resume...");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -84,16 +86,147 @@ export default function FreeResume() {
     return () => clearTimeout(autoSaveInterval);
   }, [resumeContent]);
 
-  const downloadAsPDF = () => {
-    const doc = new jsPDF();
-    doc.text(resumeContent, 10, 10);
-    doc.save(`${template}-resume.pdf`);
+  const downloadAsPDF = async () => {
+    if (!resumeRef.current) return;
+
+    const original = resumeRef.current;
+
+    // Clone the node
+    const clone = original.cloneNode(true) as HTMLElement;
+    clone.style.maxHeight = "none";
+    clone.style.overflow = "visible";
+    clone.style.height = "auto";
+    clone.style.display = "block";
+    clone.style.position = "absolute";
+    clone.style.top = "0";
+    clone.style.left = "-9999px";
+    clone.style.zIndex = "-1";
+    clone.style.backgroundColor = "#ffffff";
+
+    document.body.appendChild(clone);
+
+    try {
+      await new Promise((res) => setTimeout(res, 300)); // let it render
+
+      const canvas = await html2canvas(clone, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+      });
+
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "pt", "a4");
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const imgHeight = (canvas.height * pdfWidth) / canvas.width;
+      const pageHeight = pdf.internal.pageSize.getHeight();
+
+      let heightLeft = imgHeight;
+      let position = 0;
+
+      pdf.addImage(imgData, "PNG", 0, position, pdfWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft > 0) {
+        position -= pageHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, "PNG", 0, position, pdfWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      pdf.save(`${template}-resume.pdf`);
+    } catch (error) {
+      console.error("PDF export failed:", error);
+      alert("PDF generation failed. Please try again.");
+    } finally {
+      document.body.removeChild(clone);
+    }
   };
 
   const downloadAsWord = () => {
-    const blob = new Blob([resumeContent], { type: "application/msword" });
+    if (!resumeRef.current) return;
+
+    const content = resumeRef.current.innerHTML;
+
+    const leftContent =
+        resumeRef.current.querySelector(".left-column")?.innerHTML ||
+        resumeRef.current.querySelector("div[class*='col-span-5']")?.innerHTML;
+
+    const rightContent =
+        resumeRef.current.querySelector(".right-column")?.innerHTML ||
+        resumeRef.current.querySelector("div[class*='col-span-6']")?.innerHTML;
+
+    const isSplitLayout = template === "template2" || template === "template3";
+
+    const html = `
+  <html xmlns:o='urn:schemas-microsoft-com:office:office'
+        xmlns:w='urn:schemas-microsoft-com:office:word'
+        xmlns='http://www.w3.org/TR/REC-html40'>
+  <head>
+    <meta charset='utf-8'>
+    <title>Resume</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background: white;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      td {
+        vertical-align: top;
+        padding: 10px;
+      }
+      .left-column {
+        width: 30%;
+        background-color: #1e293b;
+        color: white;
+        padding: 20px;
+      }
+      .right-column {
+        width: 70%;
+        background-color: #f9fafb;
+        padding: 20px;
+      }
+      h1, h2, h3 {
+        margin-top: 0;
+      }
+      a {
+        color: #3b82f6;
+      }
+    </style>
+  </head>
+  <body>
+    ${
+        isSplitLayout
+            ? `
+      <table>
+        <tr>
+          <td class="left-column">
+            ${leftContent || "<p>Left side missing</p>"}
+          </td>
+          <td class="right-column">
+            ${rightContent || content}
+          </td>
+        </tr>
+      </table>
+    `
+            : `
+      <div>${content}</div>
+    `
+    }
+  </body>
+  </html>
+`;
+
+    const blob = new Blob(["\ufeff", html], {
+      type: "application/msword",
+    });
+
     saveAs(blob, `${template}-resume.doc`);
   };
+
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText("https://resumex.com/my-resume");
@@ -227,11 +360,28 @@ export default function FreeResume() {
           </aside>
 
           <section className="flex-1 p-6 h-[96vh] flex flex-col justify-center items-center bg-gray-100 pt-20 mb-32">
-            <h1 className="text-4xl font-extrabold text-gray-900 mb-4">Editing: {selectedTemplate.name}</h1>
-            <div className="w-full max-w-2xl p-4 border border-gray-400 rounded-lg shadow-xl bg-white">
-              {selectedTemplate.component && <selectedTemplate.component data={resumeData} />}
+            <h1 className="text-4xl font-extrabold text-gray-900 mb-4">
+              Editing: {selectedTemplate.name}
+            </h1>
+            <div
+                className="w-full max-w-2xl p-4 border border-gray-400 rounded-lg shadow-xl bg-white"
+            >
+              {selectedTemplate.component && (
+                  <selectedTemplate.component data={resumeData} />
+              )}
             </div>
           </section>
+
+          {/* Hidden Resume for PDF Export */}
+          <div
+              ref={resumeRef}
+              style={{ display: "none" }}
+              className="absolute top-0 left-0 w-[794px] min-h-[1123px] bg-white p-6 z-[-1]"
+          >
+            {selectedTemplate.component && (
+                <selectedTemplate.component data={resumeData} />
+            )}
+          </div>
         </main>
 
         {/* Collapsible Footer */}
