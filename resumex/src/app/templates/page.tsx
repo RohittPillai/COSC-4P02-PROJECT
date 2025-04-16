@@ -19,7 +19,7 @@ const resumes = [
 const templates = [
   {
     id: "template1",
-    image: "/templates1.svg",
+    image: "/templates1.png",
     name: "Modern Clean Resume",
     description: "A simple, modern, and easy-to-read resume template for professionals.",
   },
@@ -31,7 +31,7 @@ const templates = [
   },
   {
     id: "template3",
-    image: "/templates3.webp",
+    image: "/templates3.png",
     name: "Executive Resume",
     description: "A bold, professional resume template ideal for executives.",
   },
