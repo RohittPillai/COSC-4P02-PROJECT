@@ -580,105 +580,144 @@ export default function Template2Page() {
 
           {/* Work Experience */}
           <div>
-            <h2 className="text-md font-bold text-[#1B2A41] border-b border-gray-300 pb-1 mb-2 uppercase">
-              Work Experience
-            </h2>
-            {isEditingExperience ? (
-              <>
-                {tempExperience.map((exp, i) => (
-                  <div key={i} className="mb-5 space-y-1">
-                    <input
-                      type="text"
-                      className="text-sm text-black w-full px-2 py-1 rounded border"
-                      value={exp.company}
-                      onChange={(e) => {
-                        const updated = [...tempExperience];
-                        updated[i].company = e.target.value;
-                        setTempExperience(updated);
-                      }}
-                    />
-                    <input
-                      type="text"
-                      className="text-sm text-black w-full px-2 py-1 rounded border"
-                      value={exp.role}
-                      onChange={(e) => {
-                        const updated = [...tempExperience];
-                        updated[i].role = e.target.value;
-                        setTempExperience(updated);
-                      }}
-                    />
-                    <input
-                      type="text"
-                      className="text-sm text-black w-full px-2 py-1 rounded border"
-                      value={exp.years}
-                      onChange={(e) => {
-                        const updated = [...tempExperience];
-                        updated[i].years = e.target.value;
-                        setTempExperience(updated);
-                      }}
-                    />
-                    {exp.bullets.map((b, j) => (
-                      <input
-                        key={j}
-                        type="text"
-                        className="text-sm text-black w-full px-2 py-1 rounded border"
-                        value={b}
-                        onChange={(e) => {
-                          const updated = [...tempExperience];
-                          updated[i].bullets[j] = e.target.value;
-                          setTempExperience(updated);
-                        }}
-                      />
-                    ))}
-                  </div>
-                ))}
-                <div className="mt-4 flex gap-3">
-                  <button
-                    onClick={() => {
-                      setExperienceData(tempExperience);
-                      localStorage.setItem(
-                        getUserKey("experience"),
-                        JSON.stringify(tempExperience)
-                      );
-                      setIsEditingExperience(false);
-                    }}
-                    className="px-3 py-1 bg-green-600 text-white rounded-full text-sm flex items-center gap-1"
-                  >
-                    <AiOutlineCheck size={16} /> Save
-                  </button>
-                  <button
-                    onClick={() => {
-                      setTempExperience(JSON.parse(JSON.stringify(experienceData)));
-                      setIsEditingExperience(true);
-                    }}
-                    className="px-3 py-1 bg-red-600 text-white rounded-full text-sm flex items-center gap-1"
-                  >
-                    <AiOutlineClose size={16} /> Cancel
-                  </button>
-                </div>
-              </>
-            ) : (
-              <div
+            <h2
+                className="text-md font-bold text-[#1B2A41] border-b border-gray-300 pb-1 mb-2 uppercase cursor-pointer"
                 onClick={() => {
                   setTempExperience(JSON.parse(JSON.stringify(experienceData)));
                   setIsEditingExperience(true);
                 }}
-                className="cursor-pointer"
-              >
-                {experienceData.map((exp, i) => (
-                  <div key={i} className="mb-5">
-                    <p className="text-sm font-bold">{exp.company}</p>
-                    <p className="text-sm text-gray-600">
-                      {exp.role} | {exp.years}
-                    </p>
-                    <ul className="list-disc list-inside text-sm text-gray-800 mt-1">
-                      {exp.bullets.map((b, j) => (
-                        <li key={j}>{b}</li>
-                      ))}
-                    </ul>
+            >
+              Work Experience
+            </h2>
+            {isEditingExperience ? (
+                <>
+                  {tempExperience.map((exp, i) => (
+                      <div key={i} className="mb-5 space-y-1 relative bg-white/10 p-2 rounded">
+                        <input
+                            type="text"
+                            className="text-sm text-black bg-white w-full px-2 py-1 rounded border"
+                            placeholder="Company"
+                            value={exp.company}
+                            onChange={(e) => {
+                              const updated = [...tempExperience];
+                              updated[i].company = e.target.value;
+                              setTempExperience(updated);
+                            }}
+                        />
+                        <input
+                            type="text"
+                            className="text-sm text-black bg-white w-full px-2 py-1 rounded border"
+                            placeholder="Role"
+                            value={exp.role}
+                            onChange={(e) => {
+                              const updated = [...tempExperience];
+                              updated[i].role = e.target.value;
+                              setTempExperience(updated);
+                            }}
+                        />
+                        <input
+                            type="text"
+                            className="text-sm text-black bg-white w-full px-2 py-1 rounded border"
+                            placeholder="Years"
+                            value={exp.years}
+                            onChange={(e) => {
+                              const updated = [...tempExperience];
+                              updated[i].years = e.target.value;
+                              setTempExperience(updated);
+                            }}
+                        />
+                        {exp.bullets.map((b, j) => (
+                            <input
+                                key={j}
+                                type="text"
+                                className="text-sm text-black bg-white w-full px-2 py-1 rounded border"
+                                placeholder="Bullet Point"
+                                value={b}
+                                onChange={(e) => {
+                                  const updated = [...tempExperience];
+                                  updated[i].bullets[j] = e.target.value;
+                                  setTempExperience(updated);
+                                }}
+                            />
+                        ))}
+
+                        {/* Remove Experience Button */}
+                        <button
+                            onClick={() => {
+                              const updated = tempExperience.filter((_, idx) => idx !== i);
+                              setTempExperience(updated);
+                            }}
+                            className="absolute top-2 right-2 text-red-400 hover:text-red-600"
+                            title="Remove Experience"
+                        >
+                          <AiOutlineClose size={16} />
+                        </button>
+                      </div>
+                  ))}
+
+                  {/* + Add Experience */}
+                  <button
+                      onClick={() =>
+                          setTempExperience([
+                            ...tempExperience,
+                            {
+                              company: "",
+                              role: "",
+                              years: "",
+                              bullets: [""],
+                            },
+                          ])
+                      }
+                      className="mt-2 px-3 py-1 bg-blue-600 text-white rounded-full text-sm hover:bg-blue-700"
+                  >
+                    + Add Experience
+                  </button>
+
+                  {/* Save & Cancel Buttons */}
+                  <div className="mt-4 flex gap-3">
+                    <button
+                        onClick={() => {
+                          setExperienceData(tempExperience);
+                          localStorage.setItem(getUserKey("experience"), JSON.stringify(tempExperience));
+                          setIsEditingExperience(false);
+                        }}
+                        className="px-3 py-1 bg-green-600 text-white rounded-full text-sm flex items-center gap-1"
+                    >
+                      <AiOutlineCheck size={16} /> Save
+                    </button>
+                    <button
+                        onClick={() => {
+                          setTempExperience(JSON.parse(JSON.stringify(experienceData)));
+                          setIsEditingExperience(true);
+                        }}
+                        className="px-3 py-1 bg-red-600 text-white rounded-full text-sm flex items-center gap-1"
+                    >
+                      <AiOutlineClose size={16} /> Cancel
+                    </button>
                   </div>
-                ))}
-              </div>
+                </>
+            ) : (
+                <div
+                    onClick={() => {
+                      setTempExperience(JSON.parse(JSON.stringify(experienceData)));
+                      setIsEditingExperience(true);
+                    }}
+                    className="cursor-pointer"
+                >
+                  {experienceData.map((exp, i) => (
+                      <div key={i} className="mb-5">
+                        <p className="text-sm font-bold">{exp.company}</p>
+                        <p className="text-sm text-gray-600">
+                          {exp.role} | {exp.years}
+                        </p>
+                        <ul className="list-disc list-inside text-sm text-gray-800 mt-1">
+                          {exp.bullets.map((b, j) => (
+                              <li key={j}>{b}</li>
+                          ))}
+                        </ul>
+                      </div>
+                  ))}
+                </div>
             )}
           </div>
 
