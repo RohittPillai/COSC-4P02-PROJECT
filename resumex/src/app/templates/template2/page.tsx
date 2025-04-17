@@ -254,87 +254,122 @@ export default function Template2Page() {
 
           {/* Education (Editable) */}
           <div className="space-y-2">
-            <h2 className="text-lg font-bold tracking-wide border-b border-white pb-2">
-              EDUCATION
-            </h2>
-            {isEditingEducation ? (
-              <>
-                {tempEducation.map((edu, index) => (
-                  <div key={index} className="space-y-1">
-                    <input
-                      type="text"
-                      className="text-sm text-black w-full px-2 py-1 rounded"
-                      value={edu.year}
-                      onChange={(e) => {
-                        const updated = [...tempEducation];
-                        updated[index] = { ...updated[index], year: e.target.value };
-                        setTempEducation(updated);
-                      }}
-                    />
-                    <input
-                      type="text"
-                      className="text-sm text-black w-full px-2 py-1 rounded"
-                      value={edu.school}
-                      onChange={(e) => {
-                        const updated = [...tempEducation];
-                        updated[index] = { ...updated[index], school: e.target.value };
-                        setTempEducation(updated);
-                      }}
-                    />
-                    <input
-                      type="text"
-                      className="text-sm text-black w-full px-2 py-1 rounded"
-                      value={edu.degree}
-                      onChange={(e) => {
-                        const updated = [...tempEducation];
-                        updated[index] = { ...updated[index], degree: e.target.value };
-                        setTempEducation(updated);
-                      }}
-                    />
-                  </div>
-                ))}
-                {/* Save & Cancel Buttons */}
-                <div className="mt-4 flex gap-3">
-                  <button
-                    onClick={() => {
-                      setEducationData(tempEducation);
-                      localStorage.setItem(
-                        getUserKey("education"),
-                        JSON.stringify(tempEducation)
-                      );
-                      setIsEditingEducation(false);
-                    }}
-                    className="px-3 py-1 bg-green-600 text-white rounded-full text-sm flex items-center gap-1 whitespace-nowrap"
-                  >
-                    <AiOutlineCheck size={16} /> Save
-                  </button>
-                  <button
-                    onClick={() => {
-                      setTempEducation(educationData.map((entry) => ({ ...entry })));
-                      setIsEditingEducation(true); // stay in edit mode
-                    }}
-                    className="px-3 py-1 bg-red-600 text-white rounded-full text-sm flex items-center gap-1 whitespace-nowrap"
-                  >
-                    <AiOutlineClose size={16} /> Cancel
-                  </button>
-                </div>
-              </>
-            ) : (
-              <div
+            <h2
+                className="text-lg font-bold tracking-wide border-b border-white pb-2 cursor-pointer"
                 onClick={() => {
                   setTempEducation(educationData.map((entry) => ({ ...entry })));
                   setIsEditingEducation(true);
                 }}
-                className="cursor-pointer space-y-3"
-              >
-                {educationData.map((edu, index) => (
-                  <div key={index}>
-                    <p className="text-sm font-bold">{edu.year}</p>
-                    <p className="text-sm font-semibold">{edu.school}</p>
-                    <p className="text-sm">{edu.degree}</p>
+            >
+              EDUCATION
+            </h2>
+
+            {isEditingEducation ? (
+                <>
+                  {tempEducation.map((edu, index) => (
+                      <div key={index} className="space-y-1 relative bg-white/10 p-2 rounded">
+                        <input
+                            type="text"
+                            className="text-sm text-black w-full px-2 py-1 rounded"
+                            placeholder="Year"
+                            value={edu.year}
+                            onChange={(e) => {
+                              const updated = [...tempEducation];
+                              updated[index] = { ...updated[index], year: e.target.value };
+                              setTempEducation(updated);
+                            }}
+                        />
+                        <input
+                            type="text"
+                            className="text-sm text-black w-full px-2 py-1 rounded"
+                            placeholder="School"
+                            value={edu.school}
+                            onChange={(e) => {
+                              const updated = [...tempEducation];
+                              updated[index] = { ...updated[index], school: e.target.value };
+                              setTempEducation(updated);
+                            }}
+                        />
+                        <input
+                            type="text"
+                            className="text-sm text-black w-full px-2 py-1 rounded"
+                            placeholder="Degree"
+                            value={edu.degree}
+                            onChange={(e) => {
+                              const updated = [...tempEducation];
+                              updated[index] = { ...updated[index], degree: e.target.value };
+                              setTempEducation(updated);
+                            }}
+                        />
+                        {/* Remove Entry Button */}
+                        <button
+                            onClick={() => {
+                              const updated = tempEducation.filter((_, i) => i !== index);
+                              setTempEducation(updated);
+                            }}
+                            className="absolute top-1 right-1 text-red-300 hover:text-red-600"
+                            title="Remove"
+                        >
+                          <AiOutlineClose size={18} />
+                        </button>
+                      </div>
+                  ))}
+
+                  {/* Add Entry Button */}
+                  <button
+                      onClick={() =>
+                          setTempEducation([
+                            ...tempEducation,
+                            { year: "", school: "", degree: "" },
+                          ])
+                      }
+                      className="mt-2 px-3 py-1 bg-blue-500 text-white text-sm rounded-full hover:bg-blue-600"
+                  >
+                    + Add Education
+                  </button>
+
+                  {/* Save & Cancel Buttons */}
+                  <div className="mt-4 flex gap-3">
+                    <button
+                        onClick={() => {
+                          setEducationData(tempEducation);
+                          localStorage.setItem(
+                              getUserKey("education"),
+                              JSON.stringify(tempEducation)
+                          );
+                          setIsEditingEducation(false);
+                        }}
+                        className="px-3 py-1 bg-green-600 text-white rounded-full text-sm flex items-center gap-1 whitespace-nowrap"
+                    >
+                      <AiOutlineCheck size={16} /> Save
+                    </button>
+                    <button
+                        onClick={() => {
+                          setTempEducation(educationData.map((entry) => ({ ...entry })));
+                          setIsEditingEducation(true); // stay in edit mode
+                        }}
+                        className="px-3 py-1 bg-red-600 text-white rounded-full text-sm flex items-center gap-1 whitespace-nowrap"
+                    >
+                      <AiOutlineClose size={16} /> Cancel
+                    </button>
                   </div>
-                ))}
-              </div>
+                </>
+            ) : (
+                <div
+                    onClick={() => {
+                      setTempEducation(educationData.map((entry) => ({ ...entry })));
+                      setIsEditingEducation(true);
+                    }}
+                    className="cursor-pointer space-y-3"
+                >
+                  {educationData.map((edu, index) => (
+                      <div key={index}>
+                        <p className="text-sm font-bold">{edu.year}</p>
+                        <p className="text-sm font-semibold">{edu.school}</p>
+                        <p className="text-sm">{edu.degree}</p>
+                      </div>
+                  ))}
+                </div>
             )}
           </div>
 
