@@ -308,23 +308,23 @@ export default function FreeResume() {
                   <ul className="space-y-3">
                     <li><Link href="/login" className="text-blue-400 hover:underline">Sign In</Link></li>
 
-                    <li><button className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition">Custom Section</button></li>
+                    {/*<li><button className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition">Custom Section</button></li>*/}
 
-                    <li>
-                      <button onClick={() => setIsDesignExpanded(!isDesignExpanded)}
-                              className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition">
-                        Design & Font {isDesignExpanded ? "▲" : "▼"}
-                      </button>
-                      {isDesignExpanded && (
-                          <>
-                            <button className="w-full mt-2 py-2 bg-gray-800 text-gray-300 font-semibold rounded-lg border border-gray-600">Change Font</button>
-                            <button className="w-full mt-2 py-2 bg-gray-800 text-gray-300 font-semibold rounded-lg border border-gray-600">Change Theme</button>
-                          </>
-                      )}
-                    </li>
+                    {/*<li>*/}
+                    {/*  <button onClick={() => setIsDesignExpanded(!isDesignExpanded)}*/}
+                    {/*          className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition">*/}
+                    {/*    Design & Font {isDesignExpanded ? "▲" : "▼"}*/}
+                    {/*  </button>*/}
+                    {/*  {isDesignExpanded && (*/}
+                    {/*      <>*/}
+                    {/*        <button className="w-full mt-2 py-2 bg-gray-800 text-gray-300 font-semibold rounded-lg border border-gray-600">Change Font</button>*/}
+                    {/*        <button className="w-full mt-2 py-2 bg-gray-800 text-gray-300 font-semibold rounded-lg border border-gray-600">Change Theme</button>*/}
+                    {/*      </>*/}
+                    {/*  )}*/}
+                    {/*</li>*/}
 
-                    <li><button className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition">Undo</button></li>
-                    <li><button className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition">Redo</button></li>
+                    {/*<li><button className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition">Undo</button></li>*/}
+                    {/*<li><button className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition">Redo</button></li>*/}
 
                     <li>
                       <button onClick={saveResume}
