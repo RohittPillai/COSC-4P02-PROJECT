@@ -1138,76 +1138,117 @@ export default function Template3Page() {
 
                 <div className="border-l-4 border-purple-600 pl-4">
                 <h2 className="text-2xl font-bold mb-1">Project Highlight</h2>
-                {projectList.map((project, index) => (
-                  <div
-                    key={index}
-                    className="mb-4 cursor-pointer relative"
-                    onClick={
-                      editingProjectIndex === index
-                        ? undefined
-                        : () => setEditingProjectIndex(index)
-                    }
-                  >
-                    {editingProjectIndex === index ? (
-                      <>
-                        <input
-                          type="text"
-                          value={tempProjectList[index].title}
-                          onChange={(e) =>
-                            handleProjectChange(index, "title", e.target.value)
+                  {projectList.map((project, index) => (
+                      <div
+                          key={index}
+                          className="mb-4 cursor-pointer relative"
+                          onClick={
+                            editingProjectIndex === index
+                                ? undefined
+                                : () => setEditingProjectIndex(index)
                           }
-                          className="text-sm font-semibold border-b border-gray-300 w-full"
-                        />
-                        <textarea
-                          rows={2}
-                          value={tempProjectList[index].description1}
-                          onChange={(e) =>
-                            handleProjectChange(index, "description1", e.target.value)
-                          }
-                          className="text-sm text-gray-600 border-b border-gray-300 w-full"
-                        />
-                        <textarea
-                          rows={2}
-                          value={tempProjectList[index].description2}
-                          onChange={(e) =>
-                            handleProjectChange(index, "description2", e.target.value)
-                          }
-                          className="text-sm text-gray-600 border-b border-gray-300 w-full"
-                        />
-                        <input
-                          type="text"
-                          value={tempProjectList[index].tools}
-                          onChange={(e) =>
-                            handleProjectChange(index, "tools", e.target.value)
-                          }
-                          className="text-sm text-gray-500 border-b border-gray-300 w-full"
-                        />
-                        <div className="mt-4 flex justify-center gap-4">
-                          <button
-                            onClick={saveProject}
-                            className="px-4 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition flex items-center gap-2"
-                          >
-                            <AiOutlineCheck size={18} /> Save
-                          </button>
-                          <button
-                            onClick={cancelProject}
-                            className="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition flex items-center gap-2"
-                          >
-                            <AiOutlineClose size={18} /> Cancel
-                          </button>
-                        </div>
-                      </>
-                    ) : (
-                      <div>
-                        <p className="text-sm font-semibold text-gray-800 mb-1">{project.title}</p>
-                        <p className="text-sm text-gray-600 mb-1">{project.description1}</p>
-                        <p className="text-sm text-gray-600 mb-1">{project.description2}</p>
-                        <p className="text-sm text-gray-500">{project.tools}</p>
+                      >
+                        {editingProjectIndex === index ? (
+                            <>
+                              <input
+                                  type="text"
+                                  placeholder="Project Title (e.g., Market Expansion Strategy)"
+                                  value={tempProjectList[index].title}
+                                  onChange={(e) =>
+                                      handleProjectChange(index, "title", e.target.value)
+                                  }
+                                  className="text-sm font-semibold border-b border-gray-300 w-full"
+                              />
+                              <textarea
+                                  rows={2}
+                                  placeholder="Description 1 (e.g., Led a 4-member team...)"
+                                  value={tempProjectList[index].description1}
+                                  onChange={(e) =>
+                                      handleProjectChange(index, "description1", e.target.value)
+                                  }
+                                  className="text-sm text-gray-600 border-b border-gray-300 w-full"
+                              />
+                              <textarea
+                                  rows={2}
+                                  placeholder="Description 2 (e.g., Conducted market research...)"
+                                  value={tempProjectList[index].description2}
+                                  onChange={(e) =>
+                                      handleProjectChange(index, "description2", e.target.value)
+                                  }
+                                  className="text-sm text-gray-600 border-b border-gray-300 w-full"
+                              />
+                              <input
+                                  type="text"
+                                  placeholder="Tools (e.g., SWOT, Excel, Canva)"
+                                  value={tempProjectList[index].tools}
+                                  onChange={(e) =>
+                                      handleProjectChange(index, "tools", e.target.value)
+                                  }
+                                  className="text-sm text-gray-500 border-b border-gray-300 w-full"
+                              />
+
+                              {/* ➕ Add Project */}
+                              <button
+                                  onClick={() => {
+                                    const newEntry = {
+                                      title: "",
+                                      description1: "",
+                                      description2: "",
+                                      tools: ""
+                                    };
+                                    const updated = [...tempProjectList, newEntry];
+                                    setTempProjectList(updated);
+                                    setProjectList(updated);
+                                    setEditingProjectIndex(updated.length - 1);
+                                  }}
+                                  className="text-sm text-blue-600 mt-3 underline"
+                              >
+                                + Add Project
+                              </button>
+
+                              {/* ✅ Save / ❌ Cancel */}
+                              <div className="mt-4 flex justify-center gap-4">
+                                <button
+                                    onClick={saveProject}
+                                    className="px-4 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition flex items-center gap-2"
+                                >
+                                  <AiOutlineCheck size={18} /> Save
+                                </button>
+                                <button
+                                    onClick={cancelProject}
+                                    className="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition flex items-center gap-2"
+                                >
+                                  <AiOutlineClose size={18} /> Cancel
+                                </button>
+                              </div>
+
+                              {/* ❌ Remove Button */}
+                              <button
+                                  onClick={() => {
+                                    const updated = [...tempProjectList];
+                                    updated.splice(index, 1);
+                                    setTempProjectList(updated);
+                                    setProjectList(updated);
+                                    setEditingProjectIndex(null);
+                                    localStorage.setItem(getUserKey("Project"), JSON.stringify(updated));
+                                  }}
+                                  className="absolute top-1 right-1 text-red-600 hover:text-red-800"
+                                  title="Remove Project"
+                              >
+                                <AiOutlineClose size={16} />
+                              </button>
+                            </>
+                        ) : (
+                            <div>
+                              <p className="text-sm font-semibold text-gray-800 mb-1">{project.title}</p>
+                              <p className="text-sm text-gray-600 mb-1">{project.description1}</p>
+                              <p className="text-sm text-gray-600 mb-1">{project.description2}</p>
+                              <p className="text-sm text-gray-500">{project.tools}</p>
+                            </div>
+                        )}
                       </div>
-                    )}
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
             </div>
           )}
 
