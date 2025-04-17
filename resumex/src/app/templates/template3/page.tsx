@@ -1565,78 +1565,124 @@ export default function Template3Page() {
               </div>
           )}
 
-
           {activeTab === "awards" && (
-            <div className="space-y-10">
-              <div className="border-l-4 border-purple-600 pl-4">
-                <h2 className="text-2xl font-bold mb-4">Awards & Recognition</h2>
-                {awardList.map((award, index) => (
-                  <div
-                    key={index}
-                    className="mb-4 cursor-pointer"
-                    onClick={editingAwardIndex === index ? undefined : () => setEditingAwardIndex(index)}
-                  >
-                    {editingAwardIndex === index ? (
-                      <>
-                        <input
-                          type="text"
-                          value={tempAwardList[index].title}
-                          onChange={(e) =>
-                            handleAwardChange(index, "title", e.target.value)
+              <div className="space-y-10">
+                <div className="border-l-4 border-purple-600 pl-4">
+                  <h2 className="text-2xl font-bold mb-4">Awards & Recognition</h2>
+                  {awardList.map((award, index) => (
+                      <div
+                          key={index}
+                          className="mb-4 cursor-pointer relative"
+                          onClick={
+                            editingAwardIndex === index
+                                ? undefined
+                                : () => setEditingAwardIndex(index)
                           }
-                          className="text-sm font-semibold border-b border-gray-300 w-full mb-1"
-                        />
-                        <input
-                          type="text"
-                          value={tempAwardList[index].org}
-                          onChange={(e) =>
-                            handleAwardChange(index, "org", e.target.value)
-                          }
-                          className="text-sm text-gray-600 border-b border-gray-300 w-full mb-1"
-                        />
-                        <input
-                          type="text"
-                          value={tempAwardList[index].dateLocation}
-                          onChange={(e) =>
-                            handleAwardChange(index, "dateLocation", e.target.value)
-                          }
-                          className="text-sm text-gray-600 border-b border-gray-300 w-full mb-1"
-                        />
-                        <textarea
-                          rows={2}
-                          value={tempAwardList[index].description}
-                          onChange={(e) =>
-                            handleAwardChange(index, "description", e.target.value)
-                          }
-                          className="text-sm text-gray-600 border-b border-gray-300 w-full"
-                        />
-                        <div className="mt-3 flex justify-center gap-4">
-                          <button
-                            onClick={saveAward}
-                            className="px-4 py-1 bg-green-600 text-white rounded-full hover:bg-green-700 flex items-center gap-2 text-sm"
-                          >
-                            <AiOutlineCheck size={16} /> Save
-                          </button>
-                          <button
-                            onClick={cancelAward}
-                            className="px-4 py-1 bg-red-600 text-white rounded-full hover:bg-red-700 flex items-center gap-2 text-sm"
-                          >
-                            <AiOutlineClose size={16} /> Cancel
-                          </button>
-                        </div>
-                      </>
-                    ) : (
-                      <div>
-                        <h3 className="text-sm font-semibold text-gray-800">{award.title}</h3>
-                        <p className="text-sm text-gray-600">{award.org}</p>
-                        <p className="text-sm text-gray-600">{award.dateLocation}</p>
-                        <p className="text-sm text-gray-600">{award.description}</p>
+                      >
+                        {editingAwardIndex === index ? (
+                            <>
+                              <input
+                                  type="text"
+                                  placeholder="Award Title (e.g., Dean’s Honour List)"
+                                  value={tempAwardList[index].title}
+                                  onChange={(e) =>
+                                      handleAwardChange(index, "title", e.target.value)
+                                  }
+                                  className="text-sm font-semibold border-b border-gray-300 w-full mb-1"
+                              />
+                              <input
+                                  type="text"
+                                  placeholder="Organization (e.g., Brock University)"
+                                  value={tempAwardList[index].org}
+                                  onChange={(e) =>
+                                      handleAwardChange(index, "org", e.target.value)
+                                  }
+                                  className="text-sm text-gray-600 border-b border-gray-300 w-full mb-1"
+                              />
+                              <input
+                                  type="text"
+                                  placeholder="Date & Location (e.g., 2023 | Toronto, ON)"
+                                  value={tempAwardList[index].dateLocation}
+                                  onChange={(e) =>
+                                      handleAwardChange(index, "dateLocation", e.target.value)
+                                  }
+                                  className="text-sm text-gray-600 border-b border-gray-300 w-full mb-1"
+                              />
+                              <textarea
+                                  rows={2}
+                                  placeholder="Award Description (e.g., Selected among top 5 teams...)"
+                                  value={tempAwardList[index].description}
+                                  onChange={(e) =>
+                                      handleAwardChange(index, "description", e.target.value)
+                                  }
+                                  className="text-sm text-gray-600 border-b border-gray-300 w-full"
+                              />
+
+                              {/* ➕ Add Award Button */}
+                              <button
+                                  onClick={() => {
+                                    const newEntry = {
+                                      title: "",
+                                      org: "",
+                                      dateLocation: "",
+                                      description: ""
+                                    };
+                                    const updated = [...tempAwardList, newEntry];
+                                    setTempAwardList(updated);
+                                    setAwardList(updated);
+                                    setEditingAwardIndex(updated.length - 1);
+                                  }}
+                                  className="text-sm text-blue-600 mt-3 underline"
+                              >
+                                + Add Award
+                              </button>
+
+                              {/* ✅ Save / ❌ Cancel Buttons */}
+                              <div className="mt-3 flex justify-center gap-4">
+                                <button
+                                    onClick={saveAward}
+                                    className="px-4 py-1 bg-green-600 text-white rounded-full hover:bg-green-700 flex items-center gap-2 text-sm"
+                                >
+                                  <AiOutlineCheck size={16} /> Save
+                                </button>
+                                <button
+                                    onClick={cancelAward}
+                                    className="px-4 py-1 bg-red-600 text-white rounded-full hover:bg-red-700 flex items-center gap-2 text-sm"
+                                >
+                                  <AiOutlineClose size={16} /> Cancel
+                                </button>
+                              </div>
+
+                              {/* ❌ Remove Award */}
+                              <button
+                                  onClick={() => {
+                                    const updated = [...tempAwardList];
+                                    updated.splice(index, 1);
+                                    setTempAwardList(updated);
+                                    setAwardList(updated);
+                                    setEditingAwardIndex(null);
+                                    localStorage.setItem(getUserKey("Awards"), JSON.stringify(updated));
+                                  }}
+                                  className="absolute top-1 right-1 text-red-600 hover:text-red-800"
+                                  title="Remove Award"
+                              >
+                                <AiOutlineClose size={16} />
+                              </button>
+                            </>
+                        ) : (
+                            <div>
+                              <h3 className="text-sm font-semibold text-gray-800">
+                                {award.title}
+                              </h3>
+                              <p className="text-sm text-gray-600">{award.org}</p>
+                              <p className="text-sm text-gray-600">{award.dateLocation}</p>
+                              <p className="text-sm text-gray-600">{award.description}</p>
+                            </div>
+                        )}
                       </div>
-                    )}
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
           )}
         </div>
       </div>
