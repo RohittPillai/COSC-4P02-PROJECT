@@ -1,3 +1,4 @@
+"use client";
 import { Facebook, Twitter, Linkedin, Mail, Phone } from "lucide-react";
 
 const Footer = () => {
