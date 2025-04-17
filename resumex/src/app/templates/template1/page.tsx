@@ -21,6 +21,8 @@ export default function Template1Page({ data }: { data: any }) {
   const [isEditingProject, setIsEditingProject] = useState<number | null>(null); // Track project edit mode
   const [isEditingSkills, setIsEditingSkills] = useState(false); // Track skills edit mode
   const [isEditingInterests, setIsEditingInterests] = useState(false);
+  const [isExperienceEditingMode, setIsExperienceEditingMode] = useState(false);
+  const [isEducationEditingMode, setIsEducationEditingMode] = useState(false);
 
   const [tempData, setTempData] = useState(resumeData); // Store temporary changes
   const [tempExperience, setTempExperience] = useState(resumeData.experienceList); // Store experience changes
@@ -250,76 +252,220 @@ export default function Template1Page({ data }: { data: any }) {
 
           {/* Experience Section */}
           <div className="section mt-6">
-            <h3 className="text-2xl font-semibold text-gray-800">Experience</h3>
+            <h3
+                className="text-2xl font-semibold text-gray-800 cursor-pointer"
+                onClick={() => {
+                  setIsExperienceEditingMode(true);
+                  setTempExperience([...resumeData.experienceList]);
+                }}
+            >
+              Experience
+            </h3>
             <div className="mt-4">
               {tempExperience.map((job: any, index: number) => (
-                  <div key={index} className="mb-4 cursor-pointer relative" onClick={() => setIsEditingExperience(index)}>
-                    {isEditingExperience === index ? (
+                  <div key={index} className="mb-4 relative">
+                    {isExperienceEditingMode ? (
                         <>
-                          <input type="text" value={tempExperience[index].company} onChange={(e) => handleExperienceChange(e, index, "company")} className="text-lg font-semibold border-b border-gray-300 focus:outline-none focus:border-blue-500 w-full" />
-                          <input type="text" value={tempExperience[index].location} onChange={(e) => handleExperienceChange(e, index, "location")} className="text-sm text-gray-600 border-b border-gray-300 focus:outline-none focus:border-blue-500 w-full" />
-                          <input type="text" value={tempExperience[index].duration} onChange={(e) => handleExperienceChange(e, index, "duration")} className="text-sm text-gray-600 border-b border-gray-300 focus:outline-none focus:border-blue-500 w-full" />
-                          <textarea value={tempExperience[index].description} onChange={(e) => handleExperienceChange(e, index, "description")} className="text-gray-700 border-b border-gray-300 focus:outline-none focus:border-blue-500 w-full" />
-
-                          {/* Save and Cancel Buttons */}
-                          <div className="mt-4 flex justify-center gap-4">
-                            <button onClick={saveExperienceEdit} className="px-4 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition flex items-center gap-2">
-                              <AiOutlineCheck size={18} /> Save
-                            </button>
-                            <button onClick={cancelExperienceEdit} className="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition flex items-center gap-2">
-                              <AiOutlineClose size={18} /> Cancel
-                            </button>
-                          </div>
+                          <input
+                              type="text"
+                              value={job.company}
+                              onChange={(e) => handleExperienceChange(e, index, "company")}
+                              className="text-lg font-semibold border-b border-gray-300 focus:outline-none focus:border-blue-500 w-full"
+                              placeholder="Company"
+                          />
+                          <input
+                              type="text"
+                              value={job.location}
+                              onChange={(e) => handleExperienceChange(e, index, "location")}
+                              className="text-sm text-gray-600 border-b border-gray-300 focus:outline-none focus:border-blue-500 w-full"
+                              placeholder="Location"
+                          />
+                          <input
+                              type="text"
+                              value={job.duration}
+                              onChange={(e) => handleExperienceChange(e, index, "duration")}
+                              className="text-sm text-gray-600 border-b border-gray-300 focus:outline-none focus:border-blue-500 w-full"
+                              placeholder="Duration"
+                          />
+                          <textarea
+                              value={job.description}
+                              onChange={(e) => handleExperienceChange(e, index, "description")}
+                              className="text-gray-700 border-b border-gray-300 focus:outline-none focus:border-blue-500 w-full"
+                              placeholder="Description"
+                          />
+                          <button
+                              onClick={() => {
+                                const updated = tempExperience.filter((_, i) => i !== index);
+                                setTempExperience(updated);
+                              }}
+                              className="absolute top-2 right-2 text-red-600 hover:text-red-800"
+                          >
+                            <AiOutlineClose size={20} />
+                          </button>
                         </>
                     ) : (
-                        <div>
+                        <div
+                            onClick={() => {
+                              setIsExperienceEditingMode(true);
+                              setTempExperience([...resumeData.experienceList]);
+                            }}
+                        >
                           <h4 className="text-lg font-semibold">{job.company}</h4>
-                          <p className="text-sm text-gray-600">{job.location} ({job.duration})</p>
+                          <p className="text-sm text-gray-600">
+                            {job.location} ({job.duration})
+                          </p>
                           <p className="text-gray-700">{job.description}</p>
                         </div>
                     )}
                   </div>
               ))}
+
+              {/* + Add Experience */}
+              {isExperienceEditingMode && (
+                  <div className="text-center mt-4">
+                    <button
+                        onClick={() => {
+                          setTempExperience([
+                            ...tempExperience,
+                            { company: "", location: "", duration: "", description: "" }
+                          ]);
+                          setIsExperienceEditingMode(true);
+                        }}
+                        className="px-4 py-1 text-sm bg-blue-600 text-white rounded-full hover:bg-blue-700 transition"
+                    >
+                      + Add Experience
+                    </button>
+                  </div>
+              )}
+
+              {/* Save/Cancel Buttons */}
+              {isExperienceEditingMode && (
+                  <div className="mt-4 flex justify-center gap-4">
+                    <button
+                        onClick={() => {
+                          saveExperienceEdit();
+                          setIsExperienceEditingMode(false);
+                        }}
+                        className="px-4 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition flex items-center gap-2"
+                    >
+                      <AiOutlineCheck size={18} /> Save
+                    </button>
+                    <button
+                        onClick={() => {
+                          cancelExperienceEdit();
+                          setIsExperienceEditingMode(false);
+                        }}
+                        className="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition flex items-center gap-2"
+                    >
+                      <AiOutlineClose size={18} /> Cancel
+                    </button>
+                  </div>
+              )}
             </div>
 
             {/* Education Section */}
             <div className="section mt-6">
-              <h3 className="text-2xl font-semibold text-gray-800">Education</h3>
+              <h3
+                  className="text-2xl font-semibold text-gray-800 cursor-pointer"
+                  onClick={() => {
+                    setIsEducationEditingMode(true);
+                    setTempEducation([...resumeData.education]);
+                  }}
+              >
+                Education
+              </h3>
               <div className="mt-4">
                 {tempEducation.map((edu: any, index: number) => (
-                    <div key={index} className="mb-4 cursor-pointer relative" onClick={() => setIsEditingEducation(index)}>
-                      {isEditingEducation === index ? (
+                    <div key={index} className="mb-4 relative">
+                      {isEducationEditingMode ? (
                           <>
-                            <input type="text" value={tempEducation[index].school} onChange={(e) => handleEducationChange(e, index, "school")} className="text-lg font-semibold border-b border-gray-300 w-full" />
-                            <input type="text" value={tempEducation[index].location} onChange={(e) => handleEducationChange(e, index, "location")} className="text-sm text-gray-600 border-b border-gray-300 w-full" />
-                            <input type="text" value={tempEducation[index].year} onChange={(e) => handleEducationChange(e, index, "year")} className="text-sm text-gray-600 border-b border-gray-300 w-full" />
-
-                            {/* Save and Cancel Buttons */}
-                            {/* Save and Cancel Buttons */}
-                            <div className="mt-4 flex justify-center gap-4">
-                              <button
-                                  onClick={saveEducationEdit}
-                                  className="px-4 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition flex items-center gap-2"
-                              >
-                                <AiOutlineCheck size={18} /> Save
-                              </button>
-                              <button
-                                  onClick={cancelEducationEdit}
-                                  className="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition flex items-center gap-2"
-                              >
-                                <AiOutlineClose size={18} /> Cancel
-                              </button>
-                            </div>
-
+                            <input
+                                type="text"
+                                value={edu.school}
+                                onChange={(e) => handleEducationChange(e, index, "school")}
+                                className="text-lg font-semibold border-b border-gray-300 focus:outline-none focus:border-blue-500 w-full"
+                                placeholder="School"
+                            />
+                            <input
+                                type="text"
+                                value={edu.location}
+                                onChange={(e) => handleEducationChange(e, index, "location")}
+                                className="text-sm text-gray-600 border-b border-gray-300 focus:outline-none focus:border-blue-500 w-full"
+                                placeholder="Location"
+                            />
+                            <input
+                                type="text"
+                                value={edu.year}
+                                onChange={(e) => handleEducationChange(e, index, "year")}
+                                className="text-sm text-gray-600 border-b border-gray-300 focus:outline-none focus:border-blue-500 w-full"
+                                placeholder="Year"
+                            />
+                            <button
+                                onClick={() => {
+                                  const updated = tempEducation.filter((_, i) => i !== index);
+                                  setTempEducation(updated);
+                                }}
+                                className="absolute top-2 right-2 text-red-600 hover:text-red-800"
+                            >
+                              <AiOutlineClose size={20} />
+                            </button>
                           </>
                       ) : (
-                          <div>
+                          <div
+                              onClick={() => {
+                                setIsEducationEditingMode(true);
+                                setTempEducation([...resumeData.education]);
+                              }}
+                          >
                             <h4 className="text-lg font-semibold">{edu.school}</h4>
-                            <p className="text-sm text-gray-600">{edu.location} ({edu.year})</p>
+                            <p className="text-sm text-gray-600">
+                              {edu.location} ({edu.year})
+                            </p>
                           </div>
                       )}
                     </div>
                 ))}
+
+                {/* + Add Education */}
+                {isEducationEditingMode && (
+                    <div className="text-center mt-4">
+                      <button
+                          onClick={() =>
+                              setTempEducation([
+                                ...tempEducation,
+                                { school: "", location: "", year: "" }
+                              ])
+                          }
+                          className="px-4 py-1 text-sm bg-blue-600 text-white rounded-full hover:bg-blue-700 transition"
+                      >
+                        + Add Education
+                      </button>
+                    </div>
+                )}
+
+                {/* Save / Cancel Buttons */}
+                {isEducationEditingMode && (
+                    <div className="mt-4 flex justify-center gap-4">
+                      <button
+                          onClick={() => {
+                            saveEducationEdit();
+                            setIsEducationEditingMode(false);
+                          }}
+                          className="px-4 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition flex items-center gap-2"
+                      >
+                        <AiOutlineCheck size={18} /> Save
+                      </button>
+                      <button
+                          onClick={() => {
+                            cancelEducationEdit();
+                            setIsEducationEditingMode(false);
+                          }}
+                          className="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition flex items-center gap-2"
+                      >
+                        <AiOutlineClose size={18} /> Cancel
+                      </button>
+                    </div>
+                )}
               </div>
             </div>
 
