@@ -375,62 +375,85 @@ export default function Template2Page() {
 
           {/* Skills (Editable) */}
           <div className="space-y-2">
-            <h2 className="text-lg font-bold tracking-wide border-b border-white pb-2">
-              SKILLS
-            </h2>
-            {isEditingSkills ? (
-              <>
-                {tempSkills.map((skill, index) => (
-                  <input
-                    key={index}
-                    type="text"
-                    className="text-sm text-black w-full px-2 py-1 rounded"
-                    value={skill}
-                    onChange={(e) => {
-                      const updated = [...tempSkills];
-                      updated[index] = e.target.value;
-                      setTempSkills(updated);
-                    }}
-                  />
-                ))}
-                {/* Save & Cancel Buttons */}
-                <div className="mt-4 flex gap-3">
-                  <button
-                    onClick={() => {
-                      setSkillsData(tempSkills);
-                      localStorage.setItem(
-                        getUserKey("skills"),
-                        JSON.stringify(tempSkills)
-                      );
-                      setIsEditingSkills(false);
-                    }}
-                    className="px-3 py-1 bg-green-600 text-white rounded-full text-sm flex items-center gap-1 whitespace-nowrap"
-                  >
-                    <AiOutlineCheck size={16} /> Save
-                  </button>
-                  <button
-                    onClick={() => {
-                      setTempSkills([...skillsData]);
-                      setIsEditingSkills(true); // stay in edit mode
-                    }}
-                    className="px-3 py-1 bg-red-600 text-white rounded-full text-sm flex items-center gap-1 whitespace-nowrap"
-                  >
-                    <AiOutlineClose size={16} /> Cancel
-                  </button>
-                </div>
-              </>
-            ) : (
-              <ul
-                className="text-sm space-y-1 list-disc list-inside cursor-pointer"
+            <h2
+                className="text-lg font-bold tracking-wide border-b border-white pb-2 cursor-pointer"
                 onClick={() => {
                   setTempSkills([...skillsData]);
                   setIsEditingSkills(true);
                 }}
-              >
-                {skillsData.map((skill, index) => (
-                  <li key={index}>{skill}</li>
-                ))}
-              </ul>
+            >
+              SKILLS
+            </h2>
+            {isEditingSkills ? (
+                <>
+                  {tempSkills.map((skill, index) => (
+                      <div key={index} className="relative">
+                        <input
+                            type="text"
+                            className="text-sm text-black bg-white w-full px-2 py-1 rounded pr-10"
+                            value={skill}
+                            onChange={(e) => {
+                              const updated = [...tempSkills];
+                              updated[index] = e.target.value;
+                              setTempSkills(updated);
+                            }}
+                        />
+                        <button
+                            onClick={() => {
+                              const updated = tempSkills.filter((_, i) => i !== index);
+                              setTempSkills(updated);
+                            }}
+                            className="absolute top-1 right-1 text-red-500 hover:text-red-700"
+                            title="Remove Skill"
+                        >
+                          <AiOutlineClose size={16} />
+                        </button>
+                      </div>
+                  ))}
+
+                  {/* + Add Skill */}
+                  <button
+                      onClick={() => setTempSkills([...tempSkills, ""])}
+                      className="mt-2 px-3 py-1 bg-blue-600 text-white rounded-full text-sm hover:bg-blue-700"
+                  >
+                    + Add Skill
+                  </button>
+
+                  {/* Save & Cancel Buttons */}
+                  <div className="mt-4 flex gap-3">
+                    <button
+                        onClick={() => {
+                          setSkillsData(tempSkills);
+                          localStorage.setItem(getUserKey("skills"), JSON.stringify(tempSkills));
+                          setIsEditingSkills(false);
+                        }}
+                        className="px-3 py-1 bg-green-600 text-white rounded-full text-sm flex items-center gap-1 whitespace-nowrap"
+                    >
+                      <AiOutlineCheck size={16} /> Save
+                    </button>
+                    <button
+                        onClick={() => {
+                          setTempSkills([...skillsData]);
+                          setIsEditingSkills(true); // stay in edit mode
+                        }}
+                        className="px-3 py-1 bg-red-600 text-white rounded-full text-sm flex items-center gap-1 whitespace-nowrap"
+                    >
+                      <AiOutlineClose size={16} /> Cancel
+                    </button>
+                  </div>
+                </>
+            ) : (
+                <ul
+                    className="text-sm space-y-1 list-disc list-inside cursor-pointer"
+                    onClick={() => {
+                      setTempSkills([...skillsData]);
+                      setIsEditingSkills(true);
+                    }}
+                >
+                  {skillsData.map((skill, index) => (
+                      <li key={index}>{skill}</li>
+                  ))}
+                </ul>
             )}
           </div>
 
