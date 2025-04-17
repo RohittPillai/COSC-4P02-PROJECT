@@ -18,6 +18,7 @@ const ResumePage = () => {
     extras: [{ title: "", description: "" }],
   });
 
+  const [theme, setTheme] = useState("modern");
   const [showExtras, setShowExtras] = useState(false);
   const [sectionOrder, setSectionOrder] = useState([
     "summary",
@@ -27,7 +28,11 @@ const ResumePage = () => {
     "extras",
   ]);
 
-  const [theme, setTheme] = useState("modern");
+  const [aiLoading, setAiLoading] = useState({
+    summary: false,
+    skills: false,
+    exp: {} as Record<number, boolean>,
+  });
 
   const moveSection = (section: string, direction: "up" | "down") => {
     const index = sectionOrder.indexOf(section);
@@ -36,6 +41,24 @@ const ResumePage = () => {
     if (targetIndex >= 0 && targetIndex < sectionOrder.length) {
       [newOrder[index], newOrder[targetIndex]] = [newOrder[targetIndex], newOrder[index]];
       setSectionOrder(newOrder);
+    }
+  };
+
+  const callAI = async (
+    type: "summary" | "skills" | "experience",
+    input: string
+  ): Promise<string> => {
+    try {
+      const res = await fetch("/api/ai-tool", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type, input }),
+      });
+      const data = await res.json();
+      return data.result || "";
+    } catch {
+      alert("Failed to contact AI.");
+      return "";
     }
   };
 
@@ -55,24 +78,23 @@ const ResumePage = () => {
     }
   };
 
+  const themeClasses = {
+    modern: "text-left font-sans text-gray-900",
+    classic: "text-left font-serif text-gray-900 underline decoration-gray-300",
+    compact: "text-left text-sm font-sans text-gray-800 leading-tight",
+  };
+
   const deleteEntry = (section: string, index: number) => {
     const updated = [...(resumeData as any)[section]];
     updated.splice(index, 1);
     setResumeData({ ...resumeData, [section]: updated });
   };
 
-  const themeClasses = {
-    modern: "text-left font-sans text-gray-900",
-    classic: "text-left font-serif text-gray-900 underline decoration-gray-300 decoration-1",
-    compact: "text-left text-sm font-sans text-gray-800 leading-tight",
-  };
-
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
       <Header />
-
       <main className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
-        {/* Left Panel */}
+        {/* Left Editor Panel */}
         <div className="bg-white p-6 rounded-xl shadow space-y-6">
           <h2 className="text-xl font-semibold">Edit Resume</h2>
 
@@ -90,7 +112,7 @@ const ResumePage = () => {
             </select>
           </div>
 
-          {/* Name / Email / Phone */}
+          {/* Name/Email/Phone */}
           <div>
             <label className="block font-medium">Name</label>
             <input
@@ -139,6 +161,18 @@ const ResumePage = () => {
               value={resumeData.summary}
               onChange={(e) => setResumeData({ ...resumeData, summary: e.target.value })}
             />
+            <button
+              onClick={async () => {
+                setAiLoading((prev) => ({ ...prev, summary: true }));
+                const newSummary = await callAI("summary", resumeData.summary);
+                setResumeData({ ...resumeData, summary: newSummary });
+                setAiLoading((prev) => ({ ...prev, summary: false }));
+              }}
+              disabled={aiLoading.summary}
+              className="mt-2 text-sm bg-yellow-100 text-yellow-800 px-3 py-1 rounded hover:bg-yellow-200 transition disabled:opacity-50"
+            >
+              {aiLoading.summary ? "Improving..." : "✨ Improve Summary with AI"}
+            </button>
           </div>
 
           {/* Skills */}
@@ -151,6 +185,18 @@ const ResumePage = () => {
                 setResumeData({ ...resumeData, skills: e.target.value.split(",").map((s) => s.trim()) })
               }
             />
+            <button
+              onClick={async () => {
+                setAiLoading((prev) => ({ ...prev, skills: true }));
+                const newSkills = await callAI("skills", resumeData.summary);
+                setResumeData({ ...resumeData, skills: newSkills.split(",").map((s) => s.trim()) });
+                setAiLoading((prev) => ({ ...prev, skills: false }));
+              }}
+              disabled={aiLoading.skills}
+              className="mt-2 text-sm bg-blue-100 text-blue-800 px-3 py-1 rounded hover:bg-blue-200 transition disabled:opacity-50"
+            >
+              {aiLoading.skills ? "Generating..." : "⚡ Generate Skills with AI"}
+            </button>
           </div>
 
           {/* Experience */}
@@ -189,10 +235,24 @@ const ResumePage = () => {
                   }}
                 />
                 <button
-                  onClick={() => deleteEntry("experience", idx)}
-                  className="text-xs text-red-600 hover:underline"
+                  onClick={async () => {
+                    setAiLoading((prev) => ({
+                      ...prev,
+                      exp: { ...prev.exp, [idx]: true },
+                    }));
+                    const newDesc = await callAI("experience", exp.description);
+                    const updated = [...resumeData.experience];
+                    updated[idx].description = newDesc;
+                    setResumeData({ ...resumeData, experience: updated });
+                    setAiLoading((prev) => ({
+                      ...prev,
+                      exp: { ...prev.exp, [idx]: false },
+                    }));
+                  }}
+                  disabled={aiLoading.exp[idx]}
+                  className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded hover:bg-green-200 disabled:opacity-50"
                 >
-                  🗑 Delete
+                  {aiLoading.exp[idx] ? "Rewriting..." : "🪄 Rewrite with AI"}
                 </button>
               </div>
             ))}
@@ -206,62 +266,6 @@ const ResumePage = () => {
               }
             >
               ➕ Add Experience
-            </button>
-          </div>
-
-          {/* Education */}
-          <div>
-            <label className="block font-medium">Education</label>
-            {resumeData.education.map((edu, idx) => (
-              <div key={idx} className="border-t pt-2 mt-2 space-y-2">
-                <input
-                  className="w-full border p-2 rounded"
-                  placeholder="Degree"
-                  value={edu.degree}
-                  onChange={(e) => {
-                    const updated = [...resumeData.education];
-                    updated[idx].degree = e.target.value;
-                    setResumeData({ ...resumeData, education: updated });
-                  }}
-                />
-                <input
-                  className="w-full border p-2 rounded"
-                  placeholder="School"
-                  value={edu.school}
-                  onChange={(e) => {
-                    const updated = [...resumeData.education];
-                    updated[idx].school = e.target.value;
-                    setResumeData({ ...resumeData, education: updated });
-                  }}
-                />
-                <input
-                  className="w-full border p-2 rounded"
-                  placeholder="Year"
-                  value={edu.year}
-                  onChange={(e) => {
-                    const updated = [...resumeData.education];
-                    updated[idx].year = e.target.value;
-                    setResumeData({ ...resumeData, education: updated });
-                  }}
-                />
-                <button
-                  onClick={() => deleteEntry("education", idx)}
-                  className="text-xs text-red-600 hover:underline"
-                >
-                  🗑 Delete
-                </button>
-              </div>
-            ))}
-            <button
-              className="mt-2 text-sm text-indigo-700 hover:underline"
-              onClick={() =>
-                setResumeData({
-                  ...resumeData,
-                  education: [...resumeData.education, { degree: "", school: "", year: "" }],
-                })
-              }
-            >
-              ➕ Add Education
             </button>
           </div>
 
@@ -354,7 +358,6 @@ const ResumePage = () => {
           })}
         </div>
       </main>
-
       <Footer />
     </div>
   );
