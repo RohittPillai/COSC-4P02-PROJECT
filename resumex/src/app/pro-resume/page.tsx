@@ -9,6 +9,8 @@ const ResumePage = () => {
 
   const [resumeData, setResumeData] = useState({
     name: "John Doe",
+    email: "john@example.com",
+    phone: "123-456-7890",
     summary: "Aspiring software developer passionate about building impactful tools.",
     skills: ["JavaScript", "React", "Node.js"],
     experience: [{ jobTitle: "", company: "", description: "" }],
@@ -29,7 +31,6 @@ const ResumePage = () => {
     const index = sectionOrder.indexOf(section);
     const newOrder = [...sectionOrder];
     const targetIndex = direction === "up" ? index - 1 : index + 1;
-
     if (targetIndex >= 0 && targetIndex < sectionOrder.length) {
       [newOrder[index], newOrder[targetIndex]] = [newOrder[targetIndex], newOrder[index]];
       setSectionOrder(newOrder);
@@ -58,38 +59,81 @@ const ResumePage = () => {
     setResumeData({ ...resumeData, [section]: updated });
   };
 
-  const renderEditor = (key: string) => {
-    switch (key) {
-      case "summary":
-        return (
-          <div className="space-y-2">
+  return (
+    <div className="flex flex-col min-h-screen bg-gray-100">
+      <Header />
+
+      <main className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
+        {/* Left Editor Panel */}
+        <div className="bg-white p-6 rounded-xl shadow space-y-6">
+          <h2 className="text-xl font-semibold">Edit Resume</h2>
+
+          {/* Basic Info */}
+          <div>
+            <label className="block font-medium">Name</label>
+            <input
+              className="w-full border p-2 rounded"
+              value={resumeData.name}
+              onChange={(e) => setResumeData({ ...resumeData, name: e.target.value })}
+            />
+          </div>
+
+          <div>
+            <label className="block font-medium">Email</label>
+            <input
+              className="w-full border p-2 rounded"
+              value={resumeData.email}
+              onChange={(e) => setResumeData({ ...resumeData, email: e.target.value })}
+            />
+          </div>
+
+          <div>
+            <label className="block font-medium">Phone Number</label>
+            <input
+              className="w-full border p-2 rounded"
+              value={resumeData.phone}
+              onChange={(e) => setResumeData({ ...resumeData, phone: e.target.value })}
+            />
+          </div>
+
+          {/* Section Reordering */}
+          <div>
+            <h3 className="font-semibold">Reorder Sections</h3>
+            {sectionOrder.map((sec, idx) => (
+              <div key={sec} className="flex justify-between items-center mt-2 text-sm bg-gray-100 px-3 py-1 rounded">
+                <span className="capitalize">{sec}</span>
+                <div className="space-x-2">
+                  <button onClick={() => moveSection(sec, "up")} disabled={idx === 0}>↑</button>
+                  <button onClick={() => moveSection(sec, "down")} disabled={idx === sectionOrder.length - 1}>↓</button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Summary */}
+          <div>
             <label className="block font-medium">Summary</label>
             <textarea
               className="w-full border p-2 rounded"
-              rows={4}
+              rows={3}
               value={resumeData.summary}
               onChange={(e) => setResumeData({ ...resumeData, summary: e.target.value })}
             />
           </div>
-        );
-      case "skills":
-        return (
-          <div className="space-y-2">
-            <label className="block font-medium">Skills (comma-separated)</label>
+
+          {/* Skills */}
+          <div>
+            <label className="block font-medium">Skills (comma separated)</label>
             <input
               className="w-full border p-2 rounded"
               value={resumeData.skills.join(", ")}
               onChange={(e) =>
-                setResumeData({
-                  ...resumeData,
-                  skills: e.target.value.split(",").map((s) => s.trim()),
-                })
+                setResumeData({ ...resumeData, skills: e.target.value.split(",").map((s) => s.trim()) })
               }
             />
           </div>
-        );
-      case "experience":
-        return (
+
+          {/* Experience */}
           <div>
             <label className="block font-medium">Experience</label>
             {resumeData.experience.map((exp, idx) => (
@@ -144,9 +188,8 @@ const ResumePage = () => {
               ➕ Add Experience
             </button>
           </div>
-        );
-      case "education":
-        return (
+
+          {/* Education */}
           <div>
             <label className="block font-medium">Education</label>
             {resumeData.education.map((edu, idx) => (
@@ -201,116 +244,64 @@ const ResumePage = () => {
               ➕ Add Education
             </button>
           </div>
-        );
-      case "extras":
-        return showExtras ? (
-          <div>
-            <label className="block font-medium">Projects / Certifications</label>
-            {resumeData.extras.map((item, idx) => (
-              <div key={idx} className="border-t pt-2 mt-2 space-y-2">
-                <input
-                  className="w-full border p-2 rounded"
-                  placeholder="Title"
-                  value={item.title}
-                  onChange={(e) => {
-                    const updated = [...resumeData.extras];
-                    updated[idx].title = e.target.value;
-                    setResumeData({ ...resumeData, extras: updated });
-                  }}
-                />
-                <input
-                  className="w-full border p-2 rounded"
-                  placeholder="Description or link"
-                  value={item.description}
-                  onChange={(e) => {
-                    const updated = [...resumeData.extras];
-                    updated[idx].description = e.target.value;
-                    setResumeData({ ...resumeData, extras: updated });
-                  }}
-                />
-                <button
-                  onClick={() => deleteEntry("extras", idx)}
-                  className="text-xs text-red-600 hover:underline"
-                >
-                  🗑 Delete
-                </button>
-              </div>
-            ))}
-            <button
-              className="mt-2 text-sm text-indigo-700 hover:underline"
-              onClick={() =>
-                setResumeData({
-                  ...resumeData,
-                  extras: [...resumeData.extras, { title: "", description: "" }],
-                })
-              }
-            >
-              ➕ Add Project / Certification
-            </button>
-          </div>
-        ) : (
-          <button
-            onClick={() => setShowExtras(true)}
-            className="mt-2 bg-indigo-100 text-indigo-700 px-4 py-2 rounded hover:bg-indigo-200"
-          >
-            ➕ Add Projects / Certifications
-          </button>
-        );
-    }
-  };
 
-  return (
-    <div className="flex flex-col min-h-screen bg-gray-100">
-      <Header />
-
-      <main className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
-        {/* Left: Editor */}
-        <div className="bg-white p-6 rounded-xl shadow space-y-6">
-          <h2 className="text-xl font-semibold">Edit Resume</h2>
-
-          {/* Name */}
-          <div>
-            <label className="block font-medium">Name</label>
-            <input
-              className="w-full border p-2 rounded"
-              value={resumeData.name}
-              onChange={(e) => setResumeData({ ...resumeData, name: e.target.value })}
-            />
-          </div>
-
-          {/* Reorder Controls */}
-          <div>
-            <h3 className="font-semibold mt-4">Reorder Sections</h3>
-            {sectionOrder.map((sec, idx) => (
-              <div key={sec} className="flex justify-between items-center mt-2 text-sm bg-gray-100 px-3 py-1 rounded">
-                <span className="capitalize">{sec}</span>
-                <div className="space-x-2">
+          {/* Projects / Certifications */}
+          {showExtras ? (
+            <div>
+              <label className="block font-medium">Projects / Certifications</label>
+              {resumeData.extras.map((item, idx) => (
+                <div key={idx} className="border-t pt-2 mt-2 space-y-2">
+                  <input
+                    className="w-full border p-2 rounded"
+                    placeholder="Title"
+                    value={item.title}
+                    onChange={(e) => {
+                      const updated = [...resumeData.extras];
+                      updated[idx].title = e.target.value;
+                      setResumeData({ ...resumeData, extras: updated });
+                    }}
+                  />
+                  <input
+                    className="w-full border p-2 rounded"
+                    placeholder="Description"
+                    value={item.description}
+                    onChange={(e) => {
+                      const updated = [...resumeData.extras];
+                      updated[idx].description = e.target.value;
+                      setResumeData({ ...resumeData, extras: updated });
+                    }}
+                  />
                   <button
-                    onClick={() => moveSection(sec, "up")}
-                    className="text-blue-600 hover:underline"
-                    disabled={idx === 0}
+                    onClick={() => deleteEntry("extras", idx)}
+                    className="text-xs text-red-600 hover:underline"
                   >
-                    ↑
-                  </button>
-                  <button
-                    onClick={() => moveSection(sec, "down")}
-                    className="text-blue-600 hover:underline"
-                    disabled={idx === sectionOrder.length - 1}
-                  >
-                    ↓
+                    🗑 Delete
                   </button>
                 </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Section Inputs */}
-          {sectionOrder.map((section) => (
-            <div key={section}>{renderEditor(section)}</div>
-          ))}
+              ))}
+              <button
+                className="mt-2 text-sm text-indigo-700 hover:underline"
+                onClick={() =>
+                  setResumeData({
+                    ...resumeData,
+                    extras: [...resumeData.extras, { title: "", description: "" }],
+                  })
+                }
+              >
+                ➕ Add Project / Certification
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => setShowExtras(true)}
+              className="mt-2 bg-indigo-100 text-indigo-700 px-4 py-2 rounded hover:bg-indigo-200"
+            >
+              ➕ Add Projects / Certifications
+            </button>
+          )}
 
           {/* Export Button */}
-          <div className="pt-4">
+          <div className="pt-6">
             <button
               onClick={exportPDF}
               className="w-full bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition"
@@ -320,66 +311,84 @@ const ResumePage = () => {
           </div>
         </div>
 
-        {/* Right: Preview */}
+        {/* Right Preview Panel */}
         <div ref={resumeRef} className="bg-white p-6 rounded-xl shadow h-fit space-y-6 text-left">
-          <h1 className="text-3xl font-bold text-gray-900">{resumeData.name}</h1>
-          {sectionOrder.map((section) => {
-            const render = {
-              summary: (
-                <>
-                  <h2 className="text-lg font-semibold text-gray-600">Professional Summary</h2>
-                  <p className="mt-2 text-gray-800 whitespace-pre-line">{resumeData.summary}</p>
-                </>
-              ),
-              skills: (
-                <>
-                  <h2 className="text-lg font-semibold text-gray-600">Skills</h2>
-                  <ul className="list-disc ml-6 text-gray-800">
-                    {resumeData.skills.map((skill, idx) => <li key={idx}>{skill}</li>)}
-                  </ul>
-                </>
-              ),
-              experience: (
-                <>
-                  <h2 className="text-lg font-semibold text-gray-600">Experience</h2>
-                  {resumeData.experience.map((exp, idx) => (
-                    <div key={idx} className="mt-3">
-                      <h3 className="text-md font-medium">{exp.jobTitle}</h3>
-                      <p className="text-sm italic">{exp.company}</p>
-                      <p className="text-sm">{exp.description}</p>
-                    </div>
-                  ))}
-                </>
-              ),
-              education: (
-                <>
-                  <h2 className="text-lg font-semibold text-gray-600">Education</h2>
-                  {resumeData.education.map((edu, idx) => (
-                    <div key={idx} className="mt-3">
-                      <h3 className="text-md font-medium">{edu.degree}</h3>
-                      <p className="text-sm italic">{edu.school}</p>
-                      <p className="text-sm">{edu.year}</p>
-                    </div>
-                  ))}
-                </>
-              ),
-              extras: showExtras && (
-                <>
-                  <h2 className="text-lg font-semibold text-gray-600">Projects / Certifications</h2>
-                  {resumeData.extras.map((item, idx) => (
-                    <div key={idx} className="mt-3">
-                      <h3 className="text-md font-medium">{item.title}</h3>
-                      <p className="text-sm">{item.description}</p>
-                    </div>
-                  ))}
-                </>
-              ),
-            };
-            return <div key={section}>{render[section]}</div>;
+          <div className="text-center">
+            <h1 className="text-3xl font-bold text-gray-900">{resumeData.name}</h1>
+            <p className="text-sm text-gray-600">
+              {resumeData.email}
+              {resumeData.email && resumeData.phone && " | "}
+              {resumeData.phone}
+            </p>
+            <hr className="my-4 border-gray-300" />
+          </div>
+
+          {sectionOrder.map((sectionKey) => {
+            switch (sectionKey) {
+              case "summary":
+                return (
+                  <section key="summary">
+                    <h2 className="text-lg font-semibold text-gray-600">Professional Summary</h2>
+                    <p className="mt-2 text-gray-800 whitespace-pre-line">{resumeData.summary}</p>
+                  </section>
+                );
+              case "skills":
+                return (
+                  <section key="skills">
+                    <h2 className="text-lg font-semibold text-gray-600">Skills</h2>
+                    <ul className="list-disc ml-6 text-gray-800">
+                      {resumeData.skills.map((skill, idx) => (
+                        <li key={idx}>{skill}</li>
+                      ))}
+                    </ul>
+                  </section>
+                );
+              case "experience":
+                return (
+                  <section key="experience">
+                    <h2 className="text-lg font-semibold text-gray-600">Experience</h2>
+                    {resumeData.experience.map((exp, idx) => (
+                      <div key={idx} className="mt-3">
+                        <h3 className="text-md font-medium">{exp.jobTitle}</h3>
+                        <p className="text-sm italic">{exp.company}</p>
+                        <p className="text-sm">{exp.description}</p>
+                      </div>
+                    ))}
+                  </section>
+                );
+              case "education":
+                return (
+                  <section key="education">
+                    <h2 className="text-lg font-semibold text-gray-600">Education</h2>
+                    {resumeData.education.map((edu, idx) => (
+                      <div key={idx} className="mt-3">
+                        <h3 className="text-md font-medium">{edu.degree}</h3>
+                        <p className="text-sm italic">{edu.school}</p>
+                        <p className="text-sm">{edu.year}</p>
+                      </div>
+                    ))}
+                  </section>
+                );
+              case "extras":
+                return (
+                  showExtras && (
+                    <section key="extras">
+                      <h2 className="text-lg font-semibold text-gray-600">Projects / Certifications</h2>
+                      {resumeData.extras.map((item, idx) => (
+                        <div key={idx} className="mt-3">
+                          <h3 className="text-md font-medium">{item.title}</h3>
+                          <p className="text-sm">{item.description}</p>
+                        </div>
+                      ))}
+                    </section>
+                  )
+                );
+              default:
+                return null;
+            }
           })}
         </div>
       </main>
-
       <Footer />
     </div>
   );
