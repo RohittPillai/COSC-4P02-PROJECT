@@ -1447,78 +1447,124 @@ export default function Template3Page() {
           )}
 
           {activeTab === "work" && (
-            <div className="space-y-10">
-              <div className="border-l-4 border-purple-600 pl-4">
-                <h2 className="text-2xl font-bold mb-2">Work Experience</h2>
-                {tempWorkList.map((job, index) => (
-                  <div key={index} className="mb-6">
-                    {editingWorkIndex === index ? (
-                      <>
-                        <input
-                          type="text"
-                          value={tempWorkList[index].title}
-                          onChange={(e) => handleWorkChange(index, "title", e.target.value)}
-                          className="text-sm font-semibold border-b border-gray-300 w-full"
-                        />
-                        <input
-                          type="text"
-                          value={tempWorkList[index].company}
-                          onChange={(e) => handleWorkChange(index, "company", e.target.value)}
-                          className="text-sm text-gray-600 border-b border-gray-300 w-full"
-                        />
-                        <input
-                          type="text"
-                          value={tempWorkList[index].location}
-                          onChange={(e) => handleWorkChange(index, "location", e.target.value)}
-                          className="text-sm text-gray-600 border-b border-gray-300 w-full"
-                        />
-                        <input
-                          type="text"
-                          value={tempWorkList[index].duration}
-                          onChange={(e) => handleWorkChange(index, "duration", e.target.value)}
-                          className="text-sm text-gray-600 border-b border-gray-300 w-full"
-                        />
-                        <textarea
-                          rows={2}
-                          value={tempWorkList[index].description}
-                          onChange={(e) => handleWorkChange(index, "description", e.target.value)}
-                          className="text-sm text-gray-600 border-b border-gray-300 w-full"
-                        />
-                        <div className="mt-4 flex justify-center gap-4">
-                          <button
-                            onClick={saveWork}
-                            className="px-4 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition flex items-center gap-2"
-                          >
-                            <AiOutlineCheck size={18} /> Save
-                          </button>
-                          <button
-                            onClick={cancelWork}
-                            className="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition flex items-center gap-2"
-                          >
-                            <AiOutlineClose size={18} /> Cancel
-                          </button>
-                        </div>
-                      </>
-                    ) : (
-                      <div
-                        className="cursor-pointer"
-                        onClick={() => {
-                          if (editingWorkIndex === null) {
-                            setEditingWorkIndex(index);
-                          }
-                        }}
-                      >
-                        <p className="text-sm font-semibold text-gray-800">{job.title}</p>
-                        <p className="text-sm text-gray-600">{job.company}</p>
-                        <p className="text-sm text-gray-600">{job.duration} | {job.location}</p>
-                        <p className="text-sm text-gray-600">{job.description}</p>
+              <div className="space-y-10">
+                <div className="border-l-4 border-purple-600 pl-4">
+                  <h2 className="text-2xl font-bold mb-2">Work Experience</h2>
+                  {tempWorkList.map((job, index) => (
+                      <div key={index} className="mb-6 relative">
+                        {editingWorkIndex === index ? (
+                            <>
+                              <input
+                                  type="text"
+                                  placeholder="Job Title (e.g., Marketing Intern)"
+                                  value={tempWorkList[index].title}
+                                  onChange={(e) => handleWorkChange(index, "title", e.target.value)}
+                                  className="text-sm font-semibold border-b border-gray-300 w-full"
+                              />
+                              <input
+                                  type="text"
+                                  placeholder="Company Name (e.g., Nestlé Canada)"
+                                  value={tempWorkList[index].company}
+                                  onChange={(e) => handleWorkChange(index, "company", e.target.value)}
+                                  className="text-sm text-gray-600 border-b border-gray-300 w-full"
+                              />
+                              <input
+                                  type="text"
+                                  placeholder="Location (e.g., Toronto, ON)"
+                                  value={tempWorkList[index].location}
+                                  onChange={(e) => handleWorkChange(index, "location", e.target.value)}
+                                  className="text-sm text-gray-600 border-b border-gray-300 w-full"
+                              />
+                              <input
+                                  type="text"
+                                  placeholder="Duration (e.g., May 2023 – Aug 2023)"
+                                  value={tempWorkList[index].duration}
+                                  onChange={(e) => handleWorkChange(index, "duration", e.target.value)}
+                                  className="text-sm text-gray-600 border-b border-gray-300 w-full"
+                              />
+                              <textarea
+                                  rows={2}
+                                  placeholder="Job Description (e.g., Assisted in launching a new product...)"
+                                  value={tempWorkList[index].description}
+                                  onChange={(e) => handleWorkChange(index, "description", e.target.value)}
+                                  className="text-sm text-gray-600 border-b border-gray-300 w-full"
+                              />
+
+                              {/* ➕ Add Work */}
+                              <button
+                                  onClick={() => {
+                                    const newEntry = {
+                                      title: "",
+                                      company: "",
+                                      location: "",
+                                      duration: "",
+                                      description: ""
+                                    };
+                                    const updated = [...tempWorkList, newEntry];
+                                    setTempWorkList(updated);
+                                    setWorkList(updated);
+                                    setEditingWorkIndex(updated.length - 1);
+                                  }}
+                                  className="text-sm text-blue-600 mt-3 underline"
+                              >
+                                + Add Work
+                              </button>
+
+                              {/* ✅ Save / ❌ Cancel */}
+                              <div className="mt-4 flex justify-center gap-4">
+                                <button
+                                    onClick={saveWork}
+                                    className="px-4 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition flex items-center gap-2"
+                                >
+                                  <AiOutlineCheck size={18} /> Save
+                                </button>
+                                <button
+                                    onClick={cancelWork}
+                                    className="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition flex items-center gap-2"
+                                >
+                                  <AiOutlineClose size={18} /> Cancel
+                                </button>
+                              </div>
+
+                              {/* ❌ Remove Work Entry */}
+                              <button
+                                  onClick={() => {
+                                    const updated = [...tempWorkList];
+                                    updated.splice(index, 1);
+                                    setTempWorkList(updated);
+                                    setWorkList(updated);
+                                    setEditingWorkIndex(null);
+                                    localStorage.setItem(getUserKey("Work"), JSON.stringify(updated));
+                                  }}
+                                  className="absolute top-1 right-1 text-red-600 hover:text-red-800"
+                                  title="Remove Work Entry"
+                              >
+                                <AiOutlineClose size={16} />
+                              </button>
+                            </>
+                        ) : (
+                            <div
+                                className="cursor-pointer"
+                                onClick={() => {
+                                  if (editingWorkIndex === null) {
+                                    setEditingWorkIndex(index);
+                                  }
+                                }}
+                            >
+                              <p className="text-sm font-semibold text-gray-800">{job.title}</p>
+                              <p className="text-sm text-gray-600">{job.company}</p>
+                              <p className="text-sm text-gray-600">
+                                {job.duration} | {job.location}
+                              </p>
+                              <p className="text-sm text-gray-600">{job.description}</p>
+                            </div>
+                        )}
                       </div>
-                    )}
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
           )}
+
 
           {activeTab === "awards" && (
             <div className="space-y-10">
