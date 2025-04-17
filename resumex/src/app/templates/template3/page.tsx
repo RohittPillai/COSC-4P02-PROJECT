@@ -1031,80 +1031,112 @@ export default function Template3Page() {
           )}
 
           {activeTab === "education & projects" && (
-            <div className="space-y-10">
-              <div className="border-l-4 border-purple-600 pl-4">
-                <h2 className="text-2xl font-bold mb-2">Education</h2>
-                {educationList.map((edu, index) => (
-                  <div
-                    key={index}
-                    className="mb-4 cursor-pointer relative"
-                    onClick={
-                      editingEducationIndex === index
-                        ? undefined
-                        : () => setEditingEducationIndex(index)
-                    }
-                  >
-                    {editingEducationIndex === index ? (
-                      <>
-                        <input
-                          type="text"
-                          value={tempEducationList[index].degree}
-                          onChange={(e) =>
-                            handleEducationChange(index, "degree", e.target.value)
+              <div className="space-y-10">
+                <div className="border-l-4 border-purple-600 pl-4">
+                  <h2 className="text-2xl font-bold mb-2">Education</h2>
+                  {educationList.map((edu, index) => (
+                      <div
+                          key={index}
+                          className="mb-4 cursor-pointer relative"
+                          onClick={
+                            editingEducationIndex === index
+                                ? undefined
+                                : () => setEditingEducationIndex(index)
                           }
-                          className="text-sm font-semibold border-b border-gray-300 w-full"
-                        />
-                        <input
-                          type="text"
-                          value={tempEducationList[index].school}
-                          onChange={(e) =>
-                            handleEducationChange(index, "school", e.target.value)
-                          }
-                          className="text-sm text-gray-600 border-b border-gray-300 w-full"
-                        />
-                        <input
-                          type="text"
-                          value={tempEducationList[index].year}
-                          onChange={(e) =>
-                            handleEducationChange(index, "year", e.target.value)
-                          }
-                          className="text-sm text-gray-600 border-b border-gray-300 w-full"
-                        />
-                        <input
-                          type="text"
-                          value={tempEducationList[index].location}
-                          onChange={(e) =>
-                            handleEducationChange(index, "location", e.target.value)
-                          }
-                          className="text-sm text-gray-600 border-b border-gray-300 w-full"
-                        />
-                        <div className="mt-4 flex justify-center gap-4">
-                          <button
-                            onClick={saveEducation}
-                            className="px-4 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition flex items-center gap-2"
-                          >
-                            <AiOutlineCheck size={18} /> Save
-                          </button>
-                          <button
-                            onClick={cancelEducation}
-                            className="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition flex items-center gap-2"
-                          >
-                            <AiOutlineClose size={18} /> Cancel
-                          </button>
-                        </div>
-                      </>
-                    ) : (
-                      <div>
-                        <p className="text-sm font-semibold text-gray-800">{edu.degree}</p>
-                        <p className="text-sm text-gray-600">{edu.school}</p>
-                        <p className="text-sm text-gray-500">{edu.year} | {edu.location}</p>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
+                      >
+                        {editingEducationIndex === index ? (
+                            <>
+                              <input
+                                  type="text"
+                                  value={tempEducationList[index].degree}
+                                  onChange={(e) =>
+                                      handleEducationChange(index, "degree", e.target.value)
+                                  }
+                                  className="text-sm font-semibold border-b border-gray-300 w-full"
+                              />
+                              <input
+                                  type="text"
+                                  value={tempEducationList[index].school}
+                                  onChange={(e) =>
+                                      handleEducationChange(index, "school", e.target.value)
+                                  }
+                                  className="text-sm text-gray-600 border-b border-gray-300 w-full"
+                              />
+                              <input
+                                  type="text"
+                                  value={tempEducationList[index].year}
+                                  onChange={(e) =>
+                                      handleEducationChange(index, "year", e.target.value)
+                                  }
+                                  className="text-sm text-gray-600 border-b border-gray-300 w-full"
+                              />
+                              <input
+                                  type="text"
+                                  value={tempEducationList[index].location}
+                                  onChange={(e) =>
+                                      handleEducationChange(index, "location", e.target.value)
+                                  }
+                                  className="text-sm text-gray-600 border-b border-gray-300 w-full"
+                              />
 
-              <div className="border-l-4 border-purple-600 pl-4">
+                              {/* ❌ Remove Entry */}
+                              <button
+                                  onClick={() => {
+                                    const updated = [...tempEducationList];
+                                    updated.splice(index, 1);
+                                    setTempEducationList(updated);
+                                    setEducationList(updated);
+                                    localStorage.setItem(getUserKey("Education"), JSON.stringify(updated));
+                                    setEditingEducationIndex(null);
+                                  }}
+                                  className="absolute top-0 right-0 text-red-600 hover:text-red-800"
+                                  title="Remove"
+                              >
+                                <AiOutlineClose size={18} />
+                              </button>
+
+                              {/* ➕ Add Education Entry */}
+                              <button
+                                  onClick={() => {
+                                    const newEntry = { school: "", degree: "", year: "", location: "" };
+                                    const updated = [...tempEducationList, newEntry];
+                                    setTempEducationList(updated);
+                                    setEducationList(updated);
+                                    setEditingEducationIndex(updated.length - 1);
+                                  }}
+                                  className="text-sm text-blue-600 mt-4 underline"
+                              >
+                                + Add Education
+                              </button>
+
+                              {/* ✅ Save & Cancel */}
+                              <div className="mt-4 flex justify-center gap-4">
+                                <button
+                                    onClick={saveEducation}
+                                    className="px-4 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition flex items-center gap-2"
+                                >
+                                  <AiOutlineCheck size={18} /> Save
+                                </button>
+                                <button
+                                    onClick={cancelEducation}
+                                    className="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition flex items-center gap-2"
+                                >
+                                  <AiOutlineClose size={18} /> Cancel
+                                </button>
+                              </div>
+                            </>
+                        ) : (
+                            <div>
+                              <p className="text-sm font-semibold text-gray-800">{edu.degree}</p>
+                              <p className="text-sm text-gray-600">{edu.school}</p>
+                              <p className="text-sm text-gray-500">{edu.year} | {edu.location}</p>
+                            </div>
+                        )}
+                      </div>
+                  ))}
+                </div>
+
+                <div className="border-l-4 border-purple-600 pl-4">
                 <h2 className="text-2xl font-bold mb-1">Project Highlight</h2>
                 {projectList.map((project, index) => (
                   <div
