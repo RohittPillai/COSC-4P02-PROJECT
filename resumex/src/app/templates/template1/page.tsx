@@ -23,6 +23,7 @@ export default function Template1Page({ data }: { data: any }) {
   const [isEditingInterests, setIsEditingInterests] = useState(false);
   const [isExperienceEditingMode, setIsExperienceEditingMode] = useState(false);
   const [isEducationEditingMode, setIsEducationEditingMode] = useState(false);
+  const [isProjectsEditingMode, setIsProjectsEditingMode] = useState(false);
 
   const [tempData, setTempData] = useState(resumeData); // Store temporary changes
   const [tempExperience, setTempExperience] = useState(resumeData.experienceList); // Store experience changes
@@ -471,42 +472,97 @@ export default function Template1Page({ data }: { data: any }) {
 
             {/* Projects Section */}
             <div className="section mt-6">
-              <h3 className="text-2xl font-semibold text-gray-800">Projects</h3>
+              <h3
+                  className="text-2xl font-semibold text-gray-800 cursor-pointer"
+                  onClick={() => {
+                    setIsProjectsEditingMode(true);
+                    setTempProjects([...resumeData.projects]);
+                  }}
+              >
+                Projects
+              </h3>
               <div className="mt-4">
                 {tempProjects.map((project: any, index: number) => (
-                    <div key={index} className="mb-4 cursor-pointer relative" onClick={() => setIsEditingProject(index)}>
-                      {isEditingProject === index ? (
+                    <div key={index} className="mb-4 relative">
+                      {isProjectsEditingMode ? (
                           <>
                             <input
                                 type="text"
-                                value={tempProjects[index].name}
+                                value={project.name}
                                 onChange={(e) => handleProjectChange(e, index, "name")}
-                                className="text-lg font-semibold border-b border-gray-300 w-full"
+                                className="text-lg font-semibold border-b border-gray-300 focus:outline-none focus:border-blue-500 w-full mb-2"
+                                placeholder="Project Title"
                             />
                             <textarea
-                                value={tempProjects[index].description}
+                                value={project.description}
                                 onChange={(e) => handleProjectChange(e, index, "description")}
-                                className="text-gray-700 border-b border-gray-300 w-full"
+                                className="text-gray-700 border-b border-gray-300 focus:outline-none focus:border-blue-500 w-full"
+                                placeholder="Project Description"
                             />
-
-                            {/* Save and Cancel Buttons */}
-                            <div className="mt-4 flex justify-center gap-4">
-                              <button onClick={saveProjectEdit} className="px-4 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition flex items-center gap-2">
-                                <AiOutlineCheck size={18} /> Save
-                              </button>
-                              <button onClick={cancelProjectEdit} className="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition flex items-center gap-2">
-                                <AiOutlineClose size={18} /> Cancel
-                              </button>
-                            </div>
+                            <button
+                                onClick={() => {
+                                  const updated = tempProjects.filter((_, i) => i !== index);
+                                  setTempProjects(updated);
+                                }}
+                                className="absolute top-2 right-2 text-red-600 hover:text-red-800"
+                            >
+                              <AiOutlineClose size={20} />
+                            </button>
                           </>
                       ) : (
-                          <div>
+                          <div
+                              onClick={() => {
+                                setIsProjectsEditingMode(true);
+                                setTempProjects([...resumeData.projects]);
+                              }}
+                          >
                             <h4 className="text-lg font-semibold">{project.name}</h4>
                             <p className="text-gray-700">{project.description}</p>
                           </div>
                       )}
                     </div>
                 ))}
+
+                {/* + Add Project */}
+                {isProjectsEditingMode && (
+                    <div className="text-center mt-4">
+                      <button
+                          onClick={() =>
+                              setTempProjects([
+                                ...tempProjects,
+                                { name: "", description: "" }
+                              ])
+                          }
+                          className="px-4 py-1 text-sm bg-blue-600 text-white rounded-full hover:bg-blue-700 transition"
+                      >
+                        + Add Project
+                      </button>
+                    </div>
+                )}
+
+                {/* Save / Cancel Buttons */}
+                {isProjectsEditingMode && (
+                    <div className="mt-4 flex justify-center gap-4">
+                      <button
+                          onClick={() => {
+                            saveProjectEdit();
+                            setIsProjectsEditingMode(false);
+                          }}
+                          className="px-4 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition flex items-center gap-2"
+                      >
+                        <AiOutlineCheck size={18} /> Save
+                      </button>
+                      <button
+                          onClick={() => {
+                            cancelProjectEdit();
+                            setIsProjectsEditingMode(false);
+                          }}
+                          className="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition flex items-center gap-2"
+                      >
+                        <AiOutlineClose size={18} /> Cancel
+                      </button>
+                    </div>
+                )}
               </div>
             </div>
 
