@@ -27,6 +27,8 @@ const ResumePage = () => {
     "extras",
   ]);
 
+  const [theme, setTheme] = useState("modern");
+
   const moveSection = (section: string, direction: "up" | "down") => {
     const index = sectionOrder.indexOf(section);
     const newOrder = [...sectionOrder];
@@ -59,16 +61,36 @@ const ResumePage = () => {
     setResumeData({ ...resumeData, [section]: updated });
   };
 
+  const themeClasses = {
+    modern: "text-left font-sans text-gray-900",
+    classic: "text-left font-serif text-gray-900 underline decoration-gray-300 decoration-1",
+    compact: "text-left text-sm font-sans text-gray-800 leading-tight",
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
       <Header />
 
       <main className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
-        {/* Left Editor Panel */}
+        {/* Left Panel */}
         <div className="bg-white p-6 rounded-xl shadow space-y-6">
           <h2 className="text-xl font-semibold">Edit Resume</h2>
 
-          {/* Basic Info */}
+          {/* Theme Selector */}
+          <div>
+            <label className="block font-medium mb-1">Select Theme</label>
+            <select
+              className="w-full border rounded p-2"
+              value={theme}
+              onChange={(e) => setTheme(e.target.value)}
+            >
+              <option value="modern">Modern</option>
+              <option value="classic">Classic</option>
+              <option value="compact">Compact</option>
+            </select>
+          </div>
+
+          {/* Name / Email / Phone */}
           <div>
             <label className="block font-medium">Name</label>
             <input
@@ -77,7 +99,6 @@ const ResumePage = () => {
               onChange={(e) => setResumeData({ ...resumeData, name: e.target.value })}
             />
           </div>
-
           <div>
             <label className="block font-medium">Email</label>
             <input
@@ -86,9 +107,8 @@ const ResumePage = () => {
               onChange={(e) => setResumeData({ ...resumeData, email: e.target.value })}
             />
           </div>
-
           <div>
-            <label className="block font-medium">Phone Number</label>
+            <label className="block font-medium">Phone</label>
             <input
               className="w-full border p-2 rounded"
               value={resumeData.phone}
@@ -96,7 +116,7 @@ const ResumePage = () => {
             />
           </div>
 
-          {/* Section Reordering */}
+          {/* Section Reorder */}
           <div>
             <h3 className="font-semibold">Reorder Sections</h3>
             {sectionOrder.map((sec, idx) => (
@@ -245,63 +265,8 @@ const ResumePage = () => {
             </button>
           </div>
 
-          {/* Projects / Certifications */}
-          {showExtras ? (
-            <div>
-              <label className="block font-medium">Projects / Certifications</label>
-              {resumeData.extras.map((item, idx) => (
-                <div key={idx} className="border-t pt-2 mt-2 space-y-2">
-                  <input
-                    className="w-full border p-2 rounded"
-                    placeholder="Title"
-                    value={item.title}
-                    onChange={(e) => {
-                      const updated = [...resumeData.extras];
-                      updated[idx].title = e.target.value;
-                      setResumeData({ ...resumeData, extras: updated });
-                    }}
-                  />
-                  <input
-                    className="w-full border p-2 rounded"
-                    placeholder="Description"
-                    value={item.description}
-                    onChange={(e) => {
-                      const updated = [...resumeData.extras];
-                      updated[idx].description = e.target.value;
-                      setResumeData({ ...resumeData, extras: updated });
-                    }}
-                  />
-                  <button
-                    onClick={() => deleteEntry("extras", idx)}
-                    className="text-xs text-red-600 hover:underline"
-                  >
-                    🗑 Delete
-                  </button>
-                </div>
-              ))}
-              <button
-                className="mt-2 text-sm text-indigo-700 hover:underline"
-                onClick={() =>
-                  setResumeData({
-                    ...resumeData,
-                    extras: [...resumeData.extras, { title: "", description: "" }],
-                  })
-                }
-              >
-                ➕ Add Project / Certification
-              </button>
-            </div>
-          ) : (
-            <button
-              onClick={() => setShowExtras(true)}
-              className="mt-2 bg-indigo-100 text-indigo-700 px-4 py-2 rounded hover:bg-indigo-200"
-            >
-              ➕ Add Projects / Certifications
-            </button>
-          )}
-
-          {/* Export Button */}
-          <div className="pt-6">
+          {/* Export */}
+          <div className="pt-4">
             <button
               onClick={exportPDF}
               className="w-full bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition"
@@ -312,9 +277,9 @@ const ResumePage = () => {
         </div>
 
         {/* Right Preview Panel */}
-        <div ref={resumeRef} className="bg-white p-6 rounded-xl shadow h-fit space-y-6 text-left">
+        <div ref={resumeRef} className={`bg-white p-6 rounded-xl shadow h-fit space-y-6 ${themeClasses[theme]}`}>
           <div className="text-center">
-            <h1 className="text-3xl font-bold text-gray-900">{resumeData.name}</h1>
+            <h1 className="text-3xl font-bold">{resumeData.name}</h1>
             <p className="text-sm text-gray-600">
               {resumeData.email}
               {resumeData.email && resumeData.phone && " | "}
@@ -328,15 +293,15 @@ const ResumePage = () => {
               case "summary":
                 return (
                   <section key="summary">
-                    <h2 className="text-lg font-semibold text-gray-600">Professional Summary</h2>
-                    <p className="mt-2 text-gray-800 whitespace-pre-line">{resumeData.summary}</p>
+                    <h2 className="text-lg font-semibold">Professional Summary</h2>
+                    <p className="mt-2">{resumeData.summary}</p>
                   </section>
                 );
               case "skills":
                 return (
                   <section key="skills">
-                    <h2 className="text-lg font-semibold text-gray-600">Skills</h2>
-                    <ul className="list-disc ml-6 text-gray-800">
+                    <h2 className="text-lg font-semibold">Skills</h2>
+                    <ul className="list-disc ml-6">
                       {resumeData.skills.map((skill, idx) => (
                         <li key={idx}>{skill}</li>
                       ))}
@@ -346,7 +311,7 @@ const ResumePage = () => {
               case "experience":
                 return (
                   <section key="experience">
-                    <h2 className="text-lg font-semibold text-gray-600">Experience</h2>
+                    <h2 className="text-lg font-semibold">Experience</h2>
                     {resumeData.experience.map((exp, idx) => (
                       <div key={idx} className="mt-3">
                         <h3 className="text-md font-medium">{exp.jobTitle}</h3>
@@ -359,7 +324,7 @@ const ResumePage = () => {
               case "education":
                 return (
                   <section key="education">
-                    <h2 className="text-lg font-semibold text-gray-600">Education</h2>
+                    <h2 className="text-lg font-semibold">Education</h2>
                     {resumeData.education.map((edu, idx) => (
                       <div key={idx} className="mt-3">
                         <h3 className="text-md font-medium">{edu.degree}</h3>
@@ -373,7 +338,7 @@ const ResumePage = () => {
                 return (
                   showExtras && (
                     <section key="extras">
-                      <h2 className="text-lg font-semibold text-gray-600">Projects / Certifications</h2>
+                      <h2 className="text-lg font-semibold">Projects / Certifications</h2>
                       {resumeData.extras.map((item, idx) => (
                         <div key={idx} className="mt-3">
                           <h3 className="text-md font-medium">{item.title}</h3>
@@ -389,6 +354,7 @@ const ResumePage = () => {
           })}
         </div>
       </main>
+
       <Footer />
     </div>
   );
