@@ -79,6 +79,10 @@
   animation: marquee 15s linear infinite;
 }
 
+p {
+  white-space: pre-wrap;
+}
+
 
 
 

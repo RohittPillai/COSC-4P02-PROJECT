@@ -245,7 +245,6 @@ export default function Template1Page({ data, isPublicView = false }: { data: an
     }
   };
 
-
   return (
       <div className="relative w-full">
         {/* Download Icon Button (only visible at top) */}
@@ -393,7 +392,7 @@ export default function Template1Page({ data, isPublicView = false }: { data: an
                           <p className="text-sm text-gray-600">
                             {job.location} ({job.duration})
                           </p>
-                          <p className="text-gray-700">{job.description}</p>
+                          <p className="text-gray-700 whitespace-pre-wrap">{job.description}</p>
                         </div>
                     )}
                   </div>
