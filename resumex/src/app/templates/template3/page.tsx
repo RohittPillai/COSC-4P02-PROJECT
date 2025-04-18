@@ -72,7 +72,9 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
     name: "John Doe",
     title: "Frontend Web Developer"
   });
+
   const [tempHeader, setTempHeader] = useState(headerData);
+  const [profileImage, setProfileImage] = useState<string | null>(null);
 
   useEffect(() => {
     try {
@@ -88,6 +90,12 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
       console.warn("Failed to load header data:", err);
     }
   }, []);
+
+  useEffect(() => {
+    const savedImage = localStorage.getItem(getUserKey("ProfileImage"));
+    if (savedImage) setProfileImage(savedImage);
+  }, []);
+
 
   // Editable "Hello!" Section
   const [isEditingHello, setIsEditingHello] = useState(false);
@@ -643,17 +651,79 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
       <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
         {/* LEFT COLUMN */}
         <div className="space-y-10 md:col-span-1 left-column">
-          <div className="relative w-32 h-32 rounded-full bg-gray-300 mx-auto">
-            {/* Camera icon overlay */}
-            <div className="absolute bottom-1 right-1 bg-white p-1 rounded-full shadow-md cursor-pointer hover:bg-gray-100">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
-                   stroke="currentColor" className="w-5 h-5 text-gray-600">
-                <path strokeLinecap="round" strokeLinejoin="round"
-                      d="M15.75 10.5a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"/>
-                <path strokeLinecap="round" strokeLinejoin="round"
-                      d="M2.25 15.75V6.75A2.25 2.25 0 014.5 4.5h2.121a1.5 1.5 0 001.06-.44l.94-.94A1.5 1.5 0 0110.061 3h3.878a1.5 1.5 0 011.06.44l.94.94a1.5 1.5 0 001.061.44H19.5a2.25 2.25 0 012.25 2.25v9a2.25 2.25 0 01-2.25 2.25H4.5a2.25 2.25 0 01-2.25-2.25z"/>
-              </svg>
+          <div className="flex flex-col items-center space-y-2">
+            {/* Profile photo with camera icon */}
+            <div className="relative w-32 h-32">
+              <div className="w-full h-full rounded-full overflow-hidden bg-gray-300">
+                {profileImage ? (
+                    <img
+                        src={profileImage}
+                        alt="Profile"
+                        className="w-full h-full object-cover"
+                    />
+                ) : (
+                    <div className="w-full h-full bg-gray-300" />
+                )}
+              </div>
+
+              <label
+                  htmlFor="profile-upload"
+                  className="absolute bottom-1 right-1 bg-white p-1 rounded-full shadow-md cursor-pointer hover:bg-gray-100"
+              >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="currentColor"
+                    className="w-5 h-5 text-gray-600"
+                >
+                  <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15.75 10.5a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
+                  />
+                  <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M2.25 15.75V6.75A2.25 2.25 0 014.5 4.5h2.121a1.5 1.5 0 001.06-.44l.94-.94A1.5 1.5 0 0110.061 3h3.878a1.5 1.5 0 011.06.44l.94.94a1.5 1.5 0 001.061.44H19.5a2.25 2.25 0 012.25 2.25v9a2.25 2.25 0 01-2.25 2.25H4.5a2.25 2.25 0 01-2.25-2.25z"
+                  />
+                </svg>
+              </label>
+
+              <input
+                  id="profile-upload"
+                  type="file"
+                  accept="image/*"
+                  capture="user"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                      const base64 = reader.result as string;
+                      setProfileImage(base64);
+                      localStorage.setItem(getUserKey("ProfileImage"), base64);
+                    };
+                    reader.readAsDataURL(file);
+                  }}
+              />
             </div>
+
+            {/* Remove button */}
+            {profileImage && (
+                <button
+                    onClick={() => {
+                      setProfileImage(null);
+                      localStorage.removeItem(getUserKey("ProfileImage"));
+                    }}
+                    className="text-sm text-red-600 hover:underline"
+                >
+                  Remove Photo
+                </button>
+            )}
           </div>
 
           <div className="space-y-3">
@@ -1782,7 +1852,17 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
             {/* LEFT COLUMN */}
             <div className="space-y-10 md:col-span-1">
               {/* Photo */}
-              <div className="w-32 h-32 bg-gray-300 rounded-full" />
+              <div className="w-32 h-32 rounded-full overflow-hidden bg-gray-300">
+                {profileImage ? (
+                    <img
+                        src={profileImage}
+                        alt="Profile"
+                        className="w-full h-full object-cover"
+                    />
+                ) : (
+                    <div className="w-full h-full bg-gray-300" />
+                )}
+              </div>
 
               {/* Header (Name + Title) */}
               <div>
