@@ -308,36 +308,22 @@ export default function FreeResume() {
             </button>
             {isSidebarOpen && (
                 <>
-                  <h2 className="text-lg font-semibold mb-4">Resume Options</h2>
-                  <ul className="space-y-3">
-                    <li><Link href="/login" className="text-blue-400 hover:underline">Sign In</Link></li>
-
-                    <li>
-                      <button onClick={saveResume}
-                              className="w-full flex justify-center items-center gap-2 py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition">
-                        {isSaving ? <AiOutlineSync className="animate-spin" size={20} /> : <AiOutlineCheck size={20} />}
-                        Save
-                      </button>
-                    </li>
-
-                    <li>
-                      <button
-                          onClick={() => {
-                            if (!userId) {
-                              alert("Please sign in to generate a shareable link.");
-                              return;
-                            }
-                            const link = `${window.location.origin}/resume-view?user=${encodeURIComponent(userId)}&template=${encodeURIComponent(template)}`;
-                            navigator.clipboard.writeText(link);
-                            alert("Public resume link copied to clipboard!");
-                          }}
-                          className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition"
-                      >
-                        Share
-                      </button>
-
-                    </li>
-                  </ul>
+                  <h2 className="text-lg font-semibold mb-4">Choose Template</h2>
+                  <div className="space-y-3">
+                    {Object.entries(templates).map(([key, templateInfo]) => (
+                        <Link
+                            key={key}
+                            href={`/free-resume?template=${key}`}
+                            className={`block px-3 py-2 rounded-lg text-sm text-center font-medium border transition ${
+                                template === key
+                                    ? "bg-blue-600 text-white border-blue-600"
+                                    : "bg-white text-gray-800 hover:bg-blue-500 hover:text-white border"
+                            }`}
+                        >
+                          {templateInfo.name}
+                        </Link>
+                    ))}
+                  </div>
                 </>
             )}
           </aside>
