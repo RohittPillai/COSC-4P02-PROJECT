@@ -102,12 +102,12 @@ export function RegisterForm({ className, ...props }: React.ComponentPropsWithou
           <Card>
             <CardHeader className="text-center">
               <CardTitle className="text-xl">Create an Account</CardTitle>
-              <CardDescription>Sign up with Google or LinkedIn</CardDescription>
+              <CardDescription>Sign up with Google or Discord</CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit}>
                 <div className="grid gap-6">
-                  {/*Google & LinkedIn Sign Up Buttons */}
+                  {/*Google & Discord Sign Up Buttons */}
                   <div className="flex flex-col gap-4">
                     <Button variant="outline" className="w-full" onClick={() => signIn("google")}>
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -118,14 +118,14 @@ export function RegisterForm({ className, ...props }: React.ComponentPropsWithou
                       </svg>
                       Sign up with Google
                     </Button>
-                    <Button variant="outline" className="w-full" onClick={() => signIn("linkedin")}>
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                    <Button variant="outline" className="w-full" onClick={() => signIn("discord")}>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 71 55" width="24" height="24" className="shrink-0">
                         <path
-                          d="M28.778 1.004h-25.56c-0.008-0-0.017-0-0.027-0-1.199 0-2.172 0.964-2.186 2.159v25.672c0.014 1.196 0.987 2.161 2.186 2.161 0.010 0 0.019-0 0.029-0h25.555c0.008 0 0.018 0 0.028 0 1.2 0 2.175-0.963 2.194-2.159l0-0.002v-25.67c-0.019-1.197-0.994-2.161-2.195-2.161-0.010 0-0.019 0-0.029 0h0.001zM9.9 26.562h-4.454v-14.311h4.454zM7.674 10.293c-1.425 0-2.579-1.155-2.579-2.579s1.155-2.579 2.579-2.579c1.424 0 2.579 1.154 2.579 2.578v0c0 0.001 0 0.002 0 0.004 0 1.423-1.154 2.577-2.577 2.577-0.001 0-0.002 0-0.003 0h0zM26.556 26.562h-4.441v-6.959c0-1.66-0.034-3.795-2.314-3.795-2.316 0-2.669 1.806-2.669 3.673v7.082h-4.441v-14.311h4.266v1.951h0.058c0.828-1.395 2.326-2.315 4.039-2.315 0.061 0 0.121 0.001 0.181 0.003l-0.009-0c4.5 0 5.332 2.962 5.332 6.817v7.855z"
+                          d="M60.104 4.552A58.172 58.172 0 0045.165.8a.14.14 0 00-.149.07 40.736 40.736 0 00-1.848 3.77 54.261 54.261 0 00-16.369 0 38.958 38.958 0 00-1.89-3.77.15.15 0 00-.148-.07A58.076 58.076 0 0010.89 4.552a.13.13 0 00-.06.05C.943 20.166-1.62 35.348.373 50.39a.16.16 0 00.06.11 59.578 59.578 0 0017.96 3.725.15.15 0 00.157-.11 41.56 41.56 0 003.57-9.13.14.14 0 00-.077-.17 38.597 38.597 0 01-5.519-2.612.14.14 0 01-.014-.24c.373-.28.747-.56 1.102-.85a.14.14 0 01.148-.017c11.6 5.315 24.167 5.315 35.722 0a.14.14 0 01.15.015c.355.29.729.57 1.102.85a.14.14 0 01-.011.24 36.964 36.964 0 01-5.52 2.612.14.14 0 00-.076.17 46.997 46.997 0 003.569 9.13.15.15 0 00.157.11 59.578 59.578 0 0017.96-3.726.16.16 0 00.06-.11c1.98-15.042-.441-30.224-9.665-45.788a.13.13 0 00-.06-.05zM23.725 37.043c-3.495 0-6.366-3.206-6.366-7.14 0-3.933 2.835-7.14 6.366-7.14 3.54 0 6.39 3.227 6.367 7.14 0 3.934-2.834 7.14-6.367 7.14zm23.55 0c-3.495 0-6.366-3.206-6.366-7.14 0-3.933 2.835-7.14 6.366-7.14 3.54 0 6.39 3.227 6.367 7.14 0 3.934-2.834 7.14-6.367 7.14z"
                           fill="currentColor"
                         />
                       </svg>
-                      Sign up with LinkedIn
+                      Sign up with Discord
                     </Button>
                   </div>
                   <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
