@@ -231,6 +231,17 @@ const ResumePage = () => {
           {/* Custom Sections */}
           {resumeData.customSections.map((section, sIdx) => (
             <div key={sIdx} className="mt-4">
+              <button
+  onClick={() => {
+    const updated = [...resumeData.customSections];
+    updated.splice(sIdx, 1);
+    setResumeData({ ...resumeData, customSections: updated });
+  }}
+  className="text-xs text-red-600 hover:underline mb-2"
+>
+  ❌ Delete Entire Section
+</button>
+
               <input
                 className="w-full border p-2 rounded font-semibold"
                 placeholder="Section Heading"
