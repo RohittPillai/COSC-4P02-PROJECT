@@ -269,6 +269,109 @@ const ResumePage = () => {
             </button>
           </div>
 
+          {/* Education */}
+<div>
+  <label className="block font-medium">Education</label>
+  {resumeData.education.map((edu, idx) => (
+    <div key={idx} className="border-t pt-2 mt-2 space-y-2">
+      <input
+        className="w-full border p-2 rounded"
+        placeholder="Degree"
+        value={edu.degree}
+        onChange={(e) => {
+          const updated = [...resumeData.education];
+          updated[idx].degree = e.target.value;
+          setResumeData({ ...resumeData, education: updated });
+        }}
+      />
+      <input
+        className="w-full border p-2 rounded"
+        placeholder="School"
+        value={edu.school}
+        onChange={(e) => {
+          const updated = [...resumeData.education];
+          updated[idx].school = e.target.value;
+          setResumeData({ ...resumeData, education: updated });
+        }}
+      />
+      <input
+        className="w-full border p-2 rounded"
+        placeholder="Year"
+        value={edu.year}
+        onChange={(e) => {
+          const updated = [...resumeData.education];
+          updated[idx].year = e.target.value;
+          setResumeData({ ...resumeData, education: updated });
+        }}
+      />
+      <button
+        onClick={() => deleteEntry("education", idx)}
+        className="text-xs text-red-600 hover:underline"
+      >
+        ❌ Delete
+      </button>
+    </div>
+  ))}
+  <button
+    className="mt-2 text-sm text-indigo-700 hover:underline"
+    onClick={() =>
+      setResumeData({
+        ...resumeData,
+        education: [...resumeData.education, { degree: "", school: "", year: "" }],
+      })
+    }
+  >
+    ➕ Add Education
+  </button>
+</div>
+
+{/* Projects / Certifications */}
+<div>
+  <label className="block font-medium">Projects / Certifications</label>
+  {resumeData.extras.map((item, idx) => (
+    <div key={idx} className="border-t pt-2 mt-2 space-y-2">
+      <input
+        className="w-full border p-2 rounded"
+        placeholder="Title"
+        value={item.title}
+        onChange={(e) => {
+          const updated = [...resumeData.extras];
+          updated[idx].title = e.target.value;
+          setResumeData({ ...resumeData, extras: updated });
+        }}
+      />
+      <textarea
+        className="w-full border p-2 rounded"
+        placeholder="Description"
+        value={item.description}
+        onChange={(e) => {
+          const updated = [...resumeData.extras];
+          updated[idx].description = e.target.value;
+          setResumeData({ ...resumeData, extras: updated });
+        }}
+      />
+      <button
+        onClick={() => deleteEntry("extras", idx)}
+        className="text-xs text-red-600 hover:underline"
+      >
+        ❌ Delete
+      </button>
+    </div>
+  ))}
+  <button
+    className="mt-2 text-sm text-indigo-700 hover:underline"
+    onClick={() =>
+      setResumeData({
+        ...resumeData,
+        extras: [...resumeData.extras, { title: "", description: "" }],
+      })
+    }
+  >
+    ➕ Add Project / Certification
+  </button>
+</div>
+
+
           {/* Export */}
           <div className="pt-4">
             <button
@@ -339,19 +442,25 @@ const ResumePage = () => {
                   </section>
                 );
               case "extras":
-                return (
-                  showExtras && (
-                    <section key="extras">
-                      <h2 className="text-lg font-semibold">Projects / Certifications</h2>
-                      {resumeData.extras.map((item, idx) => (
-                        <div key={idx} className="mt-3">
-                          <h3 className="text-md font-medium">{item.title}</h3>
-                          <p className="text-sm">{item.description}</p>
-                        </div>
-                      ))}
-                    </section>
-                  )
-                );
+              const hasExtras = resumeData.extras.some(
+                (item) => item.title.trim() || item.description.trim()
+              );
+            
+              return hasExtras ? (
+                <section key="extras">
+                  <h2 className="text-lg font-semibold">Projects / Certifications</h2>
+                  {resumeData.extras.map((item, idx) => {
+                    if (!item.title.trim() && !item.description.trim()) return null;
+                    return (
+                      <div key={idx} className="mt-3">
+                        {item.title && <h3 className="text-md font-medium">{item.title}</h3>}
+                        {item.description && <p className="text-sm">{item.description}</p>}
+                      </div>
+                    );
+                  })}
+                </section>
+              ) : null;
+            
               default:
                 return null;
             }
