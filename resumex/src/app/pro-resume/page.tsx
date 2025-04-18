@@ -83,10 +83,17 @@ const ResumePage = () => {
   };
 
   const themeClasses = {
-    modern: "text-left font-sans text-gray-900",
-    classic: "text-left font-serif text-gray-900 underline decoration-gray-300",
-    compact: "text-left text-sm font-sans text-gray-800 leading-tight",
+    modern:
+      "text-left font-sans text-gray-900 space-y-6 leading-relaxed tracking-normal text-base [&_h2]:text-2xl [&_h2]:font-bold [&_h3]:text-lg [&_h3]:font-semibold",
+      
+    classic:
+      "text-left font-serif text-gray-800 space-y-8 border border-gray-300 p-6 rounded-xl bg-[#fdfaf5] shadow-md [&_h2]:text-xl [&_h2]:underline decoration-gray-500 [&_h3]:italic",
+  
+    compact:
+      "text-left text-xs font-mono text-gray-700 leading-snug space-y-2 tracking-tight [&_h2]:text-sm [&_h2]:uppercase [&_h2]:text-blue-600 [&_h2]:font-bold [&_h3]:text-xs [&_h3]:font-medium",
   };
+  
+  
 
   const deleteEntry = (section: string, index: number, customIndex?: number) => {
     if (section === "customSections" && customIndex !== undefined) {
