@@ -83,10 +83,17 @@ const ResumePage = () => {
   };
 
   const themeClasses = {
-    modern: "text-left font-sans text-gray-900",
-    classic: "text-left font-serif text-gray-900 underline decoration-gray-300",
-    compact: "text-left text-sm font-sans text-gray-800 leading-tight",
+    modern:
+      "text-left font-sans text-gray-900 space-y-6 leading-relaxed tracking-normal text-base [&_h2]:text-2xl [&_h2]:font-bold [&_h3]:text-lg [&_h3]:font-semibold",
+      
+    classic:
+      "text-left font-serif text-gray-800 space-y-8 border border-gray-300 p-6 rounded-xl bg-[#fdfaf5] shadow-md [&_h2]:text-xl [&_h2]:underline decoration-gray-500 [&_h3]:italic",
+  
+    compact:
+      "text-left text-xs font-mono text-gray-700 leading-snug space-y-2 tracking-tight [&_h2]:text-sm [&_h2]:uppercase [&_h2]:text-blue-600 [&_h2]:font-bold [&_h3]:text-xs [&_h3]:font-medium",
   };
+  
+  
 
   const deleteEntry = (section: string, index: number, customIndex?: number) => {
     if (section === "customSections" && customIndex !== undefined) {
@@ -225,8 +232,118 @@ const ResumePage = () => {
             </button>
           </div>
 
-          {/* Experience */}
-          {/* ... Your experience and education editors remain the same ... */}
+      {/* Experience Editor */}
+<div>
+  <h3 className="font-semibold text-lg mt-4">Experience</h3>
+  {resumeData.experience.map((exp, idx) => (
+    <div key={idx} className="border-t pt-2 mt-2 space-y-2">
+      <input
+        className="w-full border p-2 rounded"
+        placeholder="Job Title"
+        value={exp.jobTitle}
+        onChange={(e) => {
+          const updated = [...resumeData.experience];
+          updated[idx].jobTitle = e.target.value;
+          setResumeData({ ...resumeData, experience: updated });
+        }}
+      />
+      <input
+        className="w-full border p-2 rounded"
+        placeholder="Company"
+        value={exp.company}
+        onChange={(e) => {
+          const updated = [...resumeData.experience];
+          updated[idx].company = e.target.value;
+          setResumeData({ ...resumeData, experience: updated });
+        }}
+      />
+      <textarea
+        className="w-full border p-2 rounded"
+        placeholder="Description"
+        value={exp.description}
+        onChange={(e) => {
+          const updated = [...resumeData.experience];
+          updated[idx].description = e.target.value;
+          setResumeData({ ...resumeData, experience: updated });
+        }}
+      />
+      <button
+        onClick={() => deleteEntry("experience", idx)}
+        className="text-xs text-red-600 hover:underline"
+      >
+        ❌ Delete
+      </button>
+    </div>
+  ))}
+  <button
+    className="mt-2 text-sm text-indigo-700 hover:underline"
+    onClick={() =>
+      setResumeData({
+        ...resumeData,
+        experience: [...resumeData.experience, { jobTitle: "", company: "", description: "" }],
+      })
+    }
+  >
+    ➕ Add Experience
+  </button>
+</div>
+
+{/* Education Editor */}
+<div>
+  <h3 className="font-semibold text-lg mt-4">Education</h3>
+  {resumeData.education.map((edu, idx) => (
+    <div key={idx} className="border-t pt-2 mt-2 space-y-2">
+      <input
+        className="w-full border p-2 rounded"
+        placeholder="Degree"
+        value={edu.degree}
+        onChange={(e) => {
+          const updated = [...resumeData.education];
+          updated[idx].degree = e.target.value;
+          setResumeData({ ...resumeData, education: updated });
+        }}
+      />
+      <input
+        className="w-full border p-2 rounded"
+        placeholder="School"
+        value={edu.school}
+        onChange={(e) => {
+          const updated = [...resumeData.education];
+          updated[idx].school = e.target.value;
+          setResumeData({ ...resumeData, education: updated });
+        }}
+      />
+      <input
+        className="w-full border p-2 rounded"
+        placeholder="Year"
+        value={edu.year}
+        onChange={(e) => {
+          const updated = [...resumeData.education];
+          updated[idx].year = e.target.value;
+          setResumeData({ ...resumeData, education: updated });
+        }}
+      />
+      <button
+        onClick={() => deleteEntry("education", idx)}
+        className="text-xs text-red-600 hover:underline"
+      >
+        ❌ Delete
+      </button>
+    </div>
+  ))}
+  <button
+    className="mt-2 text-sm text-indigo-700 hover:underline"
+    onClick={() =>
+      setResumeData({
+        ...resumeData,
+        education: [...resumeData.education, { degree: "", school: "", year: "" }],
+      })
+    }
+  >
+    ➕ Add Education
+  </button>
+</div>
+
 
           {/* Custom Sections */}
           {resumeData.customSections.map((section, sIdx) => (
