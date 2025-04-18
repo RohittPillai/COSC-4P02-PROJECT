@@ -1,6 +1,9 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai"; // Icons for Save & Cancel
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import { FiDownload } from "react-icons/fi";
 
 function getUserKey(key: string) {
   const userData = localStorage.getItem("userData");
@@ -24,6 +27,7 @@ export default function Template1Page({ data }: { data: any }) {
   const [isExperienceEditingMode, setIsExperienceEditingMode] = useState(false);
   const [isEducationEditingMode, setIsEducationEditingMode] = useState(false);
   const [isProjectsEditingMode, setIsProjectsEditingMode] = useState(false);
+  const [showDownloadIcon, setShowDownloadIcon] = useState(true);
 
   const [tempData, setTempData] = useState(resumeData); // Store temporary changes
   const [tempExperience, setTempExperience] = useState(resumeData.experienceList); // Store experience changes
@@ -182,8 +186,82 @@ export default function Template1Page({ data }: { data: any }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isEditingHeader, tempData]); // Dependency ensures effect updates
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      setShowDownloadIcon(scrollTop < 100); // only show when near top
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const downloadAsPDF = async () => {
+    const resumeElement = document.querySelector(".shadow-lg.p-8.rounded-lg");
+
+    if (!resumeElement) return;
+
+    // Clone the resume content
+    const clone = resumeElement.cloneNode(true) as HTMLElement;
+
+    // Remove scroll limit styles from the clone
+    clone.style.position = "absolute";
+    clone.style.top = "-9999px";
+    clone.style.left = "-9999px";
+    clone.style.zIndex = "-1";
+    clone.style.maxHeight = "none"; // Important: remove max-height
+    clone.style.overflow = "visible"; // Show everything
+
+    document.body.appendChild(clone);
+
+    try {
+      await new Promise((res) => setTimeout(res, 300)); // Let browser render the clone
+
+      const canvas = await html2canvas(clone, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+        windowWidth: clone.scrollWidth, // ensure full rendering
+      });
+
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "pt", "a4");
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+
+      const scale = Math.min(pdfWidth / canvas.width, pdfHeight / canvas.height);
+      const imgWidth = canvas.width * scale;
+      const imgHeight = canvas.height * scale;
+      const marginX = (pdfWidth - imgWidth) / 2;
+      const marginY = 20;
+
+      pdf.addImage(imgData, "PNG", marginX, marginY, imgWidth, imgHeight);
+      pdf.save("resume-template1.pdf");
+    } catch (err) {
+      console.error("PDF Download Failed", err);
+      alert("PDF download failed. Try again.");
+    } finally {
+      document.body.removeChild(clone);
+    }
+  };
+
+
   return (
-      <div className="flex justify-center items-start w-full min-h-[calc(100vh-100px)] pt-10 pb-10">
+      <div className="relative w-full">
+        {/* Download Icon Button (only visible at top) */}
+        {showDownloadIcon && (
+            <div className="absolute top-4 right-4 z-50">
+              <button
+                  onClick={downloadAsPDF}
+                  title="Download PDF"
+                  className="text-blue-600 hover:text-blue-800 transition text-3xl"
+              >
+                <FiDownload />
+              </button>
+            </div>
+        )}
+
+        <div className="flex justify-center items-start w-full min-h-[calc(100vh-100px)] pt-10 pb-10">
         <div className="bg-white shadow-lg p-8 rounded-lg max-w-[1000px] w-[95%] mx-auto
         max-h-[calc(100vh-180px)] overflow-y-auto flex-grow">
 
@@ -629,6 +707,7 @@ export default function Template1Page({ data }: { data: any }) {
             </div>
           </div>
         </div>
+      </div>
       </div>
   );
 }

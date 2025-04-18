@@ -1,6 +1,9 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
+import { FiDownload } from "react-icons/fi";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 function getUserKey(key: string) {
   const userData = localStorage.getItem("userData");
@@ -9,6 +12,7 @@ function getUserKey(key: string) {
 }
 
 export default function Template2Page() {
+  const resumeRef = React.useRef<HTMLDivElement>(null);
   // For contact section
   const [isEditingContact, setIsEditingContact] = useState(false);
   const [contactData, setContactData] = useState({
@@ -130,8 +134,9 @@ export default function Template2Page() {
         "Coordinate the production of marketing materials.",
       ],
     },
-   
+
   ]);
+
   const [tempExperience, setTempExperience] = useState(experienceData);
 
   useEffect(() => {
@@ -143,9 +148,98 @@ export default function Template2Page() {
     }
   }, []);
 
+  const [showDownloadIcon, setShowDownloadIcon] = useState(true);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      setShowDownloadIcon(scrollTop < 100); // only show near top
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const downloadAsPDF = async () => {
+    const resumeElement = resumeRef.current;
+    const icon = document.getElementById("download-icon");
+
+    if (!resumeElement) return;
+    if (icon) icon.style.display = "none";
+
+    // Clone the resume layout
+    const clone = resumeElement.cloneNode(true) as HTMLElement;
+    clone.style.position = "absolute";
+    clone.style.top = "-9999px";
+    clone.style.left = "-9999px";
+    clone.style.width = "1120px"; // tighter width, no extra margin
+    clone.style.height = `${resumeElement.scrollHeight}px`;
+    clone.style.fontSize = "20px"; // larger readable text
+    clone.style.lineHeight = "1.8";
+    clone.style.backgroundColor = "#ffffff";
+    clone.style.color = "#000000";
+    clone.style.display = "block";
+
+    document.body.appendChild(clone);
+
+    try {
+      await new Promise((res) => setTimeout(res, 300));
+
+      const canvas = await html2canvas(clone, {
+        scale: 4, // high clarity without overshrinking
+        useCORS: true,
+        backgroundColor: "#ffffff",
+        width: clone.scrollWidth,
+        windowWidth: clone.scrollWidth,
+      });
+
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "pt", "a4");
+
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const imgWidth = pdfWidth;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      if (imgHeight <= pdf.internal.pageSize.getHeight()) {
+        pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+      } else {
+        let y = 0;
+        while (y < imgHeight) {
+          pdf.addImage(imgData, "PNG", 0, y ? 0 : y, imgWidth, imgHeight);
+          y += pdf.internal.pageSize.getHeight();
+          if (y < imgHeight) pdf.addPage();
+        }
+      }
+
+      pdf.save("resume-template2.pdf");
+    } catch (err) {
+      console.error("PDF Download Failed", err);
+      alert("PDF download failed. Try again.");
+    } finally {
+      document.body.removeChild(clone);
+      if (icon) icon.style.display = "";
+    }
+  };
+
   return (
-    <div className="w-full max-w-[850px] mx-auto px-6 py-10 bg-white shadow-xl overflow-y-auto max-h-[calc(100vh-160px)]">
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+      <div className="relative w-full">
+        {showDownloadIcon && (
+            <div className="absolute top-4 right-4 z-50" id="download-icon">
+              <button
+                  onClick={downloadAsPDF}
+                  title="Download PDF"
+                  className="text-blue-600 hover:text-blue-800 transition text-2xl"
+              >
+                <FiDownload />
+              </button>
+            </div>
+        )}
+
+        <div
+            ref={resumeRef}
+            className="w-full max-w-[850px] mx-auto px-6 py-10 bg-white shadow-xl overflow-y-auto max-h-[calc(100vh-160px)]"
+        >
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
         {/* LEFT COLUMN */}
         <div className="md:col-span-5 bg-[#1B2A41] text-white px-10 py-10 space-y-10">
           {/* Profile Picture */}
@@ -724,5 +818,6 @@ export default function Template2Page() {
         </div>
       </div>
     </div>
+  </div>
   );
 }

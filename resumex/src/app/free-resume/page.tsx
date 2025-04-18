@@ -334,24 +334,24 @@ export default function FreeResume() {
                       </button>
                     </li>
 
-                    <li>
-                      <button onClick={() => setIsDownloadExpanded(!isDownloadExpanded)}
-                              className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition">
-                        Download {isDownloadExpanded ? "▲" : "▼"}
-                      </button>
-                      {isDownloadExpanded && (
-                          <>
-                            <button onClick={downloadAsPDF}
-                                    className="w-full mt-2 py-2 bg-gray-700 text-white font-semibold rounded-lg border border-gray-500 hover:bg-gray-600 transition">
-                              Download as PDF
-                            </button>
-                            <button onClick={downloadAsWord}
-                                    className="w-full mt-2 py-2 bg-gray-700 text-white font-semibold rounded-lg border border-gray-500 hover:bg-gray-600 transition">
-                              Download as Word
-                            </button>
-                          </>
-                      )}
-                    </li>
+                    {/*<li>*/}
+                    {/*  <button onClick={() => setIsDownloadExpanded(!isDownloadExpanded)}*/}
+                    {/*          className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition">*/}
+                    {/*    Download {isDownloadExpanded ? "▲" : "▼"}*/}
+                    {/*  </button>*/}
+                    {/*  {isDownloadExpanded && (*/}
+                    {/*      <>*/}
+                    {/*        <button onClick={downloadAsPDF}*/}
+                    {/*                className="w-full mt-2 py-2 bg-gray-700 text-white font-semibold rounded-lg border border-gray-500 hover:bg-gray-600 transition">*/}
+                    {/*          Download as PDF*/}
+                    {/*        </button>*/}
+                    {/*        <button onClick={downloadAsWord}*/}
+                    {/*                className="w-full mt-2 py-2 bg-gray-700 text-white font-semibold rounded-lg border border-gray-500 hover:bg-gray-600 transition">*/}
+                    {/*          Download as Word*/}
+                    {/*        </button>*/}
+                    {/*      </>*/}
+                    {/*  )}*/}
+                    {/*</li>*/}
 
                     <li>
                       <button onClick={() => setIsShareModalOpen(true)}

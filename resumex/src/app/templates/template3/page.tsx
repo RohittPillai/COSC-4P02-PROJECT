@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import { FiDownload } from "react-icons/fi";
 
 function getUserKey(key: string) {
   const userData = localStorage.getItem("userData");
@@ -10,6 +13,58 @@ function getUserKey(key: string) {
 export default function Template3Page() {
   const [activeTab, setActiveTab] = useState("profile");
   const tabs = ["profile", "education & projects", "skills", "work", "awards"];
+
+  const downloadAsPDF = async () => {
+    const clone = document.getElementById("resume-pdf-export");
+    const icon = document.getElementById("download-icon");
+
+    if (!clone) return;
+    if (icon) icon.style.display = "none";
+    clone.style.display = "block";
+
+    try {
+      await new Promise((res) => setTimeout(res, 300));
+
+      const canvas = await html2canvas(clone, {
+        scale: 2, // High scale to improve quality and allow large fonts
+        useCORS: true,
+        backgroundColor: "#ffffff",
+        width: clone.scrollWidth,
+        windowWidth: clone.scrollWidth,
+      });
+
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "pt", "a4");
+
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+
+      // Dimensions for image (no aggressive shrinking)
+      const imgWidth = pageWidth;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      let heightLeft = imgHeight;
+      let position = 0;
+
+      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft > 0) {
+        position -= pageHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      pdf.save("resume-template3.pdf");
+    } catch (err) {
+      console.error("PDF Download Failed", err);
+      alert("PDF download failed. Try again.");
+    } finally {
+      clone.style.display = "none";
+      if (icon) icon.style.display = "";
+    }
+  };
 
   // Editable Header
   const [isEditingHeader, setIsEditingHeader] = useState(false);
@@ -488,6 +543,18 @@ export default function Template3Page() {
     }
   }, []);
 
+  const [showDownloadIcon, setShowDownloadIcon] = useState(true);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      setShowDownloadIcon(scrollTop < 100);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <div className="w-full max-w-[1200px] mx-auto px-10 py-10 bg-white rounded shadow-sm font-sans text-gray-800 leading-relaxed overflow-y-auto max-h-[calc(100vh-160px)] border border-gray-300">
       {/* HEADER */}
@@ -533,18 +600,29 @@ export default function Template3Page() {
             </div>
           </div>
         ) : (
-          <div onClick={() => setIsEditingHeader(true)} className="cursor-pointer">
-            <h1 className="text-4xl font-extrabold">
-              {headerData.name ? headerData.name.split(" ")[0] : ""}
-              {" "}
-              <span className="text-purple-600">
-                {headerData.name ? headerData.name.split(" ").slice(1).join(" ") : ""}
-              </span>
-            </h1>
-            <h2 className="text-lg uppercase tracking-wide text-gray-500 mt-1">
-              {headerData.title}
-            </h2>
-          </div>
+            <div className="flex justify-between items-start w-full">
+              <div onClick={() => setIsEditingHeader(true)} className="cursor-pointer">
+                <h1 className="text-4xl font-extrabold">
+                  {headerData.name ? headerData.name.split(" ")[0] : ""}
+                  {" "}
+                  <span className="text-purple-600">
+        {headerData.name ? headerData.name.split(" ").slice(1).join(" ") : ""}
+      </span>
+                </h1>
+                <h2 className="text-lg uppercase tracking-wide text-gray-500 mt-1">
+                  {headerData.title}
+                </h2>
+              </div>
+              <button
+                  onClick={downloadAsPDF}
+                  title="Download PDF"
+                  className="text-purple-600 hover:text-purple-800 transition text-2xl mt-1 ml-4"
+                  id="download-icon"
+              >
+                <FiDownload />
+              </button>
+            </div>
+
         )}
       </div>
 
@@ -1686,6 +1764,162 @@ export default function Template3Page() {
           )}
         </div>
       </div>
+
+      {/* Hidden resume clone for PDF export */}
+      <div
+          id="resume-pdf-export"
+          className="hidden print-target"
+          style={{
+            fontSize: "60px",
+            lineHeight: "1.6",
+            transform: "scale(2)",
+            transformOrigin: "top left",
+          }}
+      >
+        <div className="p-10 text-black text-sm w-full max-w-[1200px] mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            {/* LEFT COLUMN */}
+            <div className="space-y-10 md:col-span-1">
+              {/* Photo */}
+              <div className="w-32 h-32 bg-gray-300 rounded-full" />
+
+              {/* Header (Name + Title) */}
+              <div>
+                <h1 className="text-4xl font-bold">{headerData.name}</h1>
+                <p className="text-lg text-gray-600 mb-4">{headerData.title}</p>
+              </div>
+
+              {/* Hello Section */}
+              <div>
+                <h2 className="text-lg font-bold">Hello!</h2>
+                <p>{helloText}</p>
+              </div>
+
+              {/* Contact Info */}
+              <div>
+                <h2 className="text-lg font-bold">Contact</h2>
+                <p>{contactInfo.phone}</p>
+                <p>{contactInfo.email}</p>
+                <p>{contactInfo.addressLine1}</p>
+                <p>{contactInfo.addressLine2}</p>
+                <p>{contactInfo.addressLine3}</p>
+              </div>
+            </div>
+
+            {/* RIGHT COLUMN */}
+            <div className="md:col-span-2 space-y-10">
+
+              <div>
+                <h2 className="text-xl font-bold mb-2">Profile</h2>
+                <blockquote className="italic border-l-4 border-purple-600 pl-4 mb-4">
+                  {profileText}
+                  <br />
+                  <span className="text-sm text-right">— {profileAuthor}</span>
+                </blockquote>
+              </div>
+
+              <div>
+                <h2 className="text-xl font-bold mb-2">About Me</h2>
+                <p>{aboutMeText}</p>
+              </div>
+
+              <div>
+                <h2 className="text-xl font-bold mb-2">Philosophy</h2>
+                <p>{philosophyText}</p>
+                <ul className="list-disc list-inside">
+                  {philosophyTraits.map((t, i) => (
+                      <li key={i}>{t}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <h2 className="text-xl font-bold mb-2">Interests</h2>
+                <p>{interestIntro}</p>
+                <ul className="list-disc list-inside">
+                  {interestsList.map((t, i) => (
+                      <li key={i}>{t}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <h2 className="text-xl font-bold mb-2">Education</h2>
+                {educationList.map((edu, i) => (
+                    <div key={i} className="mb-2">
+                      <p className="font-semibold">{edu.degree}</p>
+                      <p>
+                        {edu.school}, {edu.location} ({edu.year})
+                      </p>
+                    </div>
+                ))}
+              </div>
+
+              <div>
+                <h2 className="text-xl font-bold mb-2">Projects</h2>
+                {projectList.map((proj, i) => (
+                    <div key={i} className="mb-2">
+                      <p className="font-semibold">{proj.title}</p>
+                      <p>{proj.description1}</p>
+                      <p>{proj.description2}</p>
+                      <p className="italic">{proj.tools}</p>
+                    </div>
+                ))}
+              </div>
+
+              <div>
+                <h2 className="text-xl font-bold mb-2">Work Experience</h2>
+                {workList.map((job, i) => (
+                    <div key={i} className="mb-2">
+                      <p className="font-semibold">
+                        {job.title} at {job.company}
+                      </p>
+                      <p>
+                        {job.duration} | {job.location}
+                      </p>
+                      <p>{job.description}</p>
+                    </div>
+                ))}
+              </div>
+
+              <div>
+                <h2 className="text-xl font-bold mb-2">Skills</h2>
+                <p>
+                  <strong>Technical:</strong> {techSkills}
+                </p>
+                <ul className="list-disc list-inside">
+                  {softSkills.map((s, i) => (
+                      <li key={i}>{s}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <h2 className="text-xl font-bold mb-2">Languages</h2>
+                <ul className="list-disc list-inside">
+                  {languages.map((l, i) => (
+                      <li key={i}>{l}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <h2 className="text-xl font-bold mb-2">Awards</h2>
+                {awardList.map((award, i) => (
+                    <div key={i} className="mb-2">
+                      <p className="font-semibold">{award.title}</p>
+                      <p>
+                        {award.org}, {award.dateLocation}
+                      </p>
+                      <p>{award.description}</p>
+                    </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 }
