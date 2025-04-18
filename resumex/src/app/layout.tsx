@@ -3,6 +3,7 @@ import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import { TRPCReactProvider } from "~/trpc/react";
+import { SessionProvider } from "next-auth/react";
 
 export const metadata: Metadata = {
   title: "ResumeX",
@@ -20,7 +21,9 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" className={`${GeistSans.variable}`}>
         <body className="bg-gray-100">
-          <TRPCReactProvider>{children}</TRPCReactProvider>
+          <SessionProvider> {/* ✅ Wrap here */}
+            <TRPCReactProvider>{children}</TRPCReactProvider>
+          </SessionProvider>
         </body>
       </html>
     </ClerkProvider>
