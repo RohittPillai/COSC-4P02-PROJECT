@@ -10,7 +10,7 @@ function getUserKey(key: string) {
   return `${userId}_template3_${key}`;
 }
 
-export default function Template3Page() {
+export default function Template3Page({ isPublicView = false }: { isPublicView?: boolean }) {
   const [activeTab, setActiveTab] = useState("profile");
   const tabs = ["profile", "education & projects", "skills", "work", "awards"];
 
@@ -613,16 +613,17 @@ export default function Template3Page() {
                   {headerData.title}
                 </h2>
               </div>
-              <button
-                  onClick={downloadAsPDF}
-                  title="Download PDF"
-                  className="text-purple-600 hover:text-purple-800 transition text-2xl mt-1 ml-4"
-                  id="download-icon"
-              >
-                <FiDownload />
-              </button>
+              {!isPublicView && showDownloadIcon && (
+                  <button
+                      onClick={downloadAsPDF}
+                      title="Download PDF"
+                      className="text-purple-600 hover:text-purple-800 transition text-2xl mt-1 ml-4"
+                      id="download-icon"
+                  >
+                    <FiDownload />
+                  </button>
+              )}
             </div>
-
         )}
       </div>
 

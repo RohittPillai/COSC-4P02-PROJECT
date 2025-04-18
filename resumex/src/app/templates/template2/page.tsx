@@ -11,7 +11,7 @@ function getUserKey(key: string) {
   return `${userId}_template2_${key}`;
 }
 
-export default function Template2Page() {
+export default function Template2Page({ data, isPublicView = false }) {
   const resumeRef = React.useRef<HTMLDivElement>(null);
   // For contact section
   const [isEditingContact, setIsEditingContact] = useState(false);
@@ -223,7 +223,7 @@ export default function Template2Page() {
 
   return (
       <div className="relative w-full">
-        {showDownloadIcon && (
+        {!isPublicView && showDownloadIcon && (
             <div className="absolute top-4 right-4 z-50" id="download-icon">
               <button
                   onClick={downloadAsPDF}

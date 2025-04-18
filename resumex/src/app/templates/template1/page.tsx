@@ -11,7 +11,7 @@ function getUserKey(key: string) {
   return `${userId}_${key}`;
 }
 
-export default function Template1Page({ data }: { data: any }) {
+export default function Template1Page({ data, isPublicView = false }: { data: any, isPublicView?: boolean }) {
   const [resumeData, setResumeData] = useState(() => {
     const savedData = localStorage.getItem(getUserKey("resumeData"));
     return savedData ? JSON.parse(savedData) : data;
@@ -249,7 +249,7 @@ export default function Template1Page({ data }: { data: any }) {
   return (
       <div className="relative w-full">
         {/* Download Icon Button (only visible at top) */}
-        {showDownloadIcon && (
+        {!isPublicView && showDownloadIcon && (
             <div className="absolute top-4 right-4 z-50">
               <button
                   onClick={downloadAsPDF}

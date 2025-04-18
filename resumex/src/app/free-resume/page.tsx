@@ -48,9 +48,6 @@ export default function FreeResume() {
 
   const [resumeContent, setResumeContent] = useState("Start typing your resume...");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [isDesignExpanded, setIsDesignExpanded] = useState(false);
-  const [isDownloadExpanded, setIsDownloadExpanded] = useState(false);
-  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [lastSavedContent, setLastSavedContent] = useState("");
   const [isFooterMinimized, setIsFooterMinimized] = useState(true); // Default: Minimized footer
@@ -234,9 +231,16 @@ export default function FreeResume() {
 
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText("https://resumex.com/my-resume");
-    alert("Resume link copied to clipboard!");
+    if (!userId) {
+      alert("Please sign in to generate a shareable link.");
+      return;
+    }
+
+    const shareLink = `${window.location.origin}/resume-view?user=${encodeURIComponent(userId)}&template=${encodeURIComponent(template)}`;
+    navigator.clipboard.writeText(shareLink);
+    alert("Shareable resume link copied to clipboard!");
   };
+
 
   const [resumeData, setResumeData] = useState<any>({
     firstName: "John",
@@ -308,24 +312,6 @@ export default function FreeResume() {
                   <ul className="space-y-3">
                     <li><Link href="/login" className="text-blue-400 hover:underline">Sign In</Link></li>
 
-                    {/*<li><button className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition">Custom Section</button></li>*/}
-
-                    {/*<li>*/}
-                    {/*  <button onClick={() => setIsDesignExpanded(!isDesignExpanded)}*/}
-                    {/*          className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition">*/}
-                    {/*    Design & Font {isDesignExpanded ? "▲" : "▼"}*/}
-                    {/*  </button>*/}
-                    {/*  {isDesignExpanded && (*/}
-                    {/*      <>*/}
-                    {/*        <button className="w-full mt-2 py-2 bg-gray-800 text-gray-300 font-semibold rounded-lg border border-gray-600">Change Font</button>*/}
-                    {/*        <button className="w-full mt-2 py-2 bg-gray-800 text-gray-300 font-semibold rounded-lg border border-gray-600">Change Theme</button>*/}
-                    {/*      </>*/}
-                    {/*  )}*/}
-                    {/*</li>*/}
-
-                    {/*<li><button className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition">Undo</button></li>*/}
-                    {/*<li><button className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition">Redo</button></li>*/}
-
                     <li>
                       <button onClick={saveResume}
                               className="w-full flex justify-center items-center gap-2 py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition">
@@ -334,30 +320,22 @@ export default function FreeResume() {
                       </button>
                     </li>
 
-                    {/*<li>*/}
-                    {/*  <button onClick={() => setIsDownloadExpanded(!isDownloadExpanded)}*/}
-                    {/*          className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition">*/}
-                    {/*    Download {isDownloadExpanded ? "▲" : "▼"}*/}
-                    {/*  </button>*/}
-                    {/*  {isDownloadExpanded && (*/}
-                    {/*      <>*/}
-                    {/*        <button onClick={downloadAsPDF}*/}
-                    {/*                className="w-full mt-2 py-2 bg-gray-700 text-white font-semibold rounded-lg border border-gray-500 hover:bg-gray-600 transition">*/}
-                    {/*          Download as PDF*/}
-                    {/*        </button>*/}
-                    {/*        <button onClick={downloadAsWord}*/}
-                    {/*                className="w-full mt-2 py-2 bg-gray-700 text-white font-semibold rounded-lg border border-gray-500 hover:bg-gray-600 transition">*/}
-                    {/*          Download as Word*/}
-                    {/*        </button>*/}
-                    {/*      </>*/}
-                    {/*  )}*/}
-                    {/*</li>*/}
-
                     <li>
-                      <button onClick={() => setIsShareModalOpen(true)}
-                              className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition">
+                      <button
+                          onClick={() => {
+                            if (!userId) {
+                              alert("Please sign in to generate a shareable link.");
+                              return;
+                            }
+                            const link = `${window.location.origin}/resume-view?user=${encodeURIComponent(userId)}&template=${encodeURIComponent(template)}`;
+                            navigator.clipboard.writeText(link);
+                            alert("Public resume link copied to clipboard!");
+                          }}
+                          className="w-full py-3 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 hover:bg-blue-600 hover:text-white transition"
+                      >
                         Share
                       </button>
+
                     </li>
                   </ul>
                 </>
@@ -367,6 +345,35 @@ export default function FreeResume() {
           <section className="flex-1 p-6 h-[96vh] flex flex-col justify-center items-center bg-gray-100 pt-20 mb-32">
             <h1 className="text-4xl font-extrabold text-gray-900 mb-4">
               Editing: {selectedTemplate.name}
+              <div className="mt-6 flex gap-4 justify-center">
+                <button
+                    onClick={saveResume}
+                    className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700 transition flex items-center gap-1"
+                >
+                  {isSaving ? (
+                      <AiOutlineSync className="animate-spin" size={16} />
+                  ) : (
+                      <AiOutlineCheck size={16} />
+                  )}
+                  Save
+                </button>
+
+                <button
+                    onClick={() => {
+                      if (!userId) {
+                        alert("Please sign in to generate a shareable link.");
+                        return;
+                      }
+                      const link = `${window.location.origin}/resume-view?user=${encodeURIComponent(userId)}&template=${encodeURIComponent(template)}`;
+                      navigator.clipboard.writeText(link);
+                      alert("Public resume link copied to clipboard!");
+                    }}
+                    className="px-4 py-2 bg-gray-200 text-gray-800 text-sm font-medium rounded hover:bg-gray-300 transition"
+                >
+                  Share
+                </button>
+              </div>
+
             </h1>
             <div
                 className="w-full max-w-2xl p-4 border border-gray-400 rounded-lg shadow-xl bg-white"
@@ -406,7 +413,6 @@ export default function FreeResume() {
           {/*for gap before footer*/}
           <div className="h-40"></div>
 
-
           {/* Footer Content */}
           <div className="flex-1 flex justify-between items-center text-sm px-4">
             <span>© 2025 ResumeX</span>
@@ -420,38 +426,6 @@ export default function FreeResume() {
             )}
           </div>
         </div>
-
-        {/* SHARE MODAL - Fully Restored */}
-        {isShareModalOpen && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-              <div className="relative bg-white p-6 rounded-lg shadow-lg w-96 text-center">
-                {/* Close Button */}
-                <button onClick={() => setIsShareModalOpen(false)}
-                        className="absolute top-2 right-2 text-gray-500 hover:text-gray-800">
-                  <AiOutlineClose size={24} />
-                </button>
-
-                {/* Modal Title */}
-                <h2 className="text-lg font-bold mb-4">Share Your Resume</h2>
-
-                {/* Share on LinkedIn Button - Restored ✅ */}
-                <button className="w-full py-2 bg-blue-600 text-white font-semibold rounded-lg mb-2">
-                  Share on LinkedIn
-                </button>
-
-                {/* Share via Email Button - Restored ✅ */}
-                <button className="w-full py-2 bg-gray-500 text-white font-semibold rounded-lg mb-2">
-                  Share via Email
-                </button>
-
-                {/* Copy Resume Link Button */}
-                <button onClick={copyToClipboard}
-                        className="w-full py-2 bg-green-500 text-white font-semibold rounded-lg mb-2">
-                  Copy Resume Link
-                </button>
-              </div>
-            </div>
-        )}
       </div>
   );
 }
