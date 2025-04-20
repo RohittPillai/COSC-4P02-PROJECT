@@ -258,15 +258,36 @@ const ResumePage = () => {
         }}
       />
       <textarea
-        className="w-full border p-2 rounded"
-        placeholder="Description"
-        value={exp.description}
-        onChange={(e) => {
-          const updated = [...resumeData.experience];
-          updated[idx].description = e.target.value;
-          setResumeData({ ...resumeData, experience: updated });
-        }}
-      />
+  className="w-full border p-2 rounded"
+  placeholder="Description"
+  value={exp.description}
+  onChange={(e) => {
+    const updated = [...resumeData.experience];
+    updated[idx].description = e.target.value;
+    setResumeData({ ...resumeData, experience: updated });
+  }}
+/>
+<button
+  onClick={async () => {
+    setAiLoading((prev) => ({
+      ...prev,
+      exp: { ...prev.exp, [idx]: true },
+    }));
+    const newDescription = await callAI("experience", exp.description);
+    const updated = [...resumeData.experience];
+    updated[idx].description = newDescription;
+    setResumeData({ ...resumeData, experience: updated });
+    setAiLoading((prev) => ({
+      ...prev,
+      exp: { ...prev.exp, [idx]: false },
+    }));
+  }}
+  disabled={aiLoading.exp[idx]}
+  className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded hover:bg-purple-200 transition disabled:opacity-50"
+>
+  {aiLoading.exp[idx] ? "Rewriting..." : "✨ Rewrite with AI"}
+</button>
+
       <button
         onClick={() => deleteEntry("experience", idx)}
         className="text-xs text-red-600 hover:underline"
@@ -480,7 +501,14 @@ const ResumePage = () => {
                       <div key={idx} className="mt-3">
                         <h3 className="text-md font-medium">{exp.jobTitle}</h3>
                         <p className="text-sm italic">{exp.company}</p>
-                        <p className="text-sm">{exp.description}</p>
+                        <ul className="list-disc ml-6 text-sm space-y-1">
+  {exp.description
+    .split("\n")
+    .filter((line) => line.trim() !== "")
+    .map((line, i) => (
+      <li key={i}>{line}</li>
+    ))}
+</ul>
                       </div>
                     ))}
                   </section>
