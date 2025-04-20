@@ -13,8 +13,9 @@ const ResumePage = () => {
     phone: "123-456-7890",
     summary: "Aspiring software developer passionate about building impactful tools.",
     skills: ["JavaScript", "React", "Node.js"],
-    experience: [{ jobTitle: "", company: "", description: "" }],
-    education: [{ degree: "", school: "", year: "" }],
+    experience: [{ jobTitle: "", company: "", description: "", from: "", to: "" }],
+education: [{ degree: "", school: "", year: "", from: "", to: "" }],
+
     customSections: [
       {
         heading: "Projects / Certifications",
@@ -255,8 +256,29 @@ const ResumePage = () => {
           const updated = [...resumeData.experience];
           updated[idx].company = e.target.value;
           setResumeData({ ...resumeData, experience: updated });
-        }}
-      />
+        }} />
+        <input
+  className="w-full border p-2 rounded"
+  placeholder="From (e.g. 2020)"
+  value={exp.from}
+  onChange={(e) => {
+    const updated = [...resumeData.experience];
+    updated[idx].from = e.target.value;
+    setResumeData({ ...resumeData, experience: updated });
+  }}
+/>
+<input
+  className="w-full border p-2 rounded"
+  placeholder="To (e.g. 2023 or Present)"
+  value={exp.to}
+  onChange={(e) => {
+    const updated = [...resumeData.experience];
+    updated[idx].to = e.target.value;
+    setResumeData({ ...resumeData, experience: updated });
+  }}
+/>
+
+      
       <textarea
   className="w-full border p-2 rounded"
   placeholder="Description"
@@ -493,22 +515,25 @@ const ResumePage = () => {
                     </ul>
                   </section>
                 );
-              case "experience":
+                case "experience":
                 return (
                   <section key="experience">
                     <h2 className="text-lg font-semibold">Experience</h2>
                     {resumeData.experience.map((exp, idx) => (
                       <div key={idx} className="mt-3">
                         <h3 className="text-md font-medium">{exp.jobTitle}</h3>
-                        <p className="text-sm italic">{exp.company}</p>
+                        <p className="text-sm italic">
+                          {exp.company}
+                          {(exp.from || exp.to) && ` | ${exp.from} - ${exp.to}`}
+                        </p>
                         <ul className="list-disc ml-6 text-sm space-y-1">
-  {exp.description
-    .split("\n")
-    .filter((line) => line.trim() !== "")
-    .map((line, i) => (
-      <li key={i}>{line}</li>
-    ))}
-</ul>
+                          {exp.description
+                            .split("\n")
+                            .filter((line) => line.trim() !== "")
+                            .map((line, i) => (
+                              <li key={i}>{line}</li>
+                            ))}
+                        </ul>
                       </div>
                     ))}
                   </section>
