@@ -5,8 +5,6 @@ Project documents are located in the [docs](docs) folder.
 ## Project Website 🌐
 Visit the live site at 
 
-View a product demonstration at 
-
 
 ## Project Description 📝
 The AI-Powered Resume Builder is designed to make creating professional and tailored resumes easire and efficient. Users can input their dertails, choose from customizable templates, and optimize their resumes with AI-driven suggestions for skills and keywords. The tool supports job-specific tailoring to help resumes align with ATS standards and offers export options in formats like pdf or word. it includes both free templates and premium features for advanced customization, catering to a wide range of users.
