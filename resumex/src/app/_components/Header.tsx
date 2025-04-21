@@ -8,6 +8,13 @@ import { useSession, signOut } from "next-auth/react";
 const Header = () => {
   const { data: session } = useSession();
   const [user, setUser] = useState<{ name: string } | null>(null);
+// For custom login, replace with your user data structure
+  useEffect(() => {
+    if (session) {
+      localStorage.removeItem("userData");
+      setUser(null);
+    }
+  }, [session]);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("userData");
