@@ -1,7 +1,16 @@
 "use client";
 import { Facebook, Twitter, Linkedin, Mail, Phone } from "lucide-react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 const Footer = () => {
+  const [lastTemplate, setLastTemplate] = useState("template1");
+
+  useEffect(() => {
+    const storedTemplate = localStorage.getItem("lastUsedTemplate");
+    if (storedTemplate) setLastTemplate(storedTemplate);
+  }, []);
+
   return (
       <footer className="bg-gray-900 text-gray-300 py-16 px-8">
         <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10">
@@ -18,9 +27,15 @@ const Footer = () => {
           <div>
             <h3 className="text-xl font-semibold text-white">Quick Links</h3>
             <ul className="mt-4 space-y-3">
-              <li><a href="/about" className="hover:text-blue-400">About Us</a></li>
-              <li><a href="/resume-builder" className="hover:text-blue-400">Resume Builder</a></li>
-              <li><a href="/templates" className="hover:text-blue-400">Templates</a></li>
+              <li>
+                <Link href="/aboutus" className="hover:text-blue-400">About Us</Link>
+              </li>
+              <li>
+                <Link href={`/free-resume?template=${lastTemplate}`} className="hover:text-blue-400">Resume Builder</Link>
+              </li>
+              <li>
+                <Link href="/templates" className="hover:text-blue-400">Templates</Link>
+              </li>
               <li><a href="/pricing" className="hover:text-blue-400">Pricing</a></li>
               <li className="relative group"><span className="text-gray-400 cursor-default group-hover:text-blue-400">Contact</span>
                 <div className="absolute left-1/2 -translate-x-1/2 mt-1 bg-gray-800 text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">On your right</div></li>

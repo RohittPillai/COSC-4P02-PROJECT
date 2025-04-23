@@ -42,6 +42,12 @@ function getLoggedInUserId() {
 export default function FreeResume() {
   const searchParams = useSearchParams();
   const template = searchParams.get("template") || "template1";
+  useEffect(() => {
+    if (template) {
+      localStorage.setItem("lastUsedTemplate", template);
+    }
+  }, [template]);
+
   const selectedTemplate = templates[template] || templates["template1"];
   const [userId, setUserId] = useState<string | null>(null);
   const resumeRef = useRef<HTMLDivElement>(null);
