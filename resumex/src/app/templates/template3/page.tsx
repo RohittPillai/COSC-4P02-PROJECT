@@ -4,6 +4,7 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { FiDownload } from "react-icons/fi";
 
+
 function getUserKey(key: string) {
   const userData = localStorage.getItem("userData");
   const userId = userData ? JSON.parse(userData)?.name : "guest";
@@ -11,6 +12,16 @@ function getUserKey(key: string) {
 }
 
 export default function Template3Page({ isPublicView = false }: { isPublicView?: boolean }) {
+  //for pop up timer
+  const [showPopup, setShowPopup] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowPopup(false);
+    }, 2000); // 2 seconds
+    return () => clearTimeout(timer);
+  }, []);
+
   const [activeTab, setActiveTab] = useState("profile");
   const tabs = ["profile", "education & projects", "skills", "work", "awards"];
 
@@ -564,7 +575,16 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
   }, []);
 
   return (
-    <div className="w-full max-w-[1200px] mx-auto px-10 py-10 bg-white rounded shadow-sm font-sans text-gray-800 leading-relaxed overflow-y-auto max-h-[calc(100vh-160px)] border border-gray-300">
+      <>
+        {showPopup && (
+            <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-[10000]">
+              <div className="bg-white text-black px-8 py-4 rounded-lg shadow-lg text-lg font-semibold animate-pulse">
+                In Progress...
+              </div>
+            </div>
+        )}
+
+        <div className="w-full max-w-[1200px] mx-auto px-10 py-10 bg-white rounded shadow-sm font-sans text-gray-800 leading-relaxed overflow-y-auto max-h-[calc(100vh-160px)] border border-gray-300">
       {/* HEADER */}
       <div className="flex justify-between items-center mb-6">
         {isEditingHeader ? (
@@ -2002,5 +2022,6 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
       </div>
 
     </div>
+        </>
   );
 }

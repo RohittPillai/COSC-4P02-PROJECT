@@ -13,7 +13,18 @@ function getUserKey(key: string) {
 }
 
 export default function Template2Page({ data, isPublicView = false }) {
+  //for few seconds pop up
   const resumeRef = React.useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowPopup(false);
+    }, 2000); // 2 seconds
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const [showPopup, setShowPopup] = useState(true);
   // For contact section
   const [isEditingContact, setIsEditingContact] = useState(false);
   const [contactData, setContactData] = useState({
@@ -868,8 +879,16 @@ export default function Template2Page({ data, isPublicView = false }) {
                 </div>
             )}
           </div>
-
         </div>
+
+          //for in progress timer
+          {showPopup && (
+              <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-[10000]">
+                <div className="bg-white text-black px-8 py-4 rounded-lg shadow-lg text-lg font-semibold animate-pulse">
+                  In Progress...
+                </div>
+              </div>
+          )}
       </div>
     </div>
   </div>

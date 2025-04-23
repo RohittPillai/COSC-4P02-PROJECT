@@ -88,7 +88,8 @@ export default function FreeResume() {
   
     // Clone the node to capture it without affecting layout.
     const original = resumeRef.current;
-    const clone = original.cloneNode(true);
+    //const clone = original.cloneNode(true);
+    const clone = original.cloneNode(true) as HTMLElement;
     clone.style.maxHeight = "none";
     clone.style.overflow = "visible";
     clone.style.height = "auto";
