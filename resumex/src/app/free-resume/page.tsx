@@ -405,9 +405,11 @@ export default function FreeResume() {
             <span>© 2025 ResumeX</span>
             {!isFooterMinimized && (
                 <div className="flex items-center gap-4">
-                  <a href="#" className="hover:text-blue-400">About</a>
-                  <a href="#" className="hover:text-blue-400">Resume Builder</a>
-                  <a href="#" className="hover:text-blue-400">Templates</a>
+                  <Link href="/aboutus" className="hover:text-blue-400">About</Link>
+                  <Link href={`/free-resume?template=${template}`} className="hover:text-blue-400">
+                    Resume Builder
+                  </Link>
+                  <Link href="/templates" className="hover:text-blue-400">Templates</Link>
                   <a href="mailto:support@resumex.com" className="hover:text-blue-400">Contact</a>
                 </div>
             )}

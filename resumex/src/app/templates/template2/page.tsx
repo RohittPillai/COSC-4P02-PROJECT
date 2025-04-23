@@ -881,7 +881,6 @@ export default function Template2Page({ data, isPublicView = false }) {
           </div>
         </div>
 
-          //for in progress timer
           {showPopup && (
               <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-[10000]">
                 <div className="bg-white text-black px-8 py-4 rounded-lg shadow-lg text-lg font-semibold animate-pulse">
