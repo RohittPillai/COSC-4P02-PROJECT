@@ -276,6 +276,7 @@ export default function Template1Page({ data, isPublicView = false }: { data: an
             </div>
         )}
 
+        <div className="relative w-full">
         <div className="flex justify-center items-start w-full min-h-[calc(100vh-100px)] pt-10 pb-10">
         <div className="bg-white shadow-lg p-8 rounded-lg max-w-[1000px] w-[95%] mx-auto
         max-h-[calc(100vh-180px)] overflow-y-auto flex-grow">
@@ -734,6 +735,8 @@ export default function Template1Page({ data, isPublicView = false }: { data: an
                 )}
               </div>
             </div>
+            <div className="h-[120px] w-full" />
+          </div>
           </div>
         </div>
       </div>

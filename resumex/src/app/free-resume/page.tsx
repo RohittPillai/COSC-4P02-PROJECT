@@ -81,7 +81,6 @@ export default function FreeResume() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [lastSavedContent, setLastSavedContent] = useState("");
-  const [isFooterMinimized, setIsFooterMinimized] = useState(true); // Default: Minimized footer
 
   // Fetch user and their saved resume data from localStorage
   useEffect(() => {
@@ -352,7 +351,10 @@ export default function FreeResume() {
 
           {/* Main resume editor area */}
           <section className="flex-1 p-6 h-[96vh] flex flex-col justify-center items-center bg-gray-100 pt-20 mb-32">
-            <h1 className="text-4xl font-extrabold text-gray-900 mb-4">
+            <h1 className={`text-4xl font-extrabold text-gray-900 mb-4 ${
+                template === "template1" ? "mt-16" : ""
+            }`}
+            >
               Editing: {selectedTemplate.name}
               <div className="mt-6 flex gap-4 justify-center">
                 <button
@@ -374,7 +376,6 @@ export default function FreeResume() {
                   Share
                 </button>
               </div>
-
             </h1>
             <div
                 className="w-full max-w-2xl p-4 border border-gray-400 rounded-lg shadow-xl bg-white"
@@ -396,39 +397,6 @@ export default function FreeResume() {
             )}
           </div>
         </main>
-
-        {/* Collapsible Footer */}
-        <div
-            className={`bg-gray-900 text-white transition-all duration-300 ${
-                isFooterMinimized ? "h-12" : "h-20"
-            } flex items-center justify-center relative`}
-        >
-          {/* Toggle Button */}
-          <button
-              onClick={() => setIsFooterMinimized((prev) => !prev)}
-              className="absolute top-[-10px] bg-gray-900 text-white p-2 rounded-full border border-gray-700"
-          >
-            {isFooterMinimized ? <AiOutlineUp size={16} /> : <AiOutlineDown size={16} />}
-          </button>
-
-          {/*for gap before footer*/}
-          <div className="h-40"></div>
-
-          {/* Footer Content */}
-          <div className="flex-1 flex justify-between items-center text-sm px-4">
-            <span>© 2025 ResumeX</span>
-            {!isFooterMinimized && (
-                <div className="flex items-center gap-4">
-                  <Link href="/aboutus" className="hover:text-blue-400">About</Link>
-                  <Link href={`/free-resume?template=${template}`} className="hover:text-blue-400">
-                    Resume Builder
-                  </Link>
-                  <Link href="/templates" className="hover:text-blue-400">Templates</Link>
-                  <a href="mailto:support@resumex.com" className="hover:text-blue-400">Contact</a>
-                </div>
-            )}
-          </div>
-        </div>
       </div>
   );
 }
