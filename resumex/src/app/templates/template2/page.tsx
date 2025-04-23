@@ -13,14 +13,16 @@ interface Template2PageProps {
 
 const Template2Page: React.FC<Template2PageProps> = ({ data, isPublicView = false }) => {
   const resumeRef = useRef<HTMLDivElement>(null);
-  const [showPopup, setShowPopup] = useState(true);
+  const [showPopup, setShowPopup] = useState(true); // Declare state first
 
-  useEffect(() => {
-    const timer = setTimeout(() => setShowPopup(false), 2000);
-    return () => clearTimeout(timer);
-  }, []);
+useEffect(() => {
+  const timer = setTimeout(() => {
+    setShowPopup(false);
+  }, 2000);
+  return () => clearTimeout(timer);
+}, []);
 
-  const [showPopup, setShowPopup] = useState(true);
+
 
   // For contact section
   const [isEditingContact, setIsEditingContact] = useState(false);
