@@ -13,7 +13,7 @@ export async function POST(req: Request) {
       prompt = `Improve this resume summary under 3 lines:\n\n${input}`;
       break;
     case "skills":
-      prompt = `List 6 resume skills based on this input. Comma separated:\n\n${input}`;
+      prompt = `Extract 6 highly relevant technical or soft skills from the following professional summary. Format your response as a single comma-separated list. Do not explain anything, just list the skills:\n\n${input}`;
       break;
     case "experience":
       prompt = `Rewrite the following job experience into exactly 3 one-line CAR (Challenge, Action, Result) statements. Each line should clearly express the challenge faced, the action taken, and the measurable result. Do not include any bullet symbols like "*", "-", or "•". Format each statement on a new line.:\n\n${input}`;
