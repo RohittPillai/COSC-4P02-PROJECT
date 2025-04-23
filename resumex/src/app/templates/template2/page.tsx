@@ -6,29 +6,17 @@ import { FiDownload } from "react-icons/fi";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
-// Generates a user-specific key for localStorage using the logged-in user's name.
-// Falls back to "guest" if no user is found.
-function getUserKey(key: string) {
-  const userData = localStorage.getItem("userData");
-  const userId = userData ? JSON.parse(userData)?.name : "guest";
-  return `${userId}_template2_${key}`;
-}
-
 interface Template2PageProps {
   data: any;
   isPublicView?: boolean;
 }
 
 const Template2Page: React.FC<Template2PageProps> = ({ data, isPublicView = false }) => {
-  //for few seconds pop up
-  const resumeRef = React.useRef<HTMLDivElement>(null);
+  const resumeRef = useRef<HTMLDivElement>(null);
+  const [showPopup, setShowPopup] = useState(true);
 
-  // Show "In Progress..." popup for 2 seconds on load
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowPopup(false);
-    }, 2000); // 2 seconds
-
+    const timer = setTimeout(() => setShowPopup(false), 2000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -915,5 +903,12 @@ const Template2Page: React.FC<Template2PageProps> = ({ data, isPublicView = fals
     </div>
   </div>
   );
-}
+
+return (
+  <div className="relative w-full">
+    {/* Your entire JSX layout goes here as-is */}
+  </div>
+);
+};
+
 export default Template2Page;
