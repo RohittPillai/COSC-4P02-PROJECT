@@ -51,14 +51,23 @@ export const authConfig = {
      * @see https://next-auth.js.org/providers/github
      */
   ],
+
+  pages: {
+    signIn: "/login", // Custom login page
+  },
   adapter: PrismaAdapter(db),
   callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-    }),
+    async redirect({ baseUrl }) {
+      return baseUrl; // Redirect to homepage
+    },
+    async session({ session, user }) {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: user.id,
+        },
+      };
+    },
   },
-} satisfies NextAuthConfig;
+};
