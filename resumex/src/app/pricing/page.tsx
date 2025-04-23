@@ -30,7 +30,7 @@ async function handleCheckout(priceId: string, setLoading: (value: boolean) => v
       throw new Error("Stripe did not return a URL");
     }
   } catch (error: any) {
-    console.error("❌ Checkout Error:", error);
+    console.error("Checkout Error:", error);
     alert(`Payment failed: ${error.message}`);
   } finally {
     setLoading(false);

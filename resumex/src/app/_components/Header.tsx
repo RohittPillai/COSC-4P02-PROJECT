@@ -5,10 +5,14 @@ import Link from "next/link";
 import Image from "next/image";
 import { useSession, signOut } from "next-auth/react";
 
+interface UserData {
+  name: string;
+}
+
 const Header = () => {
   const { data: session } = useSession();
-  const [user, setUser] = useState<{ name: string } | null>(null);
-// For custom login, replace with your user data structure
+  const [user, setUser] = useState<UserData | null>(null);
+
   useEffect(() => {
     if (session) {
       localStorage.removeItem("userData");
@@ -19,20 +23,25 @@ const Header = () => {
   useEffect(() => {
     const storedUser = localStorage.getItem("userData");
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      try {
+        const parsedUser = JSON.parse(storedUser) as UserData;
+        setUser(parsedUser);
+      } catch (error) {
+        console.error('Failed to parse user data:', error);
+      }
     }
   }, []);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     if (session) {
-      signOut({ callbackUrl: "/" }); // For NextAuth
+      await signOut({ callbackUrl: "/" }); // For NextAuth
     } else {
       localStorage.removeItem("userData"); // For custom login
       setUser(null);
     }
   };
 
-  const displayName = session?.user?.name || user?.name;
+  const displayName = session?.user?.name ?? user?.name;
 
   return (
     <header className="bg-gray-900 text-white sticky top-0 z-50 shadow-lg">
@@ -43,7 +52,7 @@ const Header = () => {
             alt="ResumeX Logo"
             width={160}
             height={160}
-            priority
+            priority={true}
             className="cursor-pointer"
           />
         </Link>

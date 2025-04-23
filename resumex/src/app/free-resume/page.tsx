@@ -1,4 +1,5 @@
 "use client"; // This marks the file as a Client Component in Next.js
+import React from 'react';
 // Layout component
 import Header from "../_components/Header";
 // React hooks
