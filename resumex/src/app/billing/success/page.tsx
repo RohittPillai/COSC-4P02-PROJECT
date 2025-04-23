@@ -9,7 +9,7 @@ export default function SuccessPage() {
       <p className="text-lg text-gray-700 mb-6">
         Thank you for subscribing to ResumeX Pro.
       </p>
-      <Link href="/templates">
+      <Link href="/pro-resume">
         <button className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">
           Build My Resume Now
         </button>
