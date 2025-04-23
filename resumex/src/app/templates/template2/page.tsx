@@ -1,11 +1,10 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-
-import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai"; // Icon components used in buttons
-import { FiDownload } from "react-icons/fi"; // Download icon for PDF export
-import html2canvas from "html2canvas"; // Used to capture resume as a canvas
-import jsPDF from "jspdf"; // Library to export resume as a PDF file
+import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
+import { FiDownload } from "react-icons/fi";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 // Generates a user-specific key for localStorage using the logged-in user's name.
 // Falls back to "guest" if no user is found.
@@ -15,7 +14,12 @@ function getUserKey(key: string) {
   return `${userId}_template2_${key}`;
 }
 
-export default function Template2Page({ data, isPublicView = false }) {
+interface Template2PageProps {
+  data: any;
+  isPublicView?: boolean;
+}
+
+const Template2Page: React.FC<Template2PageProps> = ({ data, isPublicView = false }) => {
   //for few seconds pop up
   const resumeRef = React.useRef<HTMLDivElement>(null);
 
@@ -912,3 +916,4 @@ export default function Template2Page({ data, isPublicView = false }) {
   </div>
   );
 }
+export default Template2Page;
