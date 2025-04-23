@@ -286,7 +286,7 @@ export default function Template1Page({ data, isPublicView = false }: { data: an
               className="header text-center pb-4 cursor-pointer relative"
               onClick={() => setIsEditingHeader(true)}
           >
-            {isEditingHeader ? (
+            {!isPublicView && isEditingHeader ? (
                 <>
                   <input
                       type="text"
@@ -349,8 +349,10 @@ export default function Template1Page({ data, isPublicView = false }: { data: an
             <h3
                 className="text-2xl font-semibold text-gray-800 cursor-pointer"
                 onClick={() => {
+                  if (!isPublicView) {
                   setIsExperienceEditingMode(true);
                   setTempExperience([...resumeData.experienceList]);
+                }
                 }}
             >
               Experience
@@ -358,7 +360,7 @@ export default function Template1Page({ data, isPublicView = false }: { data: an
             <div className="mt-4">
               {tempExperience.map((job: any, index: number) => (
                   <div key={index} className="mb-4 relative">
-                    {isExperienceEditingMode ? (
+                    {!isPublicView && isExperienceEditingMode ? (
                         <>
                           <input
                               type="text"
@@ -415,7 +417,7 @@ export default function Template1Page({ data, isPublicView = false }: { data: an
               ))}
 
               {/* + Add Experience */}
-              {isExperienceEditingMode && (
+              {!isPublicView && isExperienceEditingMode && (
                   <div className="text-center mt-4">
                     <button
                         onClick={() => {
@@ -433,7 +435,7 @@ export default function Template1Page({ data, isPublicView = false }: { data: an
               )}
 
               {/* Save/Cancel Buttons */}
-              {isExperienceEditingMode && (
+              {!isPublicView && isExperienceEditingMode && (
                   <div className="mt-4 flex justify-center gap-4">
                     <button
                         onClick={() => {
@@ -462,8 +464,10 @@ export default function Template1Page({ data, isPublicView = false }: { data: an
               <h3
                   className="text-2xl font-semibold text-gray-800 cursor-pointer"
                   onClick={() => {
-                    setIsEducationEditingMode(true);
-                    setTempEducation([...resumeData.education]);
+                    if (!isPublicView) {
+                      setIsEducationEditingMode(true);
+                      setTempEducation([...resumeData.education]);
+                    }
                   }}
               >
                 Education
@@ -471,7 +475,7 @@ export default function Template1Page({ data, isPublicView = false }: { data: an
               <div className="mt-4">
                 {tempEducation.map((edu: any, index: number) => (
                     <div key={index} className="mb-4 relative">
-                      {isEducationEditingMode ? (
+                      {!isPublicView && isEducationEditingMode ? (
                           <>
                             <input
                                 type="text"
@@ -521,7 +525,7 @@ export default function Template1Page({ data, isPublicView = false }: { data: an
                 ))}
 
                 {/* + Add Education */}
-                {isEducationEditingMode && (
+                {!isPublicView && isEducationEditingMode && (
                     <div className="text-center mt-4">
                       <button
                           onClick={() =>
@@ -538,7 +542,7 @@ export default function Template1Page({ data, isPublicView = false }: { data: an
                 )}
 
                 {/* Save / Cancel Buttons */}
-                {isEducationEditingMode && (
+                {!isPublicView && isEducationEditingMode && (
                     <div className="mt-4 flex justify-center gap-4">
                       <button
                           onClick={() => {
@@ -568,8 +572,10 @@ export default function Template1Page({ data, isPublicView = false }: { data: an
               <h3
                   className="text-2xl font-semibold text-gray-800 cursor-pointer"
                   onClick={() => {
-                    setIsProjectsEditingMode(true);
-                    setTempProjects([...resumeData.projects]);
+                    if (!isPublicView) {
+                      setIsProjectsEditingMode(true);
+                      setTempProjects([...resumeData.projects]);
+                    }
                   }}
               >
                 Projects
@@ -577,7 +583,7 @@ export default function Template1Page({ data, isPublicView = false }: { data: an
               <div className="mt-4">
                 {tempProjects.map((project: any, index: number) => (
                     <div key={index} className="mb-4 relative">
-                      {isProjectsEditingMode ? (
+                      {!isPublicView && isProjectsEditingMode ? (
                           <>
                             <input
                                 type="text"
@@ -617,7 +623,7 @@ export default function Template1Page({ data, isPublicView = false }: { data: an
                 ))}
 
                 {/* + Add Project */}
-                {isProjectsEditingMode && (
+                {!isPublicView && isProjectsEditingMode && (
                     <div className="text-center mt-4">
                       <button
                           onClick={() =>
@@ -634,7 +640,7 @@ export default function Template1Page({ data, isPublicView = false }: { data: an
                 )}
 
                 {/* Save / Cancel Buttons */}
-                {isProjectsEditingMode && (
+                {!isPublicView && isProjectsEditingMode && (
                     <div className="mt-4 flex justify-center gap-4">
                       <button
                           onClick={() => {
@@ -662,8 +668,12 @@ export default function Template1Page({ data, isPublicView = false }: { data: an
             {/* Skills Section */}
             <div className="section mt-6">
               <h3 className="text-2xl font-semibold text-gray-800">Skills</h3>
-              <div className="mt-4 cursor-pointer" onClick={() => setIsEditingSkills(true)}>
-                {isEditingSkills ? (
+              <div className={`${!isPublicView ? "cursor-pointer" : ""} mt-4`}
+                   onClick={() => {
+                     if (!isPublicView) setIsEditingSkills(true);
+                   }}
+                >
+                {!isPublicView && isEditingSkills ? (
                     <>
                       <input
                           type="text"
@@ -697,8 +707,12 @@ export default function Template1Page({ data, isPublicView = false }: { data: an
             {/* Interests Section */}
             <div className="section mt-6">
               <h3 className="text-2xl font-semibold text-gray-800">Interests</h3>
-              <div className="mt-2 cursor-pointer" onClick={() => setIsEditingInterests(true)}>
-                {isEditingInterests ? (
+              <div className={`${!isPublicView ? "cursor-pointer" : ""} mt-2`}
+                   onClick={() => {
+                     if (!isPublicView) setIsEditingInterests(true);
+                   }}
+              >
+                {!isPublicView && isEditingInterests ? (
                     <>
                       <input
                           type="text"
@@ -723,6 +737,6 @@ export default function Template1Page({ data, isPublicView = false }: { data: an
           </div>
         </div>
       </div>
-      </div>
+    </div>
   );
 }

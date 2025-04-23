@@ -873,7 +873,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
             ) : (
               <div
                 className="cursor-pointer"
-                {/* Display Contact Info */}
+                //Display Contact Info
                 onClick={() => {
                   setTempContactInfo(contactInfo);
                   setIsEditingContact(true);
@@ -2091,6 +2091,6 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
         </div>
       </div>
     </div>
-        </>
+   </>
   );
 }

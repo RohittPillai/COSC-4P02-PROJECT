@@ -8,11 +8,12 @@ import dynamic from "next/dynamic";
 // Navigation and file operations
 import Link from "next/link";
 import { jsPDF } from "jspdf";
-import { saveAs } from "file-saver";
 // Icons
 import { AiOutlineLeft, AiOutlineRight, AiOutlineSync, AiOutlineCheck, AiOutlineUp, AiOutlineDown } from "react-icons/ai";
 // PDF and screenshot utility
 import html2canvas from "html2canvas";
+
+import { supabase } from "~/lib/supabaseClient";
 
 // Dynamically import resume templates so they are loaded only when needed
 const Template1Page = dynamic(() => import("../templates/template1/page"));
@@ -95,15 +96,40 @@ export default function FreeResume() {
   }, []);
 
   // Save resume to localStorage (triggered manually or on autosave)
-  const saveResume = () => {
+  const saveResume = async () => {
     setIsSaving(true);
-    setTimeout(() => {
-      setIsSaving(false);
-      if (!userId) return;
+
+    // 1. Save to localStorage
+    if (userId) {
       const key = `${userId}_resume`;
       localStorage.setItem(key, JSON.stringify(resumeData));
       setLastSavedContent(JSON.stringify(resumeData));
-     // alert("Resume saved for your user ID!");
+    }
+
+    // 2. Save to Supabase
+    try {
+      const { data, error } = await supabase
+          .from("resumes")
+          .upsert([
+            {
+              user_id: userId,
+              template: template, // template1, template2, etc.
+              content: resumeData,
+            },
+          ]);
+
+      if (error) {
+        console.error("Supabase save failed:", error);
+      } else {
+        console.log("Saved to Supabase:", data);
+      }
+    } catch (err) {
+      console.error("Unexpected error saving to Supabase:", err);
+    }
+
+    // 3. Reset saving state after delay
+    setTimeout(() => {
+      setIsSaving(false);
     }, 500);
   };
 
@@ -178,15 +204,47 @@ export default function FreeResume() {
     }
   };
 
-  const copyToClipboard = () => {
+  const shareResume = async () => {
     if (!userId) {
       alert("Please sign in to generate a shareable link.");
       return;
     }
 
-    const shareLink = `${window.location.origin}/resume-view?user=${encodeURIComponent(userId)}&template=${encodeURIComponent(template)}`;
-    navigator.clipboard.writeText(shareLink);
-    alert("Shareable resume link copied to clipboard!");
+    try {
+      // Check if a resume already exists
+      const { data: existing, error: fetchError } = await supabase
+          .from("resumes")
+          .select("id")
+          .eq("user_id", userId)
+          .eq("template", template)
+          .single();
+
+      if (fetchError && fetchError.code !== "PGRST116") throw fetchError;
+
+      let resumeId = existing?.id;
+
+      // If not found, insert it
+      if (!resumeId) {
+        const { data: inserted, error: insertError } = await supabase
+            .from("resumes")
+            .insert([
+              { user_id: userId, template, data: resumeData }
+            ])
+            .select("id")
+            .single();
+
+        if (insertError) throw insertError;
+        resumeId = inserted.id;
+      }
+
+      // Generate public share link with the resume ID
+      const shareLink = `${window.location.origin}/resume-view?id=${resumeId}`;
+      await navigator.clipboard.writeText(shareLink);
+      alert("Public resume link copied to clipboard!");
+    } catch (err) {
+      console.error("Error sharing resume:", err);
+      alert("Failed to generate shareable link.");
+    }
   };
 
   // Default resume data (initial state)
@@ -237,12 +295,22 @@ export default function FreeResume() {
     interests: ["Football", "Programming", "Gaming"],
   });
 
+  useEffect(() => {
+    const fetchResumes = async () => {
+      const { data, error } = await supabase.from("resumes").select("*");
+      console.log("Fetched resumes:", data);
+      if (error) console.error("Error fetching resumes:", error);
+    };
+
+    fetchResumes();
+  }, []);
+
   return (
       <div className="flex flex-col min-h-screen w-full bg-gray-100">
         <Header /> {/* Top navigation bar with app title, logo, etc. */}
         {/* Main content area including sidebar and selected resume template */}
         <main className={`flex flex-grow w-full h-screen relative pb-20 transition-all duration-300 
-    ${isSidebarOpen ? "ml-[6%]" : "ml-[2%]"}`}>
+        ${isSidebarOpen ? "ml-[6%]" : "ml-[2%]"}`}>
           {/* Sidebar with template selection (collapsible) */}
           <aside className={`${isSidebarOpen ? "w-1/5" : "w-12"} 
           bg-gradient-to-b from-gray-900 to-gray-800 text-white shadow-lg 
@@ -295,15 +363,7 @@ export default function FreeResume() {
                 </button>
 
                 <button
-                    onClick={() => {
-                      if (!userId) {
-                        alert("Please sign in to generate a shareable link.");
-                        return;
-                      }
-                      const link = `${window.location.origin}/resume-view?user=${encodeURIComponent(userId)}&template=${encodeURIComponent(template)}`;
-                      navigator.clipboard.writeText(link);
-                      alert("Public resume link copied to clipboard!");
-                    }}
+                    onClick={shareResume}
                     className="px-4 py-2 bg-gray-200 text-gray-800 text-sm font-medium rounded hover:bg-gray-300 transition"
                 >
                   Share
