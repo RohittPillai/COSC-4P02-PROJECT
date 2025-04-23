@@ -41,7 +41,6 @@ export default function ResumeViewPage() {
             }
             setLoading(false);
         };
-
         fetchResume();
     }, [resumeId]);
 
