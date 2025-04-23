@@ -1,11 +1,14 @@
-import React from "react";
-import { useState, useEffect } from "react";
-import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
-import { FiDownload } from "react-icons/fi";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
-import { useRef} from "react";
+// Import core React hooks and libraries
+import React from "react"; // Needed for JSX rendering
+import { useState, useEffect } from "react"; // React hooks for state and lifecycle
+import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai"; // Icon components used in buttons
+import { FiDownload } from "react-icons/fi"; // Download icon for PDF export
+import html2canvas from "html2canvas"; // Used to capture resume as a canvas
+import jsPDF from "jspdf"; // Library to export resume as a PDF file
+import { useRef} from "react"; // For referencing DOM nodes like resume container
 
+// Generates a user-specific key for localStorage using the logged-in user's name.
+// Falls back to "guest" if no user is found.
 function getUserKey(key: string) {
   const userData = localStorage.getItem("userData");
   const userId = userData ? JSON.parse(userData)?.name : "guest";
@@ -16,6 +19,7 @@ export default function Template2Page({ data, isPublicView = false }) {
   //for few seconds pop up
   const resumeRef = React.useRef<HTMLDivElement>(null);
 
+  // Show "In Progress..." popup for 2 seconds on load
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowPopup(false);
@@ -25,6 +29,7 @@ export default function Template2Page({ data, isPublicView = false }) {
   }, []);
 
   const [showPopup, setShowPopup] = useState(true);
+
   // For contact section
   const [isEditingContact, setIsEditingContact] = useState(false);
   const [contactData, setContactData] = useState({
@@ -149,8 +154,10 @@ export default function Template2Page({ data, isPublicView = false }) {
 
   ]);
 
+  // Store temporary experience edits
   const [tempExperience, setTempExperience] = useState(experienceData);
 
+  // Load saved experience from localStorage on mount
   useEffect(() => {
     const savedExp = localStorage.getItem(getUserKey("experience"));
     if (savedExp) {
@@ -160,18 +167,18 @@ export default function Template2Page({ data, isPublicView = false }) {
     }
   }, []);
 
+  // Show/hide download icon based on scroll position (only near top)
   const [showDownloadIcon, setShowDownloadIcon] = useState(true);
-
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY || document.documentElement.scrollTop;
       setShowDownloadIcon(scrollTop < 100); // only show near top
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Export resume as PDF with custom styling
   const downloadAsPDF = async () => {
     const resumeElement = resumeRef.current;
     const icon = document.getElementById("download-icon");
@@ -212,6 +219,7 @@ export default function Template2Page({ data, isPublicView = false }) {
       const imgWidth = pdfWidth;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
+      // Add image to PDF (split if too tall)
       if (imgHeight <= pdf.internal.pageSize.getHeight()) {
         pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
       } else {
@@ -233,9 +241,11 @@ export default function Template2Page({ data, isPublicView = false }) {
     }
   };
 
+  // Profile photo handling
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [profileImage, setProfileImage] = useState<string | null>(null);
 
+  // Convert uploaded image to base64 and store
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -249,6 +259,7 @@ export default function Template2Page({ data, isPublicView = false }) {
     }
   };
 
+  // Load profile image on mount
   useEffect(() => {
     const savedImage = localStorage.getItem(getUserKey("profileImage"));
     if (savedImage) setProfileImage(savedImage);
@@ -256,6 +267,7 @@ export default function Template2Page({ data, isPublicView = false }) {
 
   return (
       <div className="relative w-full">
+        {/* Floating download icon (only if not in public view and user is near top) */}
         {!isPublicView && showDownloadIcon && (
             <div className="absolute top-4 right-4 z-50" id="download-icon">
               <button
@@ -267,7 +279,7 @@ export default function Template2Page({ data, isPublicView = false }) {
               </button>
             </div>
         )}
-
+        {/* Resume content container */}
         <div
             ref={resumeRef}
             className="w-full max-w-[850px] mx-auto px-6 py-10 bg-white shadow-xl overflow-y-auto max-h-[calc(100vh-160px)]"
@@ -320,6 +332,7 @@ export default function Template2Page({ data, isPublicView = false }) {
             </div>
           </div>
 
+          {/* Remove Photo Button */}
           {profileImage && (
               <button
                   onClick={() => {
@@ -332,7 +345,6 @@ export default function Template2Page({ data, isPublicView = false }) {
               </button>
           )}
 
-
           {/* Contact (Editable) */}
           <div className="space-y-2">
             <h2 className="text-lg font-bold tracking-wide border-b border-white pb-2">
@@ -340,6 +352,7 @@ export default function Template2Page({ data, isPublicView = false }) {
             </h2>
             {isEditingContact ? (
               <>
+                {/* Editable inputs */}
                 <input
                   type="text"
                   className="text-sm text-black w-full px-2 py-1 rounded"
@@ -399,6 +412,7 @@ export default function Template2Page({ data, isPublicView = false }) {
                 </div>
               </>
             ) : (
+                // View mode (click to edit)
               <div
                 onClick={() => setIsEditingContact(true)}
                 className="cursor-pointer space-y-1"
@@ -545,6 +559,7 @@ export default function Template2Page({ data, isPublicView = false }) {
             </h2>
             {isEditingSkills ? (
                 <>
+                  {/* Editable skill inputs */}
                   {tempSkills.map((skill, index) => (
                       <div key={index} className="relative">
                         <input
@@ -570,7 +585,7 @@ export default function Template2Page({ data, isPublicView = false }) {
                       </div>
                   ))}
 
-                  {/* + Add Skill */}
+                  {/* Add Skill */}
                   <button
                       onClick={() => setTempSkills([...tempSkills, ""])}
                       className="mt-2 px-3 py-1 bg-blue-600 text-white rounded-full text-sm hover:bg-blue-700"
@@ -602,6 +617,7 @@ export default function Template2Page({ data, isPublicView = false }) {
                   </div>
                 </>
             ) : (
+                // View mode (click to edit)
                 <ul
                     className="text-sm space-y-1 list-disc list-inside cursor-pointer"
                     onClick={() => {
@@ -615,9 +631,6 @@ export default function Template2Page({ data, isPublicView = false }) {
                 </ul>
             )}
           </div>
-
-          {/* --- Languages Section Removed --- */}
-          {/* The entire block rendering the LANGUAGES section has been removed. */}
         </div>
 
         {/* RIGHT COLUMN */}
@@ -669,6 +682,7 @@ export default function Template2Page({ data, isPublicView = false }) {
                 </div>
               </>
             ) : (
+                // View mode with click to edit
               <div
                 onClick={() => {
                   setTempHeader(headerData);
@@ -691,6 +705,7 @@ export default function Template2Page({ data, isPublicView = false }) {
             <h2 className="text-md font-bold text-[#1B2A41] border-b border-gray-300 pb-1 mb-2 uppercase">
               Profile
             </h2>
+            {/* Editable textarea */}
             {isEditingProfile ? (
               <>
                 <textarea
@@ -699,6 +714,7 @@ export default function Template2Page({ data, isPublicView = false }) {
                   value={tempProfile}
                   onChange={(e) => setTempProfile(e.target.value)}
                 />
+                {/* Save / Cancel */}
                 <div className="mt-3 flex gap-3">
                   <button
                     onClick={() => {
@@ -725,6 +741,7 @@ export default function Template2Page({ data, isPublicView = false }) {
                 </div>
               </>
             ) : (
+                // View mode with click to edit
               <p
                 className="text-sm text-gray-800 cursor-pointer"
                 onClick={() => {
@@ -856,6 +873,7 @@ export default function Template2Page({ data, isPublicView = false }) {
                   </div>
                 </>
             ) : (
+                // View mode with click to edit
                 <div
                     onClick={() => {
                       setTempExperience(JSON.parse(JSON.stringify(experienceData)));
@@ -881,6 +899,7 @@ export default function Template2Page({ data, isPublicView = false }) {
           </div>
         </div>
 
+          {/* "In Progress..." Popup */}
           {showPopup && (
               <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-[10000]">
                 <div className="bg-white text-black px-8 py-4 rounded-lg shadow-lg text-lg font-semibold animate-pulse">

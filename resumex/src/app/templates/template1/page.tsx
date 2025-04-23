@@ -1,34 +1,40 @@
-"use client";
+"use client"; // Enables client-side rendering for this component
 import { useState, useEffect, useRef } from "react";
 import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai"; // Icons for Save & Cancel
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
-import { FiDownload } from "react-icons/fi";
+import html2canvas from "html2canvas"; // Used to capture DOM elements as images for PDF generation
+import jsPDF from "jspdf"; // PDF generation library
+import { FiDownload } from "react-icons/fi"; // Icon used for download button
 
+// Utility function to create a unique localStorage key per user
 function getUserKey(key: string) {
   const userData = localStorage.getItem("userData");
   const userId = userData ? JSON.parse(userData)?.name : "guest";
   return `${userId}_${key}`;
 }
 
-export default function Template1Page({ data, isPublicView = false }: { data: any, isPublicView?: boolean }) {
+// Main component for rendering and editing Resume Template 1
+export default function Template1Page({ data, isPublicView = false }: { data: any, isPublicView?: boolean }) { // Tracks if data is currently being saved
+  // Initialize resume data from localStorage or fallback to passed-in prop `data`
   const [resumeData, setResumeData] = useState(() => {
     const savedData = localStorage.getItem(getUserKey("resumeData"));
     return savedData ? JSON.parse(savedData) : data;
   });
 
-  const [isSaving, setIsSaving] = useState(false);
-  const [isEditingHeader, setIsEditingHeader] = useState(false);
-  const [isEditingExperience, setIsEditingExperience] = useState<number | null>(null); //
+  const [isSaving, setIsSaving] = useState(false); // Tracks if data is currently being saved
+  const [isEditingHeader, setIsEditingHeader] = useState(false); // Edit mode for header
+  const [isEditingExperience, setIsEditingExperience] = useState<number | null>(null); // Tracks which experience entry is being edited
   const [isEditingEducation, setIsEditingEducation] = useState<number | null>(null); // Track education edit mode
   const [isEditingProject, setIsEditingProject] = useState<number | null>(null); // Track project edit mode
   const [isEditingSkills, setIsEditingSkills] = useState(false); // Track skills edit mode
-  const [isEditingInterests, setIsEditingInterests] = useState(false);
+  const [isEditingInterests, setIsEditingInterests] = useState(false); // Edit mode for interests section
+  // Section-wide toggle modes for batch editing
   const [isExperienceEditingMode, setIsExperienceEditingMode] = useState(false);
   const [isEducationEditingMode, setIsEducationEditingMode] = useState(false);
   const [isProjectsEditingMode, setIsProjectsEditingMode] = useState(false);
-  const [showDownloadIcon, setShowDownloadIcon] = useState(true);
 
+  const [showDownloadIcon, setShowDownloadIcon] = useState(true); // Controls visibility of floating download button
+
+  // Temporary states to hold edits before saving
   const [tempData, setTempData] = useState(resumeData); // Store temporary changes
   const [tempExperience, setTempExperience] = useState(resumeData.experienceList); // Store experience changes
   const [tempEducation, setTempEducation] = useState(resumeData.education); // Store education edits
@@ -38,10 +44,12 @@ export default function Template1Page({ data, isPublicView = false }: { data: an
 
   const headerRef = useRef<HTMLDivElement>(null); // Ref to track header section
 
+  // Handles updating temporary interests from comma-separated input
   const handleInterestsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTempInterests(e.target.value.split(',').map((item) => item.trim()));
   };
 
+  // Saves the edited interests to localStorage and updates main resume data
   const saveInterestsEdit = () => {
     setIsSaving(true);
     const updatedData = { ...resumeData, interests: tempInterests };
@@ -53,15 +61,18 @@ export default function Template1Page({ data, isPublicView = false }: { data: an
     }, 1000);
   };
 
+  // Cancels interests editing and restores original data
   const cancelInterestsEdit = () => {
     setTempInterests([...resumeData.interests]);
     setIsEditingInterests(false);
   };
 
+  // Handles skills update from comma-separated string to array
   const handleSkillsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTempSkills(e.target.value.split(",")); // Convert comma-separated input into an array
   };
 
+  // Cancels skills editing and restores previous values
   const cancelSkillsEdit = () => {
     setIsEditingSkills(false);
     setTempSkills([...resumeData.skills]); // Restore original skills data
@@ -86,13 +97,14 @@ export default function Template1Page({ data, isPublicView = false }: { data: an
     setTempEducation(updatedEducation);
   };
 
+  // Updates the temporary project data as the user types in input or textarea fields
   const handleProjectChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number, field: string) => {
     const updatedProjects = [...tempProjects];
     updatedProjects[index] = { ...updatedProjects[index], [field]: e.target.value };
     setTempProjects(updatedProjects);
   };
 
-// Cancel editing for experience section
+  // Cancel editing for experience section
   const cancelExperienceEdit = () => {
     setIsEditingExperience(null);
     setTempExperience([...resumeData.experienceList]); // Restore original experience data
@@ -104,11 +116,13 @@ export default function Template1Page({ data, isPublicView = false }: { data: an
     setTempEducation([...resumeData.education]); // Restore original education data
   };
 
+  // Cancels project editing and resets temporary project state to original resume data
   const cancelProjectEdit = () => {
     setIsEditingProject(null);
     setTempProjects([...resumeData.projects]); // Restore original project data
   };
 
+  // Saves updated project data to localStorage and main resume state
   const saveProjectEdit = () => {
     setIsSaving(true);
     const updatedData = { ...resumeData, projects: tempProjects };
@@ -120,6 +134,7 @@ export default function Template1Page({ data, isPublicView = false }: { data: an
     }, 1000);
   };
 
+  // Saves updated skills data to localStorage and updates resume state
   const saveSkillsEdit = () => {
     setIsSaving(true);
     const updatedData = { ...resumeData, skills: tempSkills };
@@ -181,11 +196,11 @@ export default function Template1Page({ data, isPublicView = false }: { data: an
         }
       }
     }
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isEditingHeader, tempData]); // Dependency ensures effect updates
 
+  // Handles showing/hiding the floating download icon based on scroll position
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY || document.documentElement.scrollTop;
@@ -196,6 +211,7 @@ export default function Template1Page({ data, isPublicView = false }: { data: an
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  //for downloading as pdf
   const downloadAsPDF = async () => {
     const resumeElement = document.querySelector(".shadow-lg.p-8.rounded-lg");
 

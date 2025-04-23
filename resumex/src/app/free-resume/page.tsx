@@ -1,20 +1,25 @@
-"use client";
+"use client"; // This marks the file as a Client Component in Next.js
+// Layout component
 import Header from "../_components/Header";
-import Footer from "../_components/Footer";
-import { useState, useEffect } from "react";
+// React hooks
+import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
+import dynamic from "next/dynamic";
+// Navigation and file operations
 import Link from "next/link";
 import { jsPDF } from "jspdf";
 import { saveAs } from "file-saver";
-import { AiOutlineLeft, AiOutlineRight, AiOutlineClose, AiOutlineSync, AiOutlineCheck, AiOutlineUp, AiOutlineDown } from "react-icons/ai";
-import dynamic from "next/dynamic";
-import { useRef } from "react";
+// Icons
+import { AiOutlineLeft, AiOutlineRight, AiOutlineSync, AiOutlineCheck, AiOutlineUp, AiOutlineDown } from "react-icons/ai";
+// PDF and screenshot utility
 import html2canvas from "html2canvas";
 
+// Dynamically import resume templates so they are loaded only when needed
 const Template1Page = dynamic(() => import("../templates/template1/page"));
 const Template2Page = dynamic(() => import("../templates/template2/page"));
 const Template3Page = dynamic(() => import("../templates/template3/page"));
 
+// Define available templates with name and component reference
 const templates = {
   template1: {
     name: "Modern Clean Resume",
@@ -30,6 +35,11 @@ const templates = {
   },
 };
 
+/**
+ * Retrieves the current user's ID from localStorage.
+ * Used to personalize saved resume data.
+ * @returns {string | null} The user name or null if not found.
+ */
 function getLoggedInUserId() {
   const userData = localStorage.getItem("userData");
   if (userData) {
@@ -39,25 +49,40 @@ function getLoggedInUserId() {
   return null;
 }
 
+/**
+ * FreeResume Component – Core logic and functionality before render
+ *
+ * - Manages selection of resume template based on URL query parameter `template`.
+ * - Persists the last used template to localStorage.
+ * - Loads and stores user-specific resume data using localStorage.
+ * - Supports autosave functionality every 5 seconds.
+ * - Provides methods to export the resume:
+ *    - as PDF using html2canvas + jsPDF.
+ *    - as Word (.doc) using Blob and HTML conversion.
+ * - Supports generating a public sharable link via `copyToClipboard`.
+ */
+// Main component for the free resume builder page
 export default function FreeResume() {
-  const searchParams = useSearchParams();
-  const template = searchParams.get("template") || "template1";
+  const searchParams = useSearchParams(); // Get query parameters from the URL
+  const template = searchParams.get("template") || "template1"; // Get selected template from URL or default to template1
+  // Store the last used template in localStorage to preserve user preference
   useEffect(() => {
     if (template) {
       localStorage.setItem("lastUsedTemplate", template);
     }
   }, [template]);
 
-  const selectedTemplate = templates[template] || templates["template1"];
+  const selectedTemplate = templates[template] || templates["template1"]; // Get the selected template configuration
+  // UI & state refs
   const [userId, setUserId] = useState<string | null>(null);
   const resumeRef = useRef<HTMLDivElement>(null);
-
   const [resumeContent, setResumeContent] = useState("Start typing your resume...");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [lastSavedContent, setLastSavedContent] = useState("");
   const [isFooterMinimized, setIsFooterMinimized] = useState(true); // Default: Minimized footer
 
+  // Fetch user and their saved resume data from localStorage
   useEffect(() => {
     const user = getLoggedInUserId();
     if (user) {
@@ -69,6 +94,7 @@ export default function FreeResume() {
     }
   }, []);
 
+  // Save resume to localStorage (triggered manually or on autosave)
   const saveResume = () => {
     setIsSaving(true);
     setTimeout(() => {
@@ -81,14 +107,15 @@ export default function FreeResume() {
     }, 500);
   };
 
+  // Automatically save resume every 5 seconds when content changes
   useEffect(() => {
     const autoSaveInterval = setTimeout(() => {
       saveResume();
     }, 5000);
-
     return () => clearTimeout(autoSaveInterval);
   }, [resumeContent]);
 
+  // Export the resume as a high-quality PDF
   const downloadAsPDF = async () => {
     if (!resumeRef.current) return;
   
@@ -150,92 +177,6 @@ export default function FreeResume() {
       document.body.removeChild(clone);
     }
   };
-  
-  const downloadAsWord = () => {
-    if (!resumeRef.current) return;
-
-    const content = resumeRef.current.innerHTML;
-
-    const leftContent =
-        resumeRef.current.querySelector(".left-column")?.innerHTML ||
-        resumeRef.current.querySelector("div[class*='col-span-5']")?.innerHTML;
-
-    const rightContent =
-        resumeRef.current.querySelector(".right-column")?.innerHTML ||
-        resumeRef.current.querySelector("div[class*='col-span-6']")?.innerHTML;
-
-    const isSplitLayout = template === "template2" || template === "template3";
-
-    const html = `
-  <html xmlns:o='urn:schemas-microsoft-com:office:office'
-        xmlns:w='urn:schemas-microsoft-com:office:word'
-        xmlns='http://www.w3.org/TR/REC-html40'>
-  <head>
-    <meta charset='utf-8'>
-    <title>Resume</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        padding: 20px;
-        background: white;
-      }
-      table {
-        width: 100%;
-        border-collapse: collapse;
-      }
-      td {
-        vertical-align: top;
-        padding: 10px;
-      }
-      .left-column {
-        width: 30%;
-        background-color: #1e293b;
-        color: white;
-        padding: 20px;
-      }
-      .right-column {
-        width: 70%;
-        background-color: #f9fafb;
-        padding: 20px;
-      }
-      h1, h2, h3 {
-        margin-top: 0;
-      }
-      a {
-        color: #3b82f6;
-      }
-    </style>
-  </head>
-  <body>
-    ${
-        isSplitLayout
-            ? `
-      <table>
-        <tr>
-          <td class="left-column">
-            ${leftContent || "<p>Left side missing</p>"}
-          </td>
-          <td class="right-column">
-            ${rightContent || content}
-          </td>
-        </tr>
-      </table>
-    `
-            : `
-      <div>${content}</div>
-    `
-    }
-  </body>
-  </html>
-`;
-
-    const blob = new Blob(["\ufeff", html], {
-      type: "application/msword",
-    });
-
-    saveAs(blob, `${template}-resume.doc`);
-  };
-
 
   const copyToClipboard = () => {
     if (!userId) {
@@ -248,7 +189,7 @@ export default function FreeResume() {
     alert("Shareable resume link copied to clipboard!");
   };
 
-
+  // Default resume data (initial state)
   const [resumeData, setResumeData] = useState<any>({
     firstName: "John",
     lastName: "Doe",
@@ -298,21 +239,22 @@ export default function FreeResume() {
 
   return (
       <div className="flex flex-col min-h-screen w-full bg-gray-100">
-        <Header />
-
+        <Header /> {/* Top navigation bar with app title, logo, etc. */}
+        {/* Main content area including sidebar and selected resume template */}
         <main className={`flex flex-grow w-full h-screen relative pb-20 transition-all duration-300 
     ${isSidebarOpen ? "ml-[6%]" : "ml-[2%]"}`}>
-
+          {/* Sidebar with template selection (collapsible) */}
           <aside className={`${isSidebarOpen ? "w-1/5" : "w-12"} 
           bg-gradient-to-b from-gray-900 to-gray-800 text-white shadow-lg 
           p-4 border-r border-gray-700 flex flex-col transition-all duration-300 
           h-[calc(100vh-4rem)] fixed top-[4rem] left-0 z-0`}>
-
-
+            {/* Sidebar toggle button */}
             <button onClick={() => setIsSidebarOpen(!isSidebarOpen)}
                     className="self-end text-gray-400 hover:text-gray-200 mb-4">
               {isSidebarOpen ? <AiOutlineLeft size={20} /> : <AiOutlineRight size={20} />}
             </button>
+
+            {/* Template selection buttons (visible only when sidebar is open) */}
             {isSidebarOpen && (
                 <>
                   <h2 className="text-lg font-semibold mb-4">Choose Template</h2>
@@ -335,6 +277,7 @@ export default function FreeResume() {
             )}
           </aside>
 
+          {/* Main resume editor area */}
           <section className="flex-1 p-6 h-[96vh] flex flex-col justify-center items-center bg-gray-100 pt-20 mb-32">
             <h1 className="text-4xl font-extrabold text-gray-900 mb-4">
               Editing: {selectedTemplate.name}

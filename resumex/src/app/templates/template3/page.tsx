@@ -1,18 +1,20 @@
+// React & necessary libraries for PDF generation and UI interactions
 import React, { useState, useEffect } from "react";
 import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { FiDownload } from "react-icons/fi";
 
-
+// Returns a unique localStorage key based on the user and current template
 function getUserKey(key: string) {
   const userData = localStorage.getItem("userData");
   const userId = userData ? JSON.parse(userData)?.name : "guest";
   return `${userId}_template3_${key}`;
 }
 
+// Main component for Template 3
 export default function Template3Page({ isPublicView = false }: { isPublicView?: boolean }) {
-  //for pop up timer
+  // Show loading popup for 2 seconds when the page mounts
   const [showPopup, setShowPopup] = useState(true);
 
   useEffect(() => {
@@ -22,9 +24,11 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
     return () => clearTimeout(timer);
   }, []);
 
+  // Controls which resume tab is currently active
   const [activeTab, setActiveTab] = useState("profile");
   const tabs = ["profile", "education & projects", "skills", "work", "awards"];
 
+  // Downloads the resume as a high-quality multi-page PDF
   const downloadAsPDF = async () => {
     const clone = document.getElementById("resume-pdf-export");
     const icon = document.getElementById("download-icon");
@@ -34,8 +38,9 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
     clone.style.display = "block";
 
     try {
-      await new Promise((res) => setTimeout(res, 300));
+      await new Promise((res) => setTimeout(res, 300)); // Wait for DOM to render
 
+      // Capture resume as canvas and convert to PDF
       const canvas = await html2canvas(clone, {
         scale: 2, // High scale to improve quality and allow large fonts
         useCORS: true,
@@ -60,6 +65,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
       pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
       heightLeft -= pageHeight;
 
+      // If content overflows, add more pages
       while (heightLeft > 0) {
         position -= pageHeight;
         pdf.addPage();
@@ -102,11 +108,11 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
     }
   }, []);
 
+  // Load profile image from localStorage on initial mount
   useEffect(() => {
     const savedImage = localStorage.getItem(getUserKey("ProfileImage"));
     if (savedImage) setProfileImage(savedImage);
   }, []);
-
 
   // Editable "Hello!" Section
   const [isEditingHello, setIsEditingHello] = useState(false);
@@ -162,7 +168,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
     }
   }, []);
 
-  // for profile section
+  // for profile section (initial)
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [profileText, setProfileText] = useState(
     `"There is no end to education... The whole of life... is a process of learning."`
@@ -576,6 +582,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
 
   return (
       <>
+        {/* Show "In Progress" popup for 2 seconds on load */}
         {showPopup && (
             <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-[10000]">
               <div className="bg-white text-black px-8 py-4 rounded-lg shadow-lg text-lg font-semibold animate-pulse">
@@ -583,8 +590,8 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
               </div>
             </div>
         )}
-
-        <div className="w-full max-w-[1200px] mx-auto px-10 py-10 bg-white rounded shadow-sm font-sans text-gray-800 leading-relaxed overflow-y-auto max-h-[calc(100vh-160px)] border border-gray-300">
+      {/* Resume Container */}
+      <div className="w-full max-w-[1200px] mx-auto px-10 py-10 bg-white rounded shadow-sm font-sans text-gray-800 leading-relaxed overflow-y-auto max-h-[calc(100vh-160px)] border border-gray-300">
       {/* HEADER */}
       <div className="flex justify-between items-center mb-6">
         {isEditingHeader ? (
@@ -628,19 +635,21 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
             </div>
           </div>
         ) : (
+            // Header View Mode
             <div className="flex justify-between items-start w-full">
               <div onClick={() => setIsEditingHeader(true)} className="cursor-pointer">
                 <h1 className="text-4xl font-extrabold">
                   {headerData.name ? headerData.name.split(" ")[0] : ""}
                   {" "}
                   <span className="text-purple-600">
-        {headerData.name ? headerData.name.split(" ").slice(1).join(" ") : ""}
-      </span>
+                  {headerData.name ? headerData.name.split(" ").slice(1).join(" ") : ""}
+                  </span>
                 </h1>
                 <h2 className="text-lg uppercase tracking-wide text-gray-500 mt-1">
                   {headerData.title}
                 </h2>
               </div>
+              {/* PDF Download Button */}
               {!isPublicView && showDownloadIcon && (
                   <button
                       onClick={downloadAsPDF}
@@ -655,7 +664,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
         )}
       </div>
 
-      {/* TABS */}
+      {/* NAVIGATION TABS */}
       <div className="flex justify-start flex-wrap gap-6 border-b mb-8 text-sm font-medium">
         {tabs.map(tab => (
           <button
@@ -686,6 +695,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                 )}
               </div>
 
+              {/* Upload Button (camera icon) */}
               <label
                   htmlFor="profile-upload"
                   className="absolute bottom-1 right-1 bg-white p-1 rounded-full shadow-md cursor-pointer hover:bg-gray-100"
@@ -710,7 +720,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                   />
                 </svg>
               </label>
-
+              {/* Upload Button (camera icon) */}
               <input
                   id="profile-upload"
                   type="file"
@@ -732,7 +742,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
               />
             </div>
 
-            {/* Remove button */}
+            {/* Remove Image button */}
             {profileImage && (
                 <button
                     onClick={() => {
@@ -746,6 +756,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
             )}
           </div>
 
+          {/* "Hello!" Section */}
           <div className="space-y-3">
             <h2 className="text-lg font-bold">Hello!</h2>
             {isEditingHello ? (
@@ -791,10 +802,12 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
             )}
           </div>
 
+          {/* Contact Details */}
           <div className="space-y-2">
             <h2 className="text-lg font-bold">Contact details</h2>
             {isEditingContact ? (
               <>
+                {/* Editable Inputs for phone, email, and address */}
                 <label className="block text-purple-600 text-sm font-semibold">Phone:</label>
                 <input
                   className="w-full text-sm border px-2 py-1 rounded mb-1"
@@ -833,6 +846,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                     setTempContactInfo({ ...tempContactInfo, addressLine3: e.target.value })
                   }
                 />
+                {/* Save & Cancel */}
                 <div className="flex gap-2 mt-2">
                   <button
                     onClick={() => {
@@ -859,6 +873,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
             ) : (
               <div
                 className="cursor-pointer"
+                {/* Display Contact Info */}
                 onClick={() => {
                   setTempContactInfo(contactInfo);
                   setIsEditingContact(true);
@@ -917,12 +932,15 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
 
         {/* RIGHT COLUMN CONTENT */}
         <div className="md:col-span-2 space-y-10 right-column">
+          {/* Profile Tab Content */}
           {activeTab === "profile" && (
             <>
+              {/* Quote Section */}
               <div className="space-y-4">
                 <h1 className="text-2xl font-bold">Profile</h1>
                 {isEditingProfile ? (
                   <>
+                    {/* Quote and author input */}
                     <textarea
                       className="w-full border px-3 py-2 rounded text-sm"
                       rows={3}
@@ -935,6 +953,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                       value={tempProfileAuthor}
                       onChange={(e) => setTempProfileAuthor(e.target.value)}
                     />
+                    {/* Save / Cancel Buttons */}
                     <div className="flex gap-2 mt-2">
                       <button
                         onClick={() => {
@@ -961,6 +980,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                     </div>
                   </>
                 ) : (
+                  // View mode - blockquote
                   <blockquote
                     className="italic border-l-4 border-purple-600 pl-4 cursor-pointer"
                     onClick={() => {
@@ -975,16 +995,19 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                 )}
               </div>
 
+              {/* About Me Section */}
               <div>
                 <h2 className="text-xl font-bold mb-2">A few words about me</h2>
                 {isEditingAboutMe ? (
                   <>
+                    {/* Edit mode: textarea */}
                     <textarea
                       className="w-full border px-3 py-2 rounded text-sm"
                       rows={4}
                       value={tempAboutMeText}
                       onChange={(e) => setTempAboutMeText(e.target.value)}
                     />
+                    {/* Save / Cancel */}
                     <div className="flex gap-2 mt-2">
                       <button
                         onClick={() => {
@@ -1008,6 +1031,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                     </div>
                   </>
                 ) : (
+                  // View mode
                   <p
                     className="text-sm cursor-pointer"
                     onClick={() => {
@@ -1020,16 +1044,19 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                 )}
               </div>
 
+              {/* Philosophy + Traits Section */}
               <div>
                 <h2 className="text-xl font-bold mb-2">Philosophy</h2>
                 {isEditingPhilosophy ? (
                   <>
+                    {/* Philosophy textarea */}
                     <textarea
                       className="w-full border px-3 py-2 rounded text-sm"
                       rows={4}
                       value={tempPhilosophyText}
                       onChange={(e) => setTempPhilosophyText(e.target.value)}
                     />
+                    {/* Traits List with Remove and Add */}
                     <div className="mt-4 space-y-2">
                       {tempTraits.map((trait, index) => (
                         <div key={index} className="flex gap-2 items-center">
@@ -1062,6 +1089,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                         + Add Trait
                       </button>
                     </div>
+                    {/* Save / Cancel */}
                     <div className="flex gap-2 mt-4">
                       <button
                         onClick={() => {
@@ -1108,16 +1136,19 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                 )}
               </div>
 
+              {/* Interests & Hobbies Section */}
               <div>
                 <h2 className="text-xl font-bold mb-2">Interests & Hobbies</h2>
                 {isEditingInterests ? (
                   <>
+                    {/* Intro text */}
                     <textarea
                       className="text-sm w-full border px-3 py-2 rounded mb-2"
                       rows={2}
                       value={tempInterestIntro}
                       onChange={(e) => setTempInterestIntro(e.target.value)}
                     />
+                    {/* Editable interest list */}
                     <div className="space-y-2">
                       {tempInterestsList.map((item, idx) => (
                         <div key={idx} className="flex gap-2 items-center">
@@ -1150,6 +1181,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                         + Add Interest
                       </button>
                     </div>
+                    {/* Save / Cancel */}
                     <div className="flex gap-2 mt-4">
                       <button
                         onClick={() => {
@@ -1201,8 +1233,10 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
 
           {activeTab === "education & projects" && (
               <div className="space-y-10">
+                {/* === Education Section === */}
                 <div className="border-l-4 border-purple-600 pl-4">
                   <h2 className="text-2xl font-bold mb-2">Education</h2>
+                  {/* Loop through each education entry */}
                   {educationList.map((edu, index) => (
                       <div
                           key={index}
@@ -1248,7 +1282,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                                   className="text-sm text-gray-600 border-b border-gray-300 w-full"
                               />
 
-                              {/* ❌ Remove Entry */}
+                              {/* Remove Entry */}
                               <button
                                   onClick={() => {
                                     const updated = [...tempEducationList];
@@ -1264,7 +1298,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                                 <AiOutlineClose size={18} />
                               </button>
 
-                              {/* ➕ Add Education Entry */}
+                              {/* Add Education Entry */}
                               <button
                                   onClick={() => {
                                     const newEntry = { school: "", degree: "", year: "", location: "" };
@@ -1278,7 +1312,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                                 + Add Education
                               </button>
 
-                              {/* ✅ Save & Cancel */}
+                              {/* Save & Cancel */}
                               <div className="mt-4 flex justify-center gap-4">
                                 <button
                                     onClick={saveEducation}
@@ -1295,6 +1329,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                               </div>
                             </>
                         ) : (
+                            // View mode
                             <div>
                               <p className="text-sm font-semibold text-gray-800">{edu.degree}</p>
                               <p className="text-sm text-gray-600">{edu.school}</p>
@@ -1305,8 +1340,10 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                   ))}
                 </div>
 
+                {/* === Project Highlight Section === */}
                 <div className="border-l-4 border-purple-600 pl-4">
                 <h2 className="text-2xl font-bold mb-1">Project Highlight</h2>
+                  {/* Loop through each project entry */}
                   {projectList.map((project, index) => (
                       <div
                           key={index}
@@ -1319,6 +1356,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                       >
                         {editingProjectIndex === index ? (
                             <>
+                              {/* Edit mode: inputs and textareas for title, descriptions, tools */}
                               <input
                                   type="text"
                                   placeholder="Project Title (e.g., Market Expansion Strategy)"
@@ -1356,7 +1394,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                                   className="text-sm text-gray-500 border-b border-gray-300 w-full"
                               />
 
-                              {/* ➕ Add Project */}
+                              {/* Add Project */}
                               <button
                                   onClick={() => {
                                     const newEntry = {
@@ -1375,7 +1413,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                                 + Add Project
                               </button>
 
-                              {/* ✅ Save / ❌ Cancel */}
+                              {/* Save / Cancel */}
                               <div className="mt-4 flex justify-center gap-4">
                                 <button
                                     onClick={saveProject}
@@ -1391,7 +1429,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                                 </button>
                               </div>
 
-                              {/* ❌ Remove Button */}
+                              {/* Remove Current Project Button */}
                               <button
                                   onClick={() => {
                                     const updated = [...tempProjectList];
@@ -1408,6 +1446,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                               </button>
                             </>
                         ) : (
+                            // View mode
                             <div>
                               <p className="text-sm font-semibold text-gray-800 mb-1">{project.title}</p>
                               <p className="text-sm text-gray-600 mb-1">{project.description1}</p>
@@ -1428,12 +1467,14 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                 <h2 className="text-2xl font-bold mb-1">Technical Skills</h2>
                 {isEditingTechSkills ? (
                   <>
+                    {/* Edit mode: multiline input */}
                     <textarea
                       className="w-full border px-3 py-2 rounded text-sm"
                       rows={3}
                       value={tempTechSkills}
                       onChange={(e) => setTempTechSkills(e.target.value)}
                     />
+                    {/* Edit mode: multiline input */}
                     <div className="flex gap-2 mt-2">
                       <button
                         onClick={() => {
@@ -1457,6 +1498,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                     </div>
                   </>
                 ) : (
+                    // View mode: click to edit
                   <p
                     className="text-sm text-gray-600 cursor-pointer"
                     onClick={() => {
@@ -1474,6 +1516,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                 <h2 className="text-2xl font-bold mb-1">Soft Skills</h2>
                 {isEditingSoftSkills ? (
                   <>
+                    {/* Editable list of soft skills */}
                     {tempSoftSkills.map((skill, index) => (
                       <div key={index} className="flex gap-2 items-center mb-1">
                         <input
@@ -1498,12 +1541,14 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                         </button>
                       </div>
                     ))}
+                    {/* Add new skill */}
                     <button
                       onClick={() => setTempSoftSkills([...tempSoftSkills, ""])}
                       className="text-blue-600 text-sm underline mt-1"
                     >
                       + Add Skill
                     </button>
+                    {/* Save / Cancel buttons */}
                     <div className="flex gap-2 mt-2">
                       <button
                         onClick={() => {
@@ -1527,6 +1572,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                     </div>
                   </>
                 ) : (
+                  // View mode: list of skills
                   <ul
                     className="list-disc list-inside text-sm text-gray-600 cursor-pointer"
                     onClick={() => {
@@ -1546,6 +1592,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                 <h2 className="text-2xl font-bold mb-1">Languages</h2>
                 {isEditingLanguages ? (
                   <>
+                    {/* Editable list of languages */}
                     {tempLanguages.map((lang, index) => (
                       <div key={index} className="flex gap-2 items-center mb-1">
                         <input
@@ -1570,12 +1617,14 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                         </button>
                       </div>
                     ))}
+                    {/* Add new language */}
                     <button
                       onClick={() => setTempLanguages([...tempLanguages, ""])}
                       className="text-blue-600 text-sm underline mt-1"
                     >
                       + Add Language
                     </button>
+                    {/* Save / Cancel buttons */}
                     <div className="flex gap-2 mt-2">
                       <button
                         onClick={() => {
@@ -1599,6 +1648,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                     </div>
                   </>
                 ) : (
+                  // View mode: list of languages
                   <ul
                     className="list-disc list-inside text-sm text-gray-600 cursor-pointer"
                     onClick={() => {
@@ -1617,12 +1667,15 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
 
           {activeTab === "work" && (
               <div className="space-y-10">
+                {/* Section wrapper for Work*/}
                 <div className="border-l-4 border-purple-600 pl-4">
                   <h2 className="text-2xl font-bold mb-2">Work Experience</h2>
+                  {/* Loop through work entries */}
                   {tempWorkList.map((job, index) => (
                       <div key={index} className="mb-6 relative">
                         {editingWorkIndex === index ? (
                             <>
+                              {/* Edit mode inputs for each field */}
                               <input
                                   type="text"
                                   placeholder="Job Title (e.g., Marketing Intern)"
@@ -1659,7 +1712,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                                   className="text-sm text-gray-600 border-b border-gray-300 w-full"
                               />
 
-                              {/* ➕ Add Work */}
+                              {/* Add Work */}
                               <button
                                   onClick={() => {
                                     const newEntry = {
@@ -1679,7 +1732,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                                 + Add Work
                               </button>
 
-                              {/* ✅ Save / ❌ Cancel */}
+                              {/* Save / Cancel */}
                               <div className="mt-4 flex justify-center gap-4">
                                 <button
                                     onClick={saveWork}
@@ -1695,7 +1748,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                                 </button>
                               </div>
 
-                              {/* ❌ Remove Work Entry */}
+                              {/* Remove Work Entry */}
                               <button
                                   onClick={() => {
                                     const updated = [...tempWorkList];
@@ -1712,6 +1765,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                               </button>
                             </>
                         ) : (
+                            // View mode (click to edit)
                             <div
                                 className="cursor-pointer"
                                 onClick={() => {
@@ -1736,8 +1790,10 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
 
           {activeTab === "awards" && (
               <div className="space-y-10">
+                {/* Section wrapper for Awards & Recognition */}
                 <div className="border-l-4 border-purple-600 pl-4">
                   <h2 className="text-2xl font-bold mb-4">Awards & Recognition</h2>
+                  {/* Loop through all award entries */}
                   {awardList.map((award, index) => (
                       <div
                           key={index}
@@ -1748,8 +1804,10 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                                 : () => setEditingAwardIndex(index)
                           }
                       >
+                        {/* Edit mode for the current award */}
                         {editingAwardIndex === index ? (
                             <>
+                              {/* Editable award fields */}
                               <input
                                   type="text"
                                   placeholder="Award Title (e.g., Dean’s Honour List)"
@@ -1787,7 +1845,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                                   className="text-sm text-gray-600 border-b border-gray-300 w-full"
                               />
 
-                              {/* ➕ Add Award Button */}
+                              {/* Add Award Button */}
                               <button
                                   onClick={() => {
                                     const newEntry = {
@@ -1806,7 +1864,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                                 + Add Award
                               </button>
 
-                              {/* ✅ Save / ❌ Cancel Buttons */}
+                              {/* Save / Cancel Buttons */}
                               <div className="mt-3 flex justify-center gap-4">
                                 <button
                                     onClick={saveAward}
@@ -1822,7 +1880,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                                 </button>
                               </div>
 
-                              {/* ❌ Remove Award */}
+                              {/* Remove Award */}
                               <button
                                   onClick={() => {
                                     const updated = [...tempAwardList];
@@ -1839,6 +1897,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                               </button>
                             </>
                         ) : (
+                            // View mode for award
                             <div>
                               <h3 className="text-sm font-semibold text-gray-800">
                                 {award.title}
@@ -1867,6 +1926,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
             transformOrigin: "top left",
           }}
       >
+        {/* Content container for PDF layout */}
         <div className="p-10 text-black text-sm w-full max-w-[1200px] mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {/* LEFT COLUMN */}
@@ -1910,6 +1970,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
             {/* RIGHT COLUMN */}
             <div className="md:col-span-2 space-y-10">
 
+              {/* Profile Quote */}
               <div>
                 <h2 className="text-xl font-bold mb-2">Profile</h2>
                 <blockquote className="italic border-l-4 border-purple-600 pl-4 mb-4">
@@ -1919,11 +1980,13 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                 </blockquote>
               </div>
 
+              {/* About Me Paragraph */}
               <div>
                 <h2 className="text-xl font-bold mb-2">About Me</h2>
                 <p>{aboutMeText}</p>
               </div>
 
+              {/* Philosophy and Traits */}
               <div>
                 <h2 className="text-xl font-bold mb-2">Philosophy</h2>
                 <p>{philosophyText}</p>
@@ -1934,6 +1997,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                 </ul>
               </div>
 
+              {/* Interests */}
               <div>
                 <h2 className="text-xl font-bold mb-2">Interests</h2>
                 <p>{interestIntro}</p>
@@ -1944,6 +2008,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                 </ul>
               </div>
 
+              {/* Education */}
               <div>
                 <h2 className="text-xl font-bold mb-2">Education</h2>
                 {educationList.map((edu, i) => (
@@ -1956,6 +2021,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                 ))}
               </div>
 
+              {/* Projects */}
               <div>
                 <h2 className="text-xl font-bold mb-2">Projects</h2>
                 {projectList.map((proj, i) => (
@@ -1968,6 +2034,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                 ))}
               </div>
 
+              {/* Work Experience */}
               <div>
                 <h2 className="text-xl font-bold mb-2">Work Experience</h2>
                 {workList.map((job, i) => (
@@ -1983,6 +2050,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                 ))}
               </div>
 
+              {/* Skills Section */}
               <div>
                 <h2 className="text-xl font-bold mb-2">Skills</h2>
                 <p>
@@ -1995,6 +2063,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                 </ul>
               </div>
 
+              {/* Languages */}
               <div>
                 <h2 className="text-xl font-bold mb-2">Languages</h2>
                 <ul className="list-disc list-inside">
@@ -2004,6 +2073,7 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
                 </ul>
               </div>
 
+              {/* Awards Section */}
               <div>
                 <h2 className="text-xl font-bold mb-2">Awards</h2>
                 {awardList.map((award, i) => (
@@ -2020,7 +2090,6 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
           </div>
         </div>
       </div>
-
     </div>
         </>
   );
