@@ -6,7 +6,7 @@ import "./src/env.js";
 
 /** @type {import('next').NextConfig} */
 const config = {
-  swcMinify: true,
+  //swcMinify: true,
   compiler: {
     removeConsole: process.env.NODE_ENV === "production",
   },
