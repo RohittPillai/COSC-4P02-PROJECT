@@ -7,7 +7,6 @@ import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai"; // Icon compone
 import { FiDownload } from "react-icons/fi"; // Download icon for PDF export
 import html2canvas from "html2canvas"; // Used to capture resume as a canvas
 import jsPDF from "jspdf"; // Library to export resume as a PDF file
-import { useRef} from "react"; // For referencing DOM nodes like resume container
 
 // Generates a user-specific key for localStorage using the logged-in user's name.
 // Falls back to "guest" if no user is found.
