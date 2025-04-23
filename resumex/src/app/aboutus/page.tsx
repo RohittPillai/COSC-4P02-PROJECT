@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { motion, useAnimation } from 'framer-motion'
 import Header from '../_components/Header'
 import Footer from '../_components/Footer'
+import Link from 'next/link'
 
 declare global {
   interface Window {
@@ -194,9 +195,11 @@ export default function AboutUs() {
             <li>• Analyzes job descriptions for tailoring</li>
             <li>• Enhances readability and structure</li>
           </ul>
-          <button className="mt-6 px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl shadow hover:bg-blue-700 transition">
-            Subscribe to Pro
-          </button>
+          <Link href="/pricing" passHref>
+            <button className="mt-6 px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl shadow hover:bg-blue-700 transition">
+              Subscribe to Pro
+            </button>
+          </Link>
         </div>
       </section>
 
