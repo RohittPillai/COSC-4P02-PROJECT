@@ -132,13 +132,13 @@ export default function Homepage() {
             </div>
           </section>
 
-          {/* ChatGPT Section */}
+          {/* Google Gemini Section */}
           <section className="py-20 px-6 bg-gray-900 text-white text-center">
             <h2 className="text-5xl font-extrabold tracking-wide">
-              ⚡ Powered by <span className="text-blue-400">ChatGPT</span>
+              ⚡ Powered by <span className="text-blue-400">Google Gemini</span>
             </h2>
             <p className="mt-6 text-lg text-gray-300 max-w-4xl mx-auto leading-relaxed">
-              ResumeX leverages the power of <strong>OpenAI&apos;s ChatGPT</strong> to generate{" "}
+              ResumeX leverages the power of <strong>Google&apos;s Gemini</strong> to generate{" "}
               <strong>job-winning resumes</strong> with AI-driven content recommendations. Whether
               you&apos;re a seasoned professional or a fresh graduate, our AI optimizes your resume
               to make it stand out to recruiters.
