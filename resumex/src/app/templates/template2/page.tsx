@@ -1,6 +1,8 @@
 // Import core React hooks and libraries
-import React from "react"; // Needed for JSX rendering
-import { useState, useEffect } from "react"; // React hooks for state and lifecycle
+"use client";
+
+import React, { useState, useEffect, useRef } from "react";
+
 import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai"; // Icon components used in buttons
 import { FiDownload } from "react-icons/fi"; // Download icon for PDF export
 import html2canvas from "html2canvas"; // Used to capture resume as a canvas

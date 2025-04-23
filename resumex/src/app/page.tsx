@@ -217,7 +217,6 @@ export default function Homepage() {
 
             <div className="mt-12 max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
               {/* Contact Info */}
-              {/* Contact Info */}
               <div className="p-6 bg-white shadow-lg rounded-2xl border border-gray-200">
                 <h3 className="text-2xl font-semibold text-gray-900">Contact Support</h3>
                 <ul className="mt-4 space-y-3 text-left">
