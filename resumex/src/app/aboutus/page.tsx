@@ -156,16 +156,17 @@ export default function AboutUs() {
                 ? 'Innovative developer creating AI-powered tools that drive measurable results.'
                 : 'Aspiring software developer passionate about building impactful tools.'}
             </div>
-            <motion.button
+            <motion.div
               ref={buttonRef}
               animate={{
                 backgroundColor: isClicking ? '#facc15' : '#fde68a',
                 scale: isClicking ? 0.95 : 1
               }}
-              className="mt-3 w-full px-6 py-2 text-sm text-yellow-900 font-semibold rounded shadow-sm transition cursor-pointer"
+              className="mt-3 w-full px-6 py-2 text-sm text-yellow-900 font-semibold rounded shadow-sm transition select-none"
+              role="presentation"
             >
               ✨ Improve Summary with AI
-            </motion.button>
+            </motion.div>
           </div>
 
           {/* Cursor */}
