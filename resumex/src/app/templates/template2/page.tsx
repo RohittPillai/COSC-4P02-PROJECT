@@ -1,4 +1,3 @@
-// Import core React hooks and libraries
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
