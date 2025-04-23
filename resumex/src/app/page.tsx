@@ -138,7 +138,7 @@ export default function Homepage() {
               ⚡ Powered by <span className="text-blue-400">Google Gemini</span>
             </h2>
             <p className="mt-6 text-lg text-gray-300 max-w-4xl mx-auto leading-relaxed">
-              ResumeX leverages the power of <strong>Google&apos;s Gemini</strong> to generate{" "}
+              ResumeX leverages the power of <strong>Google Gemini</strong> to generate{" "}
               <strong>job-winning resumes</strong> with AI-driven content recommendations. Whether
               you&apos;re a seasoned professional or a fresh graduate, our AI optimizes your resume
               to make it stand out to recruiters.
