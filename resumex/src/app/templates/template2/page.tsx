@@ -1,12 +1,10 @@
 "use client";
-// Import core React hooks and libraries
-import React from "react"; // Needed for JSX rendering
-import { useState, useEffect } from "react"; // React hooks for state and lifecycle
-import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai"; // Icon components used in buttons
-import { FiDownload } from "react-icons/fi"; // Download icon for PDF export
-import html2canvas from "html2canvas"; // Used to capture resume as a canvas
-import jsPDF from "jspdf"; // Library to export resume as a PDF file
-import { useRef} from "react"; // For referencing DOM nodes like resume container
+
+import React, { useState, useEffect, useRef } from "react";
+import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
+import { FiDownload } from "react-icons/fi";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 // Generates a user-specific key for localStorage using the logged-in user's name.
 // Falls back to "guest" if no user is found.
@@ -16,9 +14,25 @@ function getUserKey(key: string) {
   return `${userId}_template2_${key}`;
 }
 
-export default function Template2Page({ data, isPublicView = false }) {
+interface Template2PageProps {
+  data: any;
+  isPublicView?: boolean;
+}
+
+const Template2Page: React.FC<Template2PageProps> = ({ data, isPublicView = false }) => {
   //for few seconds pop up
   const resumeRef = React.useRef<HTMLDivElement>(null);
+
+  // Show "In Progress..." popup for 2 seconds on load
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowPopup(false);
+    }, 2000); // 2 seconds
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const [showPopup, setShowPopup] = useState(true);
 
   // For contact section
   const [isEditingContact, setIsEditingContact] = useState(false);
@@ -888,8 +902,18 @@ export default function Template2Page({ data, isPublicView = false }) {
             )}
           </div>
         </div>
+
+          {/* "In Progress..." Popup */}
+          {showPopup && (
+              <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-[10000]">
+                <div className="bg-white text-black px-8 py-4 rounded-lg shadow-lg text-lg font-semibold animate-pulse">
+                  In Progress...
+                </div>
+              </div>
+          )}
       </div>
     </div>
   </div>
   );
 }
+export default Template2Page;

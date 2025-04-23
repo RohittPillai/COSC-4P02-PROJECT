@@ -248,54 +248,54 @@ const ResumePage = () => {
             </button>
           </div>
 
-          {/* Skills */}
-          <div>
-            <div className="flex justify-between items-center">
-              <label htmlFor="skills" className="block font-medium">Skills (comma separated)</label>
-              <div className="space-x-2">
-                <button
-                  aria-label="Move section up"
-                  onClick={() => moveSection("skills", "up")}
-                  className="px-2 py-1 text-gray-600 hover:bg-gray-100 rounded"
-                >
-                  ↑
-                </button>
-                <button
-                  aria-label="Move section down"
-                  onClick={() => moveSection("skills", "down")}
-                  className="px-2 py-1 text-gray-600 hover:bg-gray-100 rounded"
-                >
-                  ↓
-                </button>
-              </div>
-            </div>
-            <input
-              id="skills"
-              className="w-full border p-2 rounded"
-              value={resumeData.skills.join(", ")}
-              onChange={(e) =>
-                setResumeData({
-                  ...resumeData,
-                  skills: e.target.value.split(",").map((s) => s.trim()),
-                })
-              }
-            />
-            <button
-              onClick={async () => {
-                setAiLoading((prev) => ({ ...prev, skills: true }));
-                const newSkills = await callAI("skills", resumeData.skills.join(", "));
-                setResumeData({
-                  ...resumeData,
-                  skills: newSkills.split(",").map((s) => s.trim()),
-                });
-                setAiLoading((prev) => ({ ...prev, skills: false }));
-              }}
-              disabled={aiLoading.skills}
-              className="mt-2 text-sm bg-blue-100 text-blue-800 px-3 py-1 rounded hover:bg-blue-200 transition disabled:opacity-50"
-            >
-              {aiLoading.skills ? "Generating..." : "⚡ Generate Skills with AI"}
-            </button>
-          </div>
+         {/* Skills */}
+<div>
+  <div className="flex justify-between items-center">
+    <label htmlFor="skills" className="block font-medium">Skills (comma separated)</label>
+    <div className="space-x-2">
+      <button
+        aria-label="Move section up"
+        onClick={() => moveSection("skills", "up")}
+        className="px-2 py-1 text-gray-600 hover:bg-gray-100 rounded"
+      >
+        ↑
+      </button>
+      <button
+        aria-label="Move section down"
+        onClick={() => moveSection("skills", "down")}
+        className="px-2 py-1 text-gray-600 hover:bg-gray-100 rounded"
+      >
+        ↓
+      </button>
+    </div>
+  </div>
+  <input
+    id="skills"
+    className="w-full border p-2 rounded"
+    value={resumeData.skills.join(", ")}
+    onChange={(e) =>
+      setResumeData({
+        ...resumeData,
+        skills: e.target.value.split(",").map((s) => s.trim()),
+      })
+    }
+  />
+  <button
+    onClick={async () => {
+      setAiLoading((prev) => ({ ...prev, skills: true }));
+      const newSkills = await callAI("skills", resumeData.summary); // Use summary for AI input
+      setResumeData({
+        ...resumeData,
+        skills: newSkills.split(",").map((s) => s.trim()),
+      });
+      setAiLoading((prev) => ({ ...prev, skills: false }));
+    }}
+    disabled={aiLoading.skills}
+    className="mt-2 text-sm bg-blue-100 text-blue-800 px-3 py-1 rounded hover:bg-blue-200 transition disabled:opacity-50"
+  >
+    {aiLoading.skills ? "Generating..." : "⚡ Generate Skills with AI"}
+  </button>
+</div>
 
           {/* Experience */}
           <div>
