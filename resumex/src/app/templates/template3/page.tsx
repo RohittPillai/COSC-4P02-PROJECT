@@ -1,3 +1,4 @@
+"use client";
 // React & necessary libraries for PDF generation and UI interactions
 import React, { useState, useEffect } from "react";
 import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
@@ -14,15 +15,6 @@ function getUserKey(key: string) {
 
 // Main component for Template 3
 export default function Template3Page({ isPublicView = false }: { isPublicView?: boolean }) {
-  // Show loading popup for 2 seconds when the page mounts
-  const [showPopup, setShowPopup] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowPopup(false);
-    }, 2000); // 2 seconds
-    return () => clearTimeout(timer);
-  }, []);
 
   // Controls which resume tab is currently active
   const [activeTab, setActiveTab] = useState("profile");
@@ -582,14 +574,6 @@ export default function Template3Page({ isPublicView = false }: { isPublicView?:
 
   return (
       <>
-        {/* Show "In Progress" popup for 2 seconds on load */}
-        {showPopup && (
-            <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-[10000]">
-              <div className="bg-white text-black px-8 py-4 rounded-lg shadow-lg text-lg font-semibold animate-pulse">
-                In Progress...
-              </div>
-            </div>
-        )}
       {/* Resume Container */}
       <div className="w-full max-w-[1200px] mx-auto px-10 py-10 bg-white rounded shadow-sm font-sans text-gray-800 leading-relaxed overflow-y-auto max-h-[calc(100vh-160px)] border border-gray-300">
       {/* HEADER */}

@@ -347,32 +347,35 @@ export default function FreeResume() {
 
           {/* Main resume editor area */}
           <section className="flex-1 p-6 h-[96vh] flex flex-col justify-center items-center bg-gray-100 pt-20 mb-32">
-            <h1 className={`text-4xl font-extrabold text-gray-900 mb-4 ${
-                template === "template1" ? "mt-16" : ""
-            }`}
-            >
+            <h1 className={`text-4xl font-extrabold text-gray-900 mb-4 ${template === "template1" ? "mt-16" : ""}`}>
               Editing: {selectedTemplate.name}
-              <div className="mt-6 flex gap-4 justify-center">
-                <button
-                    onClick={saveResume}
-                    className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700 transition flex items-center gap-1"
-                >
-                  {isSaving ? (
-                      <AiOutlineSync className="animate-spin" size={16} />
-                  ) : (
-                      <AiOutlineCheck size={16} />
-                  )}
-                  Save
-                </button>
-
-                <button
-                    onClick={shareResume}
-                    className="px-4 py-2 bg-gray-200 text-gray-800 text-sm font-medium rounded hover:bg-gray-300 transition"
-                >
-                  Share
-                </button>
-              </div>
             </h1>
+
+            {(template === "template2" || template === "template3") && (
+              <p className="text-xl font-bold text-red-700 mt-0 mb-1 text-center">Page Under Development</p>
+            )}
+
+            <div className="mt-6 flex gap-4 justify-center">
+              <button
+                onClick={saveResume}
+                className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700 transition flex items-center gap-1"
+              >
+                {isSaving ? (
+                  <AiOutlineSync className="animate-spin" size={16} />
+                ) : (
+                  <AiOutlineCheck size={16} />
+                )}
+                Save
+              </button>
+
+              <button
+                onClick={shareResume}
+                className="px-4 py-2 bg-gray-200 text-gray-800 text-sm font-medium rounded hover:bg-gray-300 transition"
+              >
+                Share
+              </button>
+            </div>
+
             <div
                 className="w-full max-w-2xl p-4 border border-gray-400 rounded-lg shadow-xl bg-white"
             >
