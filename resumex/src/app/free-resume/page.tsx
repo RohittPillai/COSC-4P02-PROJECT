@@ -12,8 +12,8 @@ import { jsPDF } from "jspdf";
 import { AiOutlineLeft, AiOutlineRight, AiOutlineSync, AiOutlineCheck, AiOutlineUp, AiOutlineDown } from "react-icons/ai";
 // PDF and screenshot utility
 import html2canvas from "html2canvas";
-
 import { supabase } from "~/lib/supabaseClient";
+import { v4 as uuidv4 } from "uuid";
 
 // Dynamically import resume templates so they are loaded only when needed
 const Template1Page = dynamic(() => import("../templates/template1/page"));
@@ -204,49 +204,44 @@ export default function FreeResume() {
   };
 
   const shareResume = async () => {
-    if (!userId) {
-      alert("Please sign in to generate a shareable link.");
-      return;
+    let anonymousUserId = userId;
+
+    // If not signed in, generate a temporary ID
+    if (!anonymousUserId) {
+      anonymousUserId = localStorage.getItem("anonUserId");
+      if (!anonymousUserId) {
+        anonymousUserId = uuidv4(); // generate UUID
+        localStorage.setItem("anonUserId", anonymousUserId); // store for session consistency
+      }
     }
 
     try {
-      // Check if a resume already exists
-      const { data: existing, error: fetchError } = await supabase
+      // Always insert a new shared resume (even for signed-in users)
+      const { data, error } = await supabase
           .from("resumes")
+          .insert([
+            {
+              user_id: anonymousUserId,
+              template: template,
+              data: resumeData,
+            },
+          ])
           .select("id")
-          .eq("user_id", userId)
-          .eq("template", template)
           .single();
 
-      if (fetchError && fetchError.code !== "PGRST116") throw fetchError;
+      if (error) throw error;
 
-      let resumeId = existing?.id;
-
-      // If not found, insert it
-      if (!resumeId) {
-        const { data: inserted, error: insertError } = await supabase
-            .from("resumes")
-            .insert([
-              { user_id: userId, template, data: resumeData }
-            ])
-            .select("id")
-            .single();
-
-        if (insertError) throw insertError;
-        resumeId = inserted.id;
-      }
-
-      // Generate public share link with the resume ID
+      const resumeId = data.id;
       const shareLink = `${window.location.origin}/resume-view?id=${resumeId}`;
+
       try {
         await navigator.clipboard.writeText(shareLink);
         alert("Public resume link copied to clipboard!");
-      } catch (clipError) {
-        console.error("Clipboard write failed:", clipError);
+      } catch {
         alert(`Resume link (copy manually):\n${shareLink}`);
       }
     } catch (err) {
-      console.error("Error sharing resume:", JSON.stringify(err, null, 2));
+      console.error("Error sharing resume:", err);
       alert("Failed to generate shareable link.");
     }
   };
