@@ -114,7 +114,7 @@ export default function FreeResume() {
             {
               user_id: userId,
               template: template, // template1, template2, etc.
-              content: resumeData,
+              data: resumeData,
             },
           ]);
 
@@ -239,10 +239,15 @@ export default function FreeResume() {
 
       // Generate public share link with the resume ID
       const shareLink = `${window.location.origin}/resume-view?id=${resumeId}`;
-      await navigator.clipboard.writeText(shareLink);
-      alert("Public resume link copied to clipboard!");
+      try {
+        await navigator.clipboard.writeText(shareLink);
+        alert("Public resume link copied to clipboard!");
+      } catch (clipError) {
+        console.error("Clipboard write failed:", clipError);
+        alert(`Resume link (copy manually):\n${shareLink}`);
+      }
     } catch (err) {
-      console.error("Error sharing resume:", err);
+      console.error("Error sharing resume:", JSON.stringify(err, null, 2));
       alert("Failed to generate shareable link.");
     }
   };
