@@ -5,8 +5,9 @@ import { configure } from '@testing-library/react';
 import React from 'react';
 
 // Add TextEncoder and TextDecoder to global scope
-global.TextEncoder = TextEncoder;
-global.TextDecoder = TextDecoder;
+global.TextEncoder = TextEncoder as unknown as typeof global.TextEncoder;
+global.TextDecoder = TextDecoder as unknown as typeof global.TextDecoder;
+
 
 // Configure testing library
 configure({
