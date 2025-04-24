@@ -4,10 +4,6 @@ import { TextEncoder, TextDecoder } from 'util';
 import { configure } from '@testing-library/react';
 import React from 'react';
 
-// Add TextEncoder and TextDecoder to global scope
-global.TextEncoder = TextEncoder;
-global.TextDecoder = TextDecoder;
-
 // Configure testing library
 configure({
   asyncUtilTimeout: 5000,
@@ -23,53 +19,31 @@ declare global {
   }
 }
 
-// Suppress act() warnings
+// Single beforeAll block for all setup
 beforeAll(() => {
+  // Add TextEncoder and TextDecoder to global scope
+  if (!global.TextEncoder) {
+    global.TextEncoder = TextEncoder;
+  }
+  if (!global.TextDecoder) {
+    global.TextDecoder = TextDecoder;
+  }
+
+  // Suppress act() warnings
   const originalError = console.error;
   console.error = (...args: Parameters<typeof console.error>) => {
-    if (typeof args[0] === 'string' && /Warning.*not wrapped in act/.test(args[0])) {
-      return;
-    }
-    if (typeof args[0] === 'string' && args[0].includes('The current testing environment is not configured to support act')) {
-      return;
+    if (typeof args[0] === 'string') {
+      if (/Warning.*not wrapped in act/.test(args[0]) ||
+          args[0].includes('The current testing environment is not configured to support act')) {
+        return;
+      }
     }
     originalError.call(console, ...args);
   };
 
   // Enable React concurrent mode
   (global as any).IS_REACT_ACT_ENVIRONMENT = true;
-});
 
-// Mock next/navigation
-jest.mock('next/navigation', () => ({
-  useRouter: () => ({
-    push: jest.fn(),
-    replace: jest.fn(),
-    prefetch: jest.fn(),
-  }),
-  useSearchParams: () => ({
-    get: jest.fn(),
-    getAll: jest.fn(),
-    has: jest.fn(),
-    forEach: jest.fn(),
-    entries: jest.fn(),
-    keys: jest.fn(),
-    values: jest.fn(),
-    toString: jest.fn(),
-  }),
-}));
-
-// Mock next/image
-jest.mock('next/image', () => ({
-  __esModule: true,
-  default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => {
-    // eslint-disable-next-line @next/next/no-img-element
-    return React.createElement('img', { ...props, alt: props.alt ?? '' });
-  },
-}));
-
-// Configure testing environment for React 18
-beforeAll(() => {
   // Mock window.matchMedia
   type MediaQueryList = {
     matches: boolean;
@@ -95,31 +69,51 @@ beforeAll(() => {
       dispatchEvent: jest.fn(),
     })),
   });
+
+  // Setup localStorage mock
+  const storageMock = new Map<string, string>();
+  const localStorageMock: Storage = {
+    getItem: (key: string): string | null => storageMock.get(key) ?? null,
+    setItem: (key: string, value: string): void => { storageMock.set(key, value); },
+    removeItem: (key: string): void => { storageMock.delete(key); },
+    clear: (): void => { storageMock.clear(); },
+    length: storageMock.size,
+    key: (index: number): string | null => Array.from(storageMock.keys())[index] ?? null,
+    [Symbol.iterator]: storageMock[Symbol.iterator],
+  };
+
+  Object.defineProperty(window, 'localStorage', {
+    value: localStorageMock,
+    writable: true
+  });
 });
 
-// Mock localStorage
-const storageMock = new Map<string, string>();
-const localStorageMock: Storage = {
-  getItem: (key: string): string | null => storageMock.get(key) ?? null,
-  setItem: (key: string, value: string): void => { storageMock.set(key, value); },
-  removeItem: (key: string): void => { storageMock.delete(key); },
-  clear: (): void => { storageMock.clear(); },
-  length: storageMock.size,
-  key: (index: number): string | null => Array.from(storageMock.keys())[index] ?? null,
-  [Symbol.iterator]: storageMock[Symbol.iterator],
-};
+// Mock next/navigation
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: jest.fn(),
+    replace: jest.fn(),
+    prefetch: jest.fn(),
+  }),
+  useSearchParams: () => ({
+    get: jest.fn(),
+    getAll: jest.fn(),
+    has: jest.fn(),
+    forEach: jest.fn(),
+    entries: jest.fn(),
+    keys: jest.fn(),
+    values: jest.fn(),
+    toString: jest.fn(),
+  }),
+}));
 
-Object.defineProperty(window, 'localStorage', {
-  value: localStorageMock,
-  writable: true
-});
-
-// Mock environment variables
-process.env = {
-  ...process.env,
-  NEXT_PUBLIC_SUPABASE_URL: 'http://localhost:54321',
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: 'your-anon-key',
-};
+// Mock next/image
+jest.mock('next/image', () => ({
+  __esModule: true,
+  default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => {
+    return React.createElement('img', { ...props, alt: props.alt ?? '' });
+  },
+}));
 
 // Mock next-auth
 jest.mock('next-auth/react', () => ({
@@ -129,4 +123,11 @@ jest.mock('next-auth/react', () => ({
   })),
   signIn: jest.fn(),
   signOut: jest.fn(),
-})); 
+}));
+
+// Set environment variables
+process.env = {
+  ...process.env,
+  NEXT_PUBLIC_SUPABASE_URL: 'http://localhost:54321',
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: 'your-anon-key',
+}; 
