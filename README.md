@@ -1,42 +1,81 @@
-## Welcome everybody 👋
-This is the COSC 4P02 Project of our team.
-Project documents are located in the [docs](docs) folder.
+# 🧠 AI-Powered Resume Builder
 
-## Project Website 🌐
-Visit the live site at 
+Welcome to the official repository for our **COSC 4P02 Group Project**: ResumeX, an AI-driven platform designed to simplify and enhance the resume creation process for job seekers and professionals.
 
+---
 
-## Project Description 📝
-The AI-Powered Resume Builder is designed to make creating professional and tailored resumes easire and efficient. Users can input their dertails, choose from customizable templates, and optimize their resumes with AI-driven suggestions for skills and keywords. The tool supports job-specific tailoring to help resumes align with ATS standards and offers export options in formats like pdf or word. it includes both free templates and premium features for advanced customization, catering to a wide range of users.
+## 🌐 Project Website  
+🔗 https://resumex.top/
 
-The project follows the Agile- Scrum methodology, focusing on iterative development through sprints. It is built using technologies like React, Node.js, PostgreSQL, and Figma for designing the user interface. The team addresses challenges such as refining AI suggestions and improving formatting for exported resumes, ensuring a user-friendly and effective tool for job seekers and professionals.
+---
 
-## Team Members 👥
-| Name                   | Student Number | Role            |
-|------------------------|----------------|-----------------|
-| Rohit Pillai           | 6959308        | Developer       |
-| Jenny Dobariya         | 7087893        | Scrum Master    |
-| Priyanshu Vora         | 7087729        | Developer       |
-| Neeti Pandya           | 7015696        | Product Owner   |
-| Harsh Kapoor           | 7101470        | Developer       |
-| Minhazul Islam Mahim   | 6603849        | Developer       |
+## 📝 Project Description
+
+This project aims to build a **smart and intuitive resume builder** that leverages AI to assist users in creating job-specific, ATS-friendly resumes. Users can choose from pre-designed templates, fill in their details using guided input fields, and export polished resumes in PDF format. Premium features include:
+
+- **AI-generated suggestions** for Summary and Skills  
+- **Section rearrangement tools**  
+- **Premium templates** for advanced customization
+
+The platform was developed over 4 agile sprints using the **T3 Stack** (Next.js, TypeScript, Tailwind CSS, Prisma, tRPC). It emphasizes modular development, user feedback, and real-world usability.
+
+---
+
+## 🛠️ Tech Stack & Tools
+
+- **Frontend & Backend:** Next.js, TypeScript, Tailwind CSS, tRPC  
+- **Database:** Prisma + SQLite  
+- **Authentication:** NextAuth.js (Google & Discord OAuth)  
+- **AI Integration:** Google Gemini  
+- **Payments:** Stripe  
+- **Design & Docs:** Canva and Overleaf  
+- **Testing & Dev Tools:** Jest, VS Code, GitHub
+
+---
+
+## 🚀 Key Features
+
+| Free Features                        | Premium Features                                   |
+|-------------------------------------|----------------------------------------------------|
+| Basic templates                     | Access to premium templates                        |
+| Guided section-based editing        | AI suggestions for Summary and Skills              |
+| One-click PDF export                | Section rearrangement controls                     |
+
+---
+
+## 🔁 Agile Sprint Overview
+
+- **Sprint 1:** Defined scope, selected tech stack, created wireframes  
+- **Sprint 2:** Built resume editor, integrated login, designed templates  
+- **Sprint 3:** Enhanced UI, planned pricing, and proposed AI chatbot  
+- **Sprint 4:** Finalized AI content generation, testing, and presentation prep
+
+---
+
+## 👥 Team Members
+
+| Name                     | Role           |
+|--------------------------|----------------|
+| Rohit Pillai             | Developer      |
+| Jenny Dobariya           | Scrum Master   |
+| Priyanshu Vora           | Developer      |
+| Neeti Pandya             | Product Owner  |
+| Harsh Kapoor             | Developer      |
+| Minhazul Islam Mahim     | Developer      |
+
+---
+
+## 📁 Project Documents
+
+Project documents are located in the [`/docs`](./docs) folder, including the 
+[AI Declaration Form](https://github.com/RohittPillai/COSC-4P02-PROJECT/blob/main/docs/AI%20Declaration%20Form/AI_Declaration_Form.pdf).
+
+---
+
+## 🧪 Getting Started
 
 ### 1. Clone the repository
 
 ```bash
 git clone https://github.com/rohittpillai/COSC-4P02-PROJECT.git
-cd COSC-4P02-PROJECT.git
-```
-
-### 2. Install Dependencies
-```bash
-npm install
-```
-
-### 3. Start development server
-```bash
-npm run dev
-```
-
-## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
+cd COSC-4P02-PROJECT
