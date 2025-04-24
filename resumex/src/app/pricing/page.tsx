@@ -119,12 +119,12 @@ export default function PricingPage() {
             <p className="text-gray-500">Valid for 7 days</p>
             <ul className="mt-6 space-y-3 text-gray-600 text-left">
               {[
-                "Two resumes",
-                "Few resume templates",
-                "Basic resume sections",
-                "resumeX branding",
-                "Up to 2 years of experience",
-                "Access to few design tools",
+                "Access to basic resume templates",
+                "Edit profile, experience, education, skills, and interests",
+                "Auto-save feature",
+                "Resume Save and Share",
+                "No AI enhancements",
+                "Valid for 7 days only",
               ].map((text, idx) => (
                 <li key={idx} className="flex items-start gap-3">
                   <Image src="/check.png" alt="tick" width={20} height={20} />
@@ -171,14 +171,11 @@ export default function PricingPage() {
             </p>
             <ul className="mt-6 space-y-3 text-gray-600 text-left">
               {[
-                "150 resumes",
-                "All resume templates",
-                "Real-time content suggestions",
-                "ATS Check (Applicant Tracking System)",
-                "Pro resume sections",
-                "No branding",
-                "Unlimited section items",
-                "Thousands of design options",
+                "Access all premium templates and themes",
+                "Use AI to improve summary, skills, and experience",
+                "Customise extra sections: Projects, Certifications, Awards, Volunteering",
+                "Reorder, rename, and toggle visibility of any section",
+                "Export as PDF",
               ].map((text, idx) => (
                 <li key={idx} className="flex items-start gap-3">
                   <Image src="/check.png" alt="tick" width={20} height={20} />
