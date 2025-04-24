@@ -12,16 +12,31 @@ The AI-Powered Resume Builder is designed to make creating professional and tail
 The project follows the Agile- Scrum methodology, focusing on iterative development through sprints. It is built using technologies like React, Node.js, PostgreSQL, and Figma for designing the user interface. The team addresses challenges such as refining AI suggestions and improving formatting for exported resumes, ensuring a user-friendly and effective tool for job seekers and professionals.
 
 ## Team Members 👥
-| Name                   | Student Number | Role            |
+| Name                   | Student Number | Role            |
 |------------------------|----------------|-----------------|
-| Rohit Pillai           | 6959308        | Developer       |
-| Jenny Dobariya         | 7087893        | Scrum Master    |
-| Priyanshu Vora         | 7087729        | Developer       |
-| Neeti Pandya           | 7015696        | Product Owner   |
-| Harsh Kapoor           | 7101470        | Developer       |
-| Minhazul Islam Mahim   | 6603849        | Developer       |
+| Rohit Pillai           | 6959308        | Developer       |
+| Jenny Dobariya         | 7087893        | Scrum Master    |
+| Priyanshu Vora         | 7087729        | Developer       |
+| Neeti Pandya           | 7015696        | Product Owner   |
+| Harsh Kapoor           | 7101470        | Developer       |
+| Minhazul Islam Mahim   | 6603849        | Developer       |
 
+### 1. Clone the repository
 
+```bash
+git clone https://github.com/rohittpillai/COSC-4P02-PROJECT.git
+cd COSC-4P02-PROJECT.git
+```
+
+### 2. Install Dependencies
+```bash
+npm install
+```
+
+### 3. Start development server
+```bash
+npm run dev
+```
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
