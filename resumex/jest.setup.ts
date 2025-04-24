@@ -22,11 +22,11 @@ declare global {
 // Single beforeAll block for all setup
 beforeAll(() => {
   // Add TextEncoder and TextDecoder to global scope
-  if (!global.TextEncoder) {
-    global.TextEncoder = TextEncoder;
+  if (typeof global.TextEncoder === 'undefined') {
+    (global as any).TextEncoder = TextEncoder;
   }
-  if (!global.TextDecoder) {
-    global.TextDecoder = TextDecoder;
+  if (typeof global.TextDecoder === 'undefined') {
+    (global as any).TextDecoder = TextDecoder;
   }
 
   // Suppress act() warnings
