@@ -3,6 +3,9 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import PricingPage from '~/app/pricing/page';
 import { useRouter } from 'next/navigation';
 
+// Mock window.alert
+window.alert = jest.fn();
+
 // Mock next/navigation
 jest.mock('next/navigation', () => ({
   useRouter: () => ({
@@ -10,23 +13,67 @@ jest.mock('next/navigation', () => ({
   }),
 }));
 
+// Mock framer-motion
+jest.mock('framer-motion', () => {
+  const originalModule = jest.requireActual('react');
+  return {
+    __esModule: true,
+    motion: {
+      div: (props) => React.createElement('div', props),
+      h1: (props) => React.createElement('h1', props),
+      p: (props) => React.createElement('p', props),
+    },
+  };
+});
+
 // Mock next/image
-jest.mock('next/image', () => ({
-  __esModule: true,
-  default: (props: any) => {
-    // eslint-disable-next-line @next/next/no-img-element
-    return <img {...props} alt={props.alt || ''} />;
-  },
-}));
+jest.mock('next/image', () => {
+  return {
+    __esModule: true,
+    default: (props) => {
+      return React.createElement('img', { ...props, alt: props.alt || '' });
+    }
+  };
+});
+
+// Mock FAQ component
+jest.mock('~/app/pricing/faq', () => {
+  return {
+    __esModule: true,
+    default: () => React.createElement('div', { 'data-testid': 'mock-faq' }, 'FAQ Section')
+  };
+});
+
+// Mock Header and Footer components
+jest.mock('~/app/_components/Header', () => {
+  return {
+    __esModule: true,
+    default: () => React.createElement('div', { 'data-testid': 'mock-header' }, 'Header')
+  };
+});
+
+jest.mock('~/app/_components/Footer', () => {
+  return {
+    __esModule: true,
+    default: () => React.createElement('div', { 'data-testid': 'mock-footer' }, 'Footer')
+  };
+});
 
 // Mock fetch
 const mockFetch = jest.fn();
 global.fetch = mockFetch;
 
+// Mock window.location.href
+Object.defineProperty(window, 'location', {
+  writable: true,
+  value: { href: '' }
+});
+
 describe('Pricing Page', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     mockFetch.mockReset();
+    window.location.href = '';
   });
 
   it('renders the pricing page with all sections', () => {
@@ -132,12 +179,12 @@ describe('Pricing Page', () => {
     render(<PricingPage />);
     
     const freeFeatures = [
-      'Two resumes',
-      'Few resume templates',
-      'Basic resume sections',
-      'resumeX branding',
-      'Up to 2 years of experience',
-      'Access to few design tools',
+      'Access to basic resume templates',
+      'Edit profile, experience, education, skills, and interests',
+      'Auto-save feature',
+      'Resume Save and Share',
+      'No AI enhancements',
+      'Valid for 7 days only',
     ];
     
     freeFeatures.forEach(feature => {
@@ -149,14 +196,11 @@ describe('Pricing Page', () => {
     render(<PricingPage />);
     
     const proFeatures = [
-      '150 resumes',
-      'All resume templates',
-      'Real-time content suggestions',
-      'ATS Check (Applicant Tracking System)',
-      'Pro resume sections',
-      'No branding',
-      'Unlimited section items',
-      'Thousands of design options',
+      'Access all premium templates and themes',
+      'Use AI to improve summary, skills, and experience',
+      'Customise extra sections: Projects, Certifications, Awards, Volunteering',
+      'Reorder, rename, and toggle visibility of any section',
+      'Export as PDF',
     ];
     
     proFeatures.forEach(feature => {

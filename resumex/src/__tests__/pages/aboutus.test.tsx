@@ -26,15 +26,30 @@ jest.mock('next/navigation', () => ({
 // Mock Next.js Image component to return a normal <img> tag instead of the optimized one
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: (props: any) => {
-    return <img {...props} />
+  default: (props) => {
+    return React.createElement('img', props);
   }
 }));
 
-// Mock Framer Motion’s motion.div to avoid animation logic during tests
+// Mock Framer Motion's motion.div to avoid animation logic during tests
 jest.mock('framer-motion', () => ({
   motion: {
-    div: ({ children, ...props }: any) => <div {...props}>{children}</div>
+    div: (props) => {
+      const { children, ...restProps } = props;
+      return React.createElement('div', restProps, children);
+    },
+    h1: (props) => {
+      const { children, ...restProps } = props;
+      return React.createElement('h1', restProps, children);
+    },
+    p: (props) => {
+      const { children, ...restProps } = props;
+      return React.createElement('p', restProps, children);
+    },
+    section: (props) => {
+      const { children, ...restProps } = props;
+      return React.createElement('section', restProps, children);
+    }
   },
   useAnimation: () => ({
     start: jest.fn().mockResolvedValue(undefined) // Stubbed animation controller
@@ -44,21 +59,22 @@ jest.mock('framer-motion', () => ({
 // Mock the Link component from Next.js to behave like a standard <a> tag
 jest.mock('next/link', () => ({
   __esModule: true,
-  default: ({ children, href, ...props }: any) => (
-    <a href={href} {...props}>{children}</a>
-  ),
+  default: (props) => {
+    const { children, href, ...restProps } = props;
+    return React.createElement('a', { href, ...restProps }, children);
+  }
 }));
 
 // Mock Header component used in AboutUs page to isolate test scope
 jest.mock('../../app/_components/Header', () => ({
   __esModule: true,
-  default: () => <div data-testid="mock-header">Header</div>,
+  default: () => React.createElement('div', { 'data-testid': 'mock-header' }, 'Header')
 }));
 
 // Mock Footer component used in AboutUs page to isolate test scope
 jest.mock('../../app/_components/Footer', () => ({
   __esModule: true,
-  default: () => <div data-testid="mock-footer">Footer</div>,
+  default: () => React.createElement('div', { 'data-testid': 'mock-footer' }, 'Footer')
 }));
 
 // Begin test suite for the AboutUs page

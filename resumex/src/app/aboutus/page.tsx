@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { useEffect, useRef, useState } from 'react'
 import { motion, useAnimation } from 'framer-motion'
 import Header from '../_components/Header'
@@ -217,9 +218,9 @@ export default function AboutUs() {
 
       {/* Let's Connect */}
       <section className="text-center pt-16 pb-24 px-4 z-10">
-        <h2 className="text-4xl font-extrabold text-gray-900 mb-3">Let’s Connect</h2>
+        <h2 className="text-4xl font-extrabold text-gray-900 mb-3">Let's Connect</h2>
         <p className="text-lg text-gray-700 max-w-2xl mx-auto mb-12">
-          Whether you have questions, feedback, or just need help — we’re here for you.
+          Whether you have questions, feedback, or just need help — we're here for you.
         </p>
         <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
           <div className="flex flex-col items-center">
@@ -249,7 +250,7 @@ export default function AboutUs() {
       {/* Meet the Team */}
       <section className="text-center pt-12 pb-20 px-4 z-10">
         <h2 className="text-3xl font-extrabold text-gray-900 mb-2">Meet the Team</h2>
-        <p className="text-gray-600 mb-8">We’re the people behind ResumeX.</p>
+        <p className="text-gray-600 mb-8">We're the people behind ResumeX.</p>
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
           {[
             'Jenny Dobariya',

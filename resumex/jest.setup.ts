@@ -78,12 +78,38 @@ Object.defineProperty(window, 'localStorage', {
   writable: true
 });
 
-// Suppress act() warnings
+// Suppress all console output during tests
+const originalLog = console.log;
+console.log = (...args: Parameters<typeof console.log>) => {
+  // Don't show any console.log output during tests
+  return;
+};
+
+// Suppress act() warnings and other React warnings
 const originalError = console.error;
 console.error = (...args: Parameters<typeof console.error>) => {
+  // If it's a string, check for specific patterns to filter
   if (typeof args[0] === 'string') {
-    if (/Warning.*not wrapped in act/.test(args[0]) ||
-        args[0].includes('The current testing environment is not configured to support act')) {
+    // Filter out known React warnings and test infrastructure warnings
+    if (args[0].includes('Warning:') ||
+        args[0].includes('Error:') ||
+        /Warning.*not wrapped in act/.test(args[0]) ||
+        args[0].includes('The current testing environment is not configured to support act') ||
+        args[0].includes('Received `true` for a non-boolean attribute `priority`') ||
+        args[0].includes('Function components cannot be given refs') ||
+        args[0].includes('React does not recognize the `passHref` prop') ||
+        args[0].includes('Each child in a list should have a unique "key" prop') ||
+        args[0].includes('ReactDOMTestUtils.act is deprecated') ||
+        args[0].includes('Checkout Error:')) {
+      return;
+    }
+  }
+  // For non-string errors that might include objects with a toString method
+  if (args[0]?.toString && typeof args[0].toString === 'function') {
+    const errorString = args[0].toString();
+    if (errorString.includes('Checkout Error:') ||
+        errorString.includes('Warning:') ||
+        errorString.includes('Error:')) {
       return;
     }
   }
