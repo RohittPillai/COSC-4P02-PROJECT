@@ -743,12 +743,3 @@ export default function Template1Page({ data, isPublicView = false }: { data: an
     </div>
   );
 }
-
-return (
-  <div className="relative w-full">
-    {/* Your entire JSX layout goes here as-is */}
-  </div>
-);
-};
-
-export default Template2Page;
