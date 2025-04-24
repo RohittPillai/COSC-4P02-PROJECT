@@ -2,7 +2,16 @@
 import '@testing-library/jest-dom';
 import { TextEncoder, TextDecoder } from 'util';
 import { configure } from '@testing-library/react';
+import { beforeAll, jest } from '@jest/globals';
 import React from 'react';
+
+// Add TextEncoder and TextDecoder to global scope
+if (typeof global.TextEncoder === 'undefined') {
+  (global as any).TextEncoder = TextEncoder;
+}
+if (typeof global.TextDecoder === 'undefined') {
+  (global as any).TextDecoder = TextDecoder;
+}
 
 // Configure testing library
 configure({
@@ -19,74 +28,64 @@ declare global {
   }
 }
 
-// Single beforeAll block for all setup
-beforeAll(() => {
-  // Add TextEncoder and TextDecoder to global scope
-  if (typeof global.TextEncoder === 'undefined') {
-    (global as any).TextEncoder = TextEncoder;
-  }
-  if (typeof global.TextDecoder === 'undefined') {
-    (global as any).TextDecoder = TextDecoder;
-  }
+// Enable React concurrent mode
+(global as any).IS_REACT_ACT_ENVIRONMENT = true;
 
-  // Suppress act() warnings
-  const originalError = console.error;
-  console.error = (...args: Parameters<typeof console.error>) => {
-    if (typeof args[0] === 'string') {
-      if (/Warning.*not wrapped in act/.test(args[0]) ||
-          args[0].includes('The current testing environment is not configured to support act')) {
-        return;
-      }
-    }
-    originalError.call(console, ...args);
-  };
+// Mock window.matchMedia
+type MediaQueryList = {
+  matches: boolean;
+  media: string;
+  onchange: null;
+  addListener: jest.Mock;
+  removeListener: jest.Mock;
+  addEventListener: jest.Mock;
+  removeEventListener: jest.Mock;
+  dispatchEvent: jest.Mock;
+};
 
-  // Enable React concurrent mode
-  (global as any).IS_REACT_ACT_ENVIRONMENT = true;
-
-  // Mock window.matchMedia
-  type MediaQueryList = {
-    matches: boolean;
-    media: string;
-    onchange: null;
-    addListener: jest.Mock;
-    removeListener: jest.Mock;
-    addEventListener: jest.Mock;
-    removeEventListener: jest.Mock;
-    dispatchEvent: jest.Mock;
-  };
-
-  Object.defineProperty(window, 'matchMedia', {
-    writable: true,
-    value: jest.fn().mockImplementation((query: string): MediaQueryList => ({
-      matches: false,
-      media: query,
-      onchange: null,
-      addListener: jest.fn(),
-      removeListener: jest.fn(),
-      addEventListener: jest.fn(),
-      removeEventListener: jest.fn(),
-      dispatchEvent: jest.fn(),
-    })),
-  });
-
-  // Setup localStorage mock
-  const storageMock = new Map<string, string>();
-  const localStorageMock: Storage = {
-    getItem: (key: string): string | null => storageMock.get(key) ?? null,
-    setItem: (key: string, value: string): void => { storageMock.set(key, value); },
-    removeItem: (key: string): void => { storageMock.delete(key); },
-    clear: (): void => { storageMock.clear(); },
-    length: storageMock.size,
-    key: (index: number): string | null => Array.from(storageMock.keys())[index] ?? null,
-    [Symbol.iterator]: storageMock[Symbol.iterator],
-  };
-
-  Object.defineProperty(window, 'localStorage', {
-    value: localStorageMock,
-    writable: true
-  });
+// Setup window.matchMedia mock
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: jest.fn().mockImplementation((query: string): MediaQueryList => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: jest.fn(),
+    removeListener: jest.fn(),
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+    dispatchEvent: jest.fn(),
+  })),
 });
+
+// Setup localStorage mock
+const storageMock = new Map<string, string>();
+const localStorageMock: Storage = {
+  getItem: (key: string): string | null => storageMock.get(key) ?? null,
+  setItem: (key: string, value: string): void => { storageMock.set(key, value); },
+  removeItem: (key: string): void => { storageMock.delete(key); },
+  clear: (): void => { storageMock.clear(); },
+  length: storageMock.size,
+  key: (index: number): string | null => Array.from(storageMock.keys())[index] ?? null,
+  [Symbol.iterator]: storageMock[Symbol.iterator],
+};
+
+Object.defineProperty(window, 'localStorage', {
+  value: localStorageMock,
+  writable: true
+});
+
+// Suppress act() warnings
+const originalError = console.error;
+console.error = (...args: Parameters<typeof console.error>) => {
+  if (typeof args[0] === 'string') {
+    if (/Warning.*not wrapped in act/.test(args[0]) ||
+        args[0].includes('The current testing environment is not configured to support act')) {
+      return;
+    }
+  }
+  originalError.call(console, ...args);
+};
 
 // Mock next/navigation
 jest.mock('next/navigation', () => ({
