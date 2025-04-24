@@ -9,6 +9,11 @@ Welcome to the official repository for our **COSC 4P02 Group Project**: ResumeX,
 
 ---
 
+## 🎥 Project Demo Video 
+🔗 https://youtu.be/uSg_ZD70cC4
+
+---
+
 ## 📝 Project Description
 
 This project aims to build a **smart and intuitive resume builder** that leverages AI to assist users in creating job-specific, ATS-friendly resumes. Users can choose from pre-designed templates, fill in their details using guided input fields, and export polished resumes in PDF format. Premium features include:
