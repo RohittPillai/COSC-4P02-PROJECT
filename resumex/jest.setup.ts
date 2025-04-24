@@ -46,16 +46,19 @@ type MediaQueryList = {
 // Setup window.matchMedia mock
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
-  value: jest.fn().mockImplementation((query: string): MediaQueryList => ({
-    matches: false,
-    media: query,
-    onchange: null,
-    addListener: jest.fn(),
-    removeListener: jest.fn(),
-    addEventListener: jest.fn(),
-    removeEventListener: jest.fn(),
-    dispatchEvent: jest.fn(),
-  })),
+  value: jest.fn(
+    // Use type assertion to handle the unknown type
+    (query: unknown) => ({
+      matches: false,
+      media: String(query),
+      onchange: null,
+      addListener: jest.fn(),
+      removeListener: jest.fn(),
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
+      dispatchEvent: jest.fn(),
+    } as MediaQueryList)
+  ),
 });
 
 // Setup localStorage mock
