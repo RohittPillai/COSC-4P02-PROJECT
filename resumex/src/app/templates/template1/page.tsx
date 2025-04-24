@@ -1,23 +1,38 @@
-"use client"; // Enables client-side rendering for this component
+"use client";
 import { useState, useEffect, useRef } from "react";
-import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai"; // Icons for Save & Cancel
-import html2canvas from "html2canvas"; // Used to capture DOM elements as images for PDF generation
-import jsPDF from "jspdf"; // PDF generation library
-import { FiDownload } from "react-icons/fi"; // Icon used for download button
+import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import { FiDownload } from "react-icons/fi";
 
-// Utility function to create a unique localStorage key per user
 function getUserKey(key: string) {
   const userData = localStorage.getItem("userData");
   const userId = userData ? JSON.parse(userData)?.name : "guest";
   return `${userId}_${key}`;
 }
 
-// Main component for rendering and editing Resume Template 1
-export default function Template1Page({ data, isPublicView = false }: { data: any, isPublicView?: boolean }) { // Tracks if data is currently being saved
-  // Initialize resume data from localStorage or fallback to passed-in prop `data`
+export default function Template1Page() {
+  const isPublicView = false; // Default set to false since page.tsx can't receive props
+
+  const defaultData = {
+    firstName: "John",
+    lastName: "Doe",
+    position: "Software Developer",
+    email: "john@example.com",
+    phone: "123-456-7890",
+    skills: ["JavaScript", "React"],
+    interests: ["Reading", "Gaming"],
+    experienceList: [],
+    education: [],
+    projects: []
+  };
+
   const [resumeData, setResumeData] = useState(() => {
-    const savedData = localStorage.getItem(getUserKey("resumeData"));
-    return savedData ? JSON.parse(savedData) : data;
+    if (typeof window !== "undefined") {
+      const savedData = localStorage.getItem(getUserKey("resumeData"));
+      return savedData ? JSON.parse(savedData) : defaultData;
+    }
+    return defaultData;
   });
 
   const [isSaving, setIsSaving] = useState(false); // Tracks if data is currently being saved

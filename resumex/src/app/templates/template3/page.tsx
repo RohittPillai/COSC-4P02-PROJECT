@@ -1,5 +1,7 @@
-// React & necessary libraries for PDF generation and UI interactions
+"use client";
+
 import React, { useState, useEffect } from "react";
+
 import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";

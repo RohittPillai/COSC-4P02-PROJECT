@@ -1,10 +1,14 @@
-/**
- * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially useful
- * for Docker builds.
- */
-import "./src/env.js";
+/** @type {import('next').NextConfig} */
+const isProd = process.env.NODE_ENV === "production";
 
-/** @type {import("next").NextConfig} */
-const config = {};
+const nextConfig = {
+  assetPrefix: isProd ? "/COSC-4P02-PROJECT/" : "",
+  images: {
+    unoptimized: true, 
+  },
+  compiler: {
+    removeConsole: isProd,
+  },
+};
 
-export default config;
+export default nextConfig;
