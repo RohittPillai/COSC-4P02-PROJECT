@@ -279,6 +279,18 @@ const ResumePage = () => {
               value={resumeData.summary}
               onChange={(e) => setResumeData({ ...resumeData, summary: e.target.value })}
             />
+            <button
+              onClick={async () => {
+                setAiLoading((prev) => ({ ...prev, summary: true }))
+                const newSummary = await callAI("summary", resumeData.summary)
+                setResumeData({ ...resumeData, summary: newSummary })
+                setAiLoading((prev) => ({ ...prev, summary: false }))
+              }}
+              disabled={aiLoading.summary}
+              className="mt-2 text-sm bg-blue-100 text-blue-800 px-3 py-1 rounded hover:bg-blue-200 transition disabled:opacity-50"
+            >
+              {aiLoading.summary ? "Generating..." : "⚡ Rewrite Summary with AI"}
+            </button>
           </div>
 
           {/* Skills */}
