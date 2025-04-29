@@ -10,6 +10,7 @@ const nextConfig = {
   compiler: {
     removeConsole: isProd,
   },
+  allowedDevOrigins: ['local-origin.dev', '*.local-origin.dev', 'resumex.top'],
 };
 
 export default nextConfig;
